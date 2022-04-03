@@ -45,9 +45,9 @@ public class Ship : MonoBehaviour
     }
 
     public void Select()
-    {
+        {
         _glowHighlight.ToggleGlow();
-    }
+        }
 
     public void MoveThroughPath(List<Vector3> path)
     {
@@ -64,7 +64,7 @@ public class Ship : MonoBehaviour
         Quaternion endRotation = Quaternion.LookRotation(direction, Vector3.up);
 
         if (Mathf.Approximately(Mathf.Abs(Quaternion.Dot(startRotation, endRotation)), 1.0f) == false) //The rottation is needed only if the ship does not face the good direction
-        {
+    {
             float timeElapsed = 0;
             while (timeElapsed < rotationDuration)
             {
@@ -72,7 +72,7 @@ public class Ship : MonoBehaviour
                 float lerpStep = timeElapsed / rotationDuration;
                 transform.rotation = Quaternion.Lerp(startRotation, endRotation, lerpStep);
                 yield return null;
-            }
+    }
             transform.rotation = endRotation;
         }
         StartCoroutine(MovementCoroutine(endPosition)); //To move to the beginning of the coroutine if we want to turn while moving
@@ -82,7 +82,7 @@ public class Ship : MonoBehaviour
     {
         Vector3 startPosition = transform.position;
         endPosition.y = startPosition.y;
-
+        
         float timeElapsed = 0;
 
         while (timeElapsed < _movementDuration)
@@ -91,7 +91,7 @@ public class Ship : MonoBehaviour
             float lerpStep = timeElapsed/_movementDuration;
             transform.position = Vector3.Lerp(startPosition, endPosition, lerpStep);
             yield return null;
-        }
+    }
         transform.position = endPosition;
 
         //The following part may not be useful if we want to move 1 cell at a time
@@ -101,13 +101,13 @@ public class Ship : MonoBehaviour
             StartCoroutine(RotationCoroutine(_pathPositions.Dequeue(), _rotationDuration));
         }
         else
-        {
+    {
             Debug.Log("Movement finished.");
             MovementFinished?.Invoke(this);
         }
         UpdateShipTile(startPosition, endPosition);
     }
-
+        
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
     {        
         //set previoustile.Ship à null et set newtile.ship à ship
