@@ -9,21 +9,21 @@ public class HexCoordinates : MonoBehaviour
     private static float xOffset = 2;
     private static float yOffset = 1;
 
-    public Vector3Int GetHexCoords()
-    {
-        return offsetCoordinates;
-    }
-
     private static float zOffset = 1.73f;
 
     [Header("Offset coordinates")]
     [SerializeField]
     private Vector3Int offsetCoordinates;
 
+    public Vector3Int GetHexCoords()
+    {
+        return offsetCoordinates;
+    }
+
     private void Awake()
     {
         offsetCoordinates = ConvertPositionToOffset(transform.position);
-    }
+    }    
 
     private Vector3Int ConvertPositionToOffset(Vector3 position)
         //convert actual position to int coordinates

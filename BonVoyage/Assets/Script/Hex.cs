@@ -6,11 +6,10 @@ using UnityEngine;
 public class Hex : MonoBehaviour
 {
     private HexCoordinates hexCoordinates;
+    public Vector3Int HexCoords => hexCoordinates.GetHexCoords(); 
 
-    public Vector3Int HexCoords; 
     private void Awake()
     {
         hexCoordinates = GetComponent<HexCoordinates>();
-        HexCoords = hexCoordinates.GetHexCoords();
     }
 }
