@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4936956383488517678}
   - component: {fileID: 7973266531564256088}
   - component: {fileID: 4265637737454110934}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hex
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de98d39407a788942aa19c95c2f9102b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HexCoords: {x: 0, y: 0, z: 0}
 --- !u!1 &4936956383641461398
 GameObject:
   m_ObjectHideFlags: 0
