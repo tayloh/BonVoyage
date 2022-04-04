@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class PirateShip : Ship
 {
-    // Start is called before the first frame update
-    void Start()
+
+    
+    public override void Update()
     {
-        
+        //Aim();
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            shoot();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
+  
 }
