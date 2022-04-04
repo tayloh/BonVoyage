@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 
-        //testing turn list function
+        /*//testing turn list function
         Ship ship1 = new Ship();
         ship1.name = "ship1";
         playerShips.Add(ship1);
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         DisplayShipList(pirateShips);
         DisplayShipList(TurnList());
         DisplayShipList(playerShips);
-        DisplayShipList(pirateShips);
+        DisplayShipList(pirateShips);*/
     }
 
     public void AddPlayerShip(Ship shipToAdd)
@@ -80,7 +80,8 @@ public static class ListExtensions
 //Elements to connect to the script:
 public class Ship
 {
+    private int health;
+    private bool isAlive;
     //for debugging only:
     public string name;
-
 }
