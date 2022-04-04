@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,33 @@ public class Hex : MonoBehaviour
     private GlowHighlight highlight;
 
     private HexCoordinates hexCoordinates;
-    public Vector3Int HexCoords => hexCoordinates.GetHexCoords(); 
+    public Vector3Int HexCoords => hexCoordinates.GetHexCoords();
+
+    [SerializeField]
+    private HexType hexType;
+
+    public int GetCost()
+    {
+        switch (hexType)
+        {
+            case HexType.Water:
+                return 1;
+                
+            case HexType.Stormy:
+                return 2;
+                
+            case HexType.Obstacle:
+                return 10;
+                
+            default:
+                throw new Exception($"Hex of type {hexType} not supported.");
+        }
+    }
+
+    public bool IsObstacle()
+    {
+        return hexType == HexType.Obstacle;
+    }
 
     private void Awake()
     {
@@ -26,4 +53,12 @@ public class Hex : MonoBehaviour
     {
         highlight.ToggleGlow(false);
     }
+}
+
+public enum HexType
+{
+    None,
+    Water, // default
+    Stormy,
+    Obstacle
 }

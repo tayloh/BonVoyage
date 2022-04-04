@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlight: {fileID: 0}
+  hexType: 1
 --- !u!114 &3788887259659557734
 MonoBehaviour:
   m_ObjectHideFlags: 0
