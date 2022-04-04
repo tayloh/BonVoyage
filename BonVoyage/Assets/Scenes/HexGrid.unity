@@ -3219,6 +3219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementDuration: 1
+  hexGrid: {fileID: 1679244513}
 --- !u!114 &1019322732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6398,15 +6399,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.219
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.186
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.023
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
       propertyPath: m_LocalRotation.w

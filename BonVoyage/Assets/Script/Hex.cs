@@ -10,6 +10,17 @@ public class Hex : MonoBehaviour
     private GlowHighlight highlight;
 
     private HexCoordinates hexCoordinates;
+
+    [SerializeField]
+    private Ship ship;
+    public Ship Ship
+    {
+        get
+        { return ship; }
+        set
+        { ship = value; }
+    }
+
     public Vector3Int HexCoords => hexCoordinates.GetHexCoords();
 
     [SerializeField]

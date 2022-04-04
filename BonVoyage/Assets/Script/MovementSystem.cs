@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MovementSystem : MonoBehaviour
 {
-
+    // missing BFS
     private List<Vector3Int> _currentPath = new List<Vector3Int>();
     
     public void HideRange(HexGrid hexGrid)
@@ -16,21 +17,18 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
-    public void ShowRange(Ship selectedShip, HexGrid hexGrid)
+    //WORK IN PROGRESS
+    /*public void ShowRange(Ship selectedShip, HexGrid hexGrid)
     {
+        CalculateRange(selectedShip, hexGrid);
+        foreach (Vector3Int hexPosition in *//*movementRange.GetRangePositions())*//*)
+        {
 
-    }
+        }
+    }*/
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void CalculateRange(Ship selectedShip, HexGrid hexGrid)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        throw new NotImplementedException();
     }
 }

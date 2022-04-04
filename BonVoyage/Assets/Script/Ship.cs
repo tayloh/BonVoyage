@@ -10,13 +10,27 @@ public class Ship : MonoBehaviour
     private float _rotationDuration = 0.3f;
     private GlowHighlight _glowHighlight;
 
+    [SerializeField]
+    private HexGrid hexGrid;
+
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
     public event Action<Ship> MovementFinished;
 
+    private Vector3Int hexCoord;
+
     private void Awake()
     {
         _glowHighlight = GetComponent<GlowHighlight>();
+
+        //compute hex coord of the ship and assign the ship to corresponding hex tile
+        hexCoord = new HexCoordinates().ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0,1,0));
+    }
+
+    private void Start()
+    {
+        Debug.Log("hex coord of the ship " + hexCoord);
+        hexGrid.PlaceShip(hexCoord, this);
     }
 
     public void Deselect()
