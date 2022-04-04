@@ -47,9 +47,18 @@ public class HexGrid : MonoBehaviour
         return hexTileNeighboursDict[hexCoordinates];
     }
 
-    public List<Vector3Int> GetAccessibleNeighboursFor(Vector3Int hexcoordinates, Vector3Int forward)
+    //TESTING
+    private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            List<Vector3Int> example;
+            example = GetAccessibleNeighboursFor(new Vector3Int(5, 0, 7), new Vector3(1f, 0f, 0f));
+        }
+    }
 
+    public List<Vector3Int> GetAccessibleNeighboursFor(Vector3Int hexcoordinates, Vector3 forward)
+    {
         List<Vector3Int> result = new List<Vector3Int>();
         //TODO : return the list of neighbours accessible for a ship pointing in the towards direction (only 3 possible tiles)
         if (hexTileDict.ContainsKey(hexcoordinates) == false) //if the tile does not exist, no neighbour
@@ -64,9 +73,18 @@ public class HexGrid : MonoBehaviour
                 {
                     if(Direction.directionsOffsetEven[i]==forward)
                     {
-                        result.Add(Direction.directionsOffsetEven[(i - 1) % 6]); 
-                        result.Add(Direction.directionsOffsetEven[i]); 
-                        result.Add(Direction.directionsOffsetEven[(i + 1) % 6]);
+                        if(hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[(i - 1) % 6]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetEven[(i - 1) % 6]); 
+                        }
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[i]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetEven[i]);
+                        }
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[(i + 1) % 6]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetEven[(i + 1) % 6]);
+                        }
                     }
                 }
                 break;
@@ -76,13 +94,23 @@ public class HexGrid : MonoBehaviour
                 {
                     if (Direction.directionsOffsetEven[i] == forward) //direction is always convert as an even configuration
                     {
-                        result.Add(Direction.directionsOffsetOdd[(i - 1) % 6]);
-                        result.Add(Direction.directionsOffsetOdd[i]);
-                        result.Add(Direction.directionsOffsetOdd[(i + 1) % 6]);
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[(i - 1) % 6]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[(i - 1) % 6]);
+                        }
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[i]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[i]);
+                        }
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[(i + 1) % 6]))
+                        {
+                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[(i + 1) % 6]);
+                        }
                     }
                 }
                 break;
         }
+        //Debug.Log("a neighbour of the ship is "+result[0]);
         return result;
     }
 
@@ -91,6 +119,7 @@ public class HexGrid : MonoBehaviour
         if(hexTileDict.ContainsKey(hexCoord))
         {
             hexTileDict[hexCoord].Ship = ship;
+            Debug.Log("Ship placed at " + hexCoord);
         }
         else
         {

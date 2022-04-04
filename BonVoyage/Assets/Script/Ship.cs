@@ -29,7 +29,7 @@ public class Ship : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("hex coord of the ship " + hexCoord);
+        Debug.Log("Ship script: hex coord of the ship " + hexCoord);
         hexGrid.PlaceShip(hexCoord, this);
     }
 

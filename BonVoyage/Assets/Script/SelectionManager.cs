@@ -36,9 +36,10 @@ public class SelectionManager : MonoBehaviour
             {
                 hexGrid.GetTileAt(neighbour).DisableHighlight();
             }
-
             //Testing finding neighbours
-            neighbours = hexGrid.GetNeighboursFor(selectedHex.HexCoords);
+            //neighbours = hexGrid.GetNeighboursFor(selectedHex.HexCoords);
+            neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords,-selectedHex.Ship.gameObject.transform.right);
+            
 
             foreach (Vector3Int neighbour in neighbours)
             {
@@ -50,6 +51,8 @@ public class SelectionManager : MonoBehaviour
             {
                 Debug.Log(pos);
             }
+
+            //TODO: manage the case when the user clicks on a cell without ships => Highmight it or not? Change color?
 
         }
     }
