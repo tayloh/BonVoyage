@@ -15,6 +15,8 @@ public class SelectionManager : MonoBehaviour
 
     private List<Vector3Int> neighbours = new List<Vector3Int>();
 
+    private Hex previousHighligthedHex;
+
     [SerializeField]
     private int movementPoints = 1;
 
@@ -31,6 +33,10 @@ public class SelectionManager : MonoBehaviour
         GameObject result;
         if (FindTarget(mousePosition, out result))
         {
+            if (previousHighligthedHex != null)
+            {
+                previousHighligthedHex.DisableHighlightInvalid();
+            }            
             Hex selectedHex = result.GetComponent<Hex>();
 
             selectedHex.DisableHighlight();
@@ -43,23 +49,32 @@ public class SelectionManager : MonoBehaviour
             //Testing finding neighbours
             //neighbours = hexGrid.GetNeighboursFor(selectedHex.HexCoords);
 
-            //Display only accessible neighbours in one move:
-            neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords,-selectedHex.Ship.gameObject.transform.right);
-
-            //Display accessible neighbours in a number of move points /!\DOES NOT WORK FOR MOVEPOINTS>1, NEEDS TO HANDLE ROTATION
-            BFSResult bfsresult = GraphSearch.BFSGetRange(hexGrid, selectedHex.HexCoords, movementPoints);
-            neighbours = new List<Vector3Int>(bfsresult.GetRangePositions());
-
-            foreach (Vector3Int neighbour in neighbours)
+            if(selectedHex.Ship != null)
             {
-                hexGrid.GetTileAt(neighbour).EnableHighLight();
-            }
+                //Display only accessible neighbours in one move:
+                neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords, -selectedHex.Ship.gameObject.transform.right);
 
-            Debug.Log($"Neighbours of {selectedHex.HexCoords} are: ");
-            foreach (Vector3Int pos in neighbours)
-            {
-                Debug.Log(pos);
+                //Display accessible neighbours in a number of move points /!\DOES NOT WORK FOR MOVEPOINTS>1, NEEDS TO HANDLE ROTATION
+                BFSResult bfsresult = GraphSearch.BFSGetRange(hexGrid, selectedHex.HexCoords, movementPoints);
+                neighbours = new List<Vector3Int>(bfsresult.GetRangePositions());
+
+                foreach (Vector3Int neighbour in neighbours)
+                {
+                    hexGrid.GetTileAt(neighbour).EnableHighLight();
+                }
+
+                Debug.Log($"Neighbours of {selectedHex.HexCoords} are: ");
+                foreach (Vector3Int pos in neighbours)
+                {
+                    Debug.Log(pos);
+                }
             }
+            else //if there is no ship on the cell, just highlight it in different color
+            {
+                selectedHex.EnableHighlightInvalid();
+                previousHighligthedHex = selectedHex;
+            }
+            
 
             //TODO: manage the case when the user clicks on a cell without ships => Highmight it or not? Change color?
 

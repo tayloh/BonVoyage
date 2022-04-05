@@ -23,6 +23,8 @@ public class GraphSearch : MonoBehaviour
         while (nodesToVisitQueue.Count > 0)
         {
             Vector3Int currentNode = nodesToVisitQueue.Dequeue();
+            //TODO calculate forward
+            
             foreach (Vector3Int neighbourPosition in hexGrid.GetAccessibleNeighboursFor(currentNode, forward)) //Forard is not updated, accurate for only 1 movement
             {
                 if(hexGrid.GetTileAt(neighbourPosition).IsObstacle())
@@ -49,7 +51,7 @@ public class GraphSearch : MonoBehaviour
                 }
             }
             //Update vector forward
-            //this function does not return orientation of the ship => need to change the structure
+            //this function does not return orientation of the ship => need to change the structure ==> update froward
         }
         return new BFSResult { visitedNodesDict = visitedNodes };
     }

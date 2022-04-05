@@ -6849,6 +6849,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1488788714}
     m_Modifications:
+    - target: {fileID: 3788887259659557734, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
+      propertyPath: glowMaterialWhenInvalid
+      value: 
+      objectReference: {fileID: 2100000, guid: 8a4a672c410be7f479f79efc701d0a82, type: 2}
     - target: {fileID: 4936956383488517673, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
       propertyPath: m_Name
       value: Hex

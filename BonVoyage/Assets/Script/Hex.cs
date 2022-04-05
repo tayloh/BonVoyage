@@ -64,6 +64,16 @@ public class Hex : MonoBehaviour
     {
         highlight.ToggleGlow(false);
     }
+
+    public void EnableHighlightInvalid()
+    {
+        highlight.ToggleGlowInvalid(true);
+    }
+
+    public void DisableHighlightInvalid()
+    {
+        highlight.ToggleGlowInvalid(false);
+    }
 }
 
 public enum HexType

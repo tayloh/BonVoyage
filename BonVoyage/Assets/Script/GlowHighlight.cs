@@ -10,6 +10,7 @@ public class GlowHighlight : MonoBehaviour
     Dictionary<Color, Material> cachedGlowMaterials = new Dictionary<Color, Material>();
 
     public Material glowMaterial;
+    public Material glowMaterialWhenInvalid;
 
     private bool isGlowing = false;
 
@@ -34,6 +35,7 @@ public class GlowHighlight : MonoBehaviour
                     mat = new Material(glowMaterial);
 
                     mat.color = originalMaterials[i].color;
+                    cachedGlowMaterials[mat.color] = mat;
                 }
                 newMaterials[i] = mat;
             }
@@ -58,6 +60,33 @@ public class GlowHighlight : MonoBehaviour
             }
         }
         isGlowing = !isGlowing;
+    }
+
+    public void ToggleGlow(Material mat)
+    {
+        if (!isGlowing)
+        {
+            foreach (Renderer renderer in originalMaterialDictionary.Keys)
+            {
+                renderer.materials = new Material[1] { mat };
+            }
+        }
+        else
+        {
+            foreach (Renderer renderer in originalMaterialDictionary.Keys)
+            {
+                renderer.materials = originalMaterialDictionary[renderer];
+            }
+        }
+        isGlowing = !isGlowing;
+    }
+
+    public void ToggleGlowInvalid(bool state)
+    {
+        if (isGlowing == state) return;
+
+        isGlowing = !state;
+        ToggleGlow(glowMaterialWhenInvalid);
     }
 
     public void ToggleGlow(bool state)
