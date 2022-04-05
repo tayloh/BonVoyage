@@ -70,9 +70,19 @@ public class Hex : MonoBehaviour
         highlight.ToggleGlowInvalid(true);
     }
 
+    internal void ResetHighlight()
+    {
+        highlight.ResetGlowHighlight();
+    }
+
     public void DisableHighlightInvalid()
     {
         highlight.ToggleGlowInvalid(false);
+    }
+
+    internal void HighlightPath()
+    {
+        highlight.HighlightValidPath();
     }
 }
 

@@ -6,8 +6,14 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     [SerializeField]
+    private int movementPoints = 1;
+    public int MovementPoints { get => movementPoints; }
+
+    [SerializeField]
     private float _movementDuration = 1.0f;
+    [SerializeField]
     private float _rotationDuration = 0.3f;
+
     private GlowHighlight _glowHighlight;
 
     [SerializeField]
@@ -24,7 +30,7 @@ public class Ship : MonoBehaviour
         _glowHighlight = GetComponent<GlowHighlight>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
-        hexCoord = new HexCoordinates().ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0,1,0));
+        hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0,1,0));
     }
 
     private void Start()
@@ -47,7 +53,6 @@ public class Ship : MonoBehaviour
     {
         _pathPositions = new Queue<Vector3>(path);
         Vector3 firstTarget = _pathPositions.Dequeue();
-
         StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));
 
     }
@@ -59,7 +64,7 @@ public class Ship : MonoBehaviour
         Vector3 direction = endPosition - transform.position;
         Quaternion endRotation = Quaternion.LookRotation(direction, Vector3.up);
 
-        if (Mathf.Approximately(Mathf.Abs(Quaternion.Dot(startRotation, endRotation)), 1.0f) == false)
+        if (Mathf.Approximately(Mathf.Abs(Quaternion.Dot(startRotation, endRotation)), 1.0f) == false) //The rottation is needed only if the ship does not face the good direction
         {
             float timeElapsed = 0;
             while (timeElapsed < rotationDuration)
@@ -71,7 +76,7 @@ public class Ship : MonoBehaviour
             }
             transform.rotation = endRotation;
         }
-        StartCoroutine(MovementCoroutine(endPosition));
+        StartCoroutine(MovementCoroutine(endPosition)); //To move to the beginning of the coroutine if we want to turn while moving
     }
 
     public IEnumerator MovementCoroutine(Vector3 endPosition)
@@ -90,6 +95,7 @@ public class Ship : MonoBehaviour
         }
         transform.position = endPosition;
 
+        //The following part may not be useful if we want to move 1 cell at a time
         if (_pathPositions.Count > 0)
         {
             Debug.Log("Selecting next position...");

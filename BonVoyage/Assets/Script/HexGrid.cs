@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,12 @@ public class HexGrid : MonoBehaviour
         return hexTileNeighboursDict[hexCoordinates];
     }
 
+    public Vector3Int GetClosestHex(Vector3 worldPosition)
+    {
+        worldPosition.y = 0;
+        return HexCoordinates.ConvertPositionToOffset(worldPosition);
+    }
+
     //TESTING
     private void Update()
     {
@@ -68,7 +75,7 @@ public class HexGrid : MonoBehaviour
         switch (Direction.IsOffsetEven(hexcoordinates.z))
         {
             case true:
-                forward = new HexCoordinates().ConvertPositionToOffset(forward);
+                forward = HexCoordinates.ConvertPositionToOffset(forward);
                 for(int i =0; i<Direction.directionsOffsetEven.Count; i++)
                 {
                     if(Direction.directionsOffsetEven[i]==forward)
@@ -89,7 +96,7 @@ public class HexGrid : MonoBehaviour
                 }
                 break;
             case false:
-                forward = new HexCoordinates().ConvertPositionToOffset(forward);
+                forward = HexCoordinates.ConvertPositionToOffset(forward);
                 for (int i = 0; i < Direction.directionsOffsetOdd.Count; i++)
                 {
                     if (Direction.directionsOffsetEven[i] == forward) //direction is always convert as an even configuration

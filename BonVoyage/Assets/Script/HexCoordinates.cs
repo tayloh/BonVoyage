@@ -25,7 +25,7 @@ public class HexCoordinates : MonoBehaviour
         offsetCoordinates = ConvertPositionToOffset(transform.position);
     }    
 
-    public Vector3Int ConvertPositionToOffset(Vector3 position)
+    public static Vector3Int ConvertPositionToOffset(Vector3 position)
         //convert actual position to int coordinates
     {
         int x = Mathf.CeilToInt(position.x / xOffset);
