@@ -15,6 +15,9 @@ public class SelectionManager : MonoBehaviour
 
     private List<Vector3Int> neighbours = new List<Vector3Int>();
 
+    [SerializeField]
+    private int movementPoints = 1;
+
     private void Awake()
     {
         if (mainCamera == null)
@@ -36,10 +39,16 @@ public class SelectionManager : MonoBehaviour
             {
                 hexGrid.GetTileAt(neighbour).DisableHighlight();
             }
+
             //Testing finding neighbours
             //neighbours = hexGrid.GetNeighboursFor(selectedHex.HexCoords);
+
+            //Display only accessible neighbours in one move:
             neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords,-selectedHex.Ship.gameObject.transform.right);
-            
+
+            //Display accessible neighbours in a number of move points /!\DOES NOT WORK FOR MOVEPOINTS>1, NEEDS TO HANDLE ROTATION
+            BFSResult bfsresult = GraphSearch.BFSGetRange(hexGrid, selectedHex.HexCoords, movementPoints);
+            neighbours = new List<Vector3Int>(bfsresult.GetRangePositions());
 
             foreach (Vector3Int neighbour in neighbours)
             {
