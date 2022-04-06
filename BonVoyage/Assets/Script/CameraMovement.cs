@@ -29,22 +29,22 @@ public class CameraMovement : MonoBehaviour
         //takes inputs for all directions at once and then applies it all at the same time at the end
         if(Input.GetKey("w"))
         {
-            CamPos.z += movementSpeed * Time.deltaTime;
+            CamPos += transform.up * movementSpeed * Time.deltaTime;
         }
         
         if(Input.GetKey("s"))
         {
-            CamPos.z -= movementSpeed * Time.deltaTime;
+            CamPos -= transform.up * movementSpeed * Time.deltaTime;
         }
         
         if(Input.GetKey("d"))
         {
-            CamPos.x += movementSpeed * Time.deltaTime;
+            CamPos += transform.right * movementSpeed * Time.deltaTime;
         }
         
         if(Input.GetKey("a"))
         {
-            CamPos.x -= movementSpeed * Time.deltaTime;
+            CamPos -= transform.right * movementSpeed * Time.deltaTime;
         }
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
@@ -61,9 +61,9 @@ public class CameraMovement : MonoBehaviour
 
         if(Input.GetMouseButton(1))
         {
-            transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), 0, 0);
+            //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), 0, 0);
             //transform.eulerAngles += RotSpeed * new Vector3(0, Input.GetAxis("Mouse X"), 0);
-            //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
         }
     }
 }
