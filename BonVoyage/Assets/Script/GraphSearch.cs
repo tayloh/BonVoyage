@@ -16,7 +16,7 @@ public class GraphSearch : MonoBehaviour
         costSoFar.Add(startPoint, 0);
         visitedNodes.Add(startPoint, null);
         
-        Vector3 forward = -hexGrid.GetTileAt(startPoint).Ship.gameObject.transform.right;
+        Vector3 forward = hexGrid.GetTileAt(startPoint).Ship.gameObject.transform.forward;
         
 
             //
@@ -25,7 +25,7 @@ public class GraphSearch : MonoBehaviour
             Vector3Int currentNode = nodesToVisitQueue.Dequeue();
             //TODO calculate forward
             
-            foreach (Vector3Int neighbourPosition in hexGrid.GetAccessibleNeighboursFor(currentNode, forward)) //Forard is not updated, accurate for only 1 movement
+            foreach (Vector3Int neighbourPosition in hexGrid.GetAccessibleNeighboursFor(currentNode, forward)) //Forward is not updated, accurate for only 1 movement
             {
                 if(hexGrid.GetTileAt(neighbourPosition).IsObstacle())
                 {
@@ -41,7 +41,7 @@ public class GraphSearch : MonoBehaviour
                     {
                         visitedNodes[neighbourPosition] = currentNode;
                         costSoFar[neighbourPosition] = newCost;
-                        nodesToVisitQueue.Enqueue(neighbourPosition);
+                        //nodesToVisitQueue.Enqueue(neighbourPosition); //not necessary if one tile at a time
                     }
                     else if (costSoFar[neighbourPosition]>newCost)
                     {

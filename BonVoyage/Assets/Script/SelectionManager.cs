@@ -68,7 +68,7 @@ public class SelectionManager : MonoBehaviour
             if(selectedHex.Ship != null)
             {
                 //Display only accessible neighbours in one move:
-                neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords, -selectedHex.Ship.gameObject.transform.right);
+                neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords, selectedHex.Ship.gameObject.transform.forward);
 
                 //Display accessible neighbours in a number of move points /!\DOES NOT WORK FOR MOVEPOINTS>1, NEEDS TO HANDLE ROTATION
                 BFSResult bfsresult = GraphSearch.BFSGetRange(hexGrid, selectedHex.HexCoords, selectedHex.Ship.MovementPoints);

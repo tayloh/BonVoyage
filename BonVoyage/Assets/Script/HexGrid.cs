@@ -75,50 +75,60 @@ public class HexGrid : MonoBehaviour
         switch (Direction.IsOffsetEven(hexcoordinates.z))
         {
             case true:
-                forward = HexCoordinates.ConvertPositionToOffset(forward);
+                forward = HexCoordinates.ConvertVectorToOffset(forward);
                 for(int i =0; i<Direction.directionsOffsetEven.Count; i++)
                 {
                     if(Direction.directionsOffsetEven[i]==forward)
                     {
-                        if(hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[(i - 1) % 6]))
+                        if(hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[PositiveModulo(i - 1, 6)]))
                         {
-                            result.Add(hexcoordinates + Direction.directionsOffsetEven[(i - 1) % 6]); 
+                            result.Add(hexcoordinates + Direction.directionsOffsetEven[PositiveModulo(i - 1, 6)]); 
                         }
                         if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[i]))
                         {
                             result.Add(hexcoordinates + Direction.directionsOffsetEven[i]);
                         }
-                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[(i + 1) % 6]))
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetEven[PositiveModulo(i + 1, 6)]))
                         {
-                            result.Add(hexcoordinates + Direction.directionsOffsetEven[(i + 1) % 6]);
+                            result.Add(hexcoordinates + Direction.directionsOffsetEven[PositiveModulo(i + 1, 6)]);
                         }
                     }
                 }
                 break;
             case false:
-                forward = HexCoordinates.ConvertPositionToOffset(forward);
+                forward = HexCoordinates.ConvertVectorToOffset(forward);
                 for (int i = 0; i < Direction.directionsOffsetOdd.Count; i++)
                 {
                     if (Direction.directionsOffsetEven[i] == forward) //direction is always convert as an even configuration
                     {
-                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[(i - 1) % 6]))
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[PositiveModulo(i-1, 6)]))
                         {
-                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[(i - 1) % 6]);
+                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[PositiveModulo(i - 1, 6)]);
                         }
                         if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[i]))
                         {
                             result.Add(hexcoordinates + Direction.directionsOffsetOdd[i]);
                         }
-                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[(i + 1) % 6]))
+                        if (hexTileDict.ContainsKey(hexcoordinates + Direction.directionsOffsetOdd[PositiveModulo(i + 1, 6)]))
                         {
-                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[(i + 1) % 6]);
+                            result.Add(hexcoordinates + Direction.directionsOffsetOdd[PositiveModulo(i + 1, 6)]);
                         }
                     }
                 }
                 break;
         }
-        //Debug.Log("a neighbour of the ship is "+result[0]);
+        Debug.Log("a neighbour of the ship is "+result[0] +" ; "+ (result.Count > 1 ? result[1] : new Vector3Int(-1, -1, -1)) + " ; "+ (result.Count > 2 ? result[2] : new Vector3Int(-1, -1, -1)));
         return result;
+    }
+
+    public static int PositiveModulo(int a, int b)
+    {
+        int c = a % b;
+        if ((c < 0 && b > 0) || (c > 0 && b < 0))
+        {
+            c += b;
+        }
+        return c;
     }
 
     public void PlaceShip(Vector3Int hexCoord, Ship ship)

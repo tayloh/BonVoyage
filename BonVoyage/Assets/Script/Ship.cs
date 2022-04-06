@@ -53,8 +53,7 @@ public class Ship : MonoBehaviour
     {
         _pathPositions = new Queue<Vector3>(path);
         Vector3 firstTarget = _pathPositions.Dequeue();
-        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));
-
+        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));        
     }
 
     public IEnumerator RotationCoroutine(Vector3 endPosition, float rotationDuration)
@@ -106,6 +105,17 @@ public class Ship : MonoBehaviour
             Debug.Log("Movement finished.");
             MovementFinished?.Invoke(this);
         }
+        UpdateShipTile(startPosition, endPosition);
+    }
+
+    private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
+    {        
+        //set previoustile.Ship à null et set newtile.ship à ship
+        Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
+        previousTile.Ship = null;
+        Hex newTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(newPosition - new Vector3(0, 1, 0)));
+        newTile.Ship = this;
+        Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
     }
 
 }

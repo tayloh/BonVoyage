@@ -18,13 +18,17 @@ public class MovementSystem : MonoBehaviour
         }
         movementRange = new BFSResult();
     }
-
-    //WORK IN PROGRESS
+    
     public void ShowRange(Ship selectedShip, HexGrid hexGrid)
     {
         CalculateRange(selectedShip, hexGrid);
+        Vector3Int shipPos = hexGrid.GetClosestHex(selectedShip.transform.position);
         foreach (Vector3Int hexPosition in movementRange.GetRangePositions())
         {
+            if(shipPos == hexPosition)
+            {
+                continue;
+            }
             hexGrid.GetTileAt(hexPosition).EnableHighLight();
         }
     }
@@ -53,11 +57,14 @@ public class MovementSystem : MonoBehaviour
     public void MoveShip(Ship selectedShip, HexGrid hexGrid)
     {
         Debug.Log("Moving ship " + selectedShip.name);
-        selectedShip.MoveThroughPath(_currentPath.Select(pos => hexGrid.GetTileAt(pos).transform.position).ToList());
+        selectedShip.MoveThroughPath(_currentPath.Select(pos => hexGrid.GetTileAt(pos).transform.position).ToList());        
     }
+
+    
 
     public bool IsHexInRange(Vector3Int hexPosition)
     {
         return movementRange.IsHexPositionInRange(hexPosition);
     }
+
 }
