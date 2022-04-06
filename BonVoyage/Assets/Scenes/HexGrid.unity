@@ -2487,9 +2487,11 @@ MonoBehaviour:
   limiter_x: 100
   limiter_z: 100
   scrollSpeed: 2000
-  minLimiter_y: 20
+  minLimiter_y: 5
   maxLimiter_y: 120
-  RotSpeed: 6
+  RotSpeed: 2000
+  RotMaxX: 90
+  RotMinX: 0
 --- !u!114 &732777267
 MonoBehaviour:
   m_ObjectHideFlags: 0
