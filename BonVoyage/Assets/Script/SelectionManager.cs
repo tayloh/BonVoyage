@@ -44,57 +44,25 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("clic on terrain detected");
                 TerrainSelected?.Invoke(result);
             }
-        }
+        }        
+    }
 
-        /*GameObject result;
+    private void HandleClickDuringTurn(Vector3 mousePosition)
+    {
+        GameObject result;
         if (FindTarget(mousePosition, out result))
         {
-            if (previousHighligthedHex != null)
+            if (ShipSelected(result))
             {
-                previousHighligthedHex.DisableHighlightInvalid();
-            }            
-            Hex selectedHex = result.GetComponent<Hex>();
-
-            selectedHex.DisableHighlight();
-
-            foreach (Vector3Int neighbour in neighbours)
-            {
-                hexGrid.GetTileAt(neighbour).DisableHighlight();
+                Debug.Log("Clic on ship detected");
+                OnShipSelected?.Invoke(result);
             }
-
-            //Testing finding neighbours
-            //neighbours = hexGrid.GetNeighboursFor(selectedHex.HexCoords);
-
-            if(selectedHex.Ship != null)
+            else
             {
-                //Display only accessible neighbours in one move:
-                neighbours = hexGrid.GetAccessibleNeighboursFor(selectedHex.HexCoords, selectedHex.Ship.gameObject.transform.forward);
-
-                //Display accessible neighbours in a number of move points /!\DOES NOT WORK FOR MOVEPOINTS>1, NEEDS TO HANDLE ROTATION
-                BFSResult bfsresult = GraphSearch.BFSGetRange(hexGrid, selectedHex.HexCoords, selectedHex.Ship.MovementPoints);
-                neighbours = new List<Vector3Int>(bfsresult.GetRangePositions());
-
-                foreach (Vector3Int neighbour in neighbours)
-                {
-                    hexGrid.GetTileAt(neighbour).EnableHighLight();
-                }
-
-                Debug.Log($"Neighbours of {selectedHex.HexCoords} are: ");
-                foreach (Vector3Int pos in neighbours)
-                {
-                    Debug.Log(pos);
-                }
+                Debug.Log("clic on terrain detected");
+                TerrainSelected?.Invoke(result);
             }
-            else //if there is no ship on the cell, just highlight it in different color
-            {
-                selectedHex.EnableHighlightInvalid();
-                previousHighligthedHex = selectedHex;
-            }
-            
-
-            //TODO: manage the case when the user clicks on a cell without ships => Highmight it or not? Change color?
-
-        }*/
+        }
     }
 
     private bool ShipSelected(GameObject result)

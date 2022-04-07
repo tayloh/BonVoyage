@@ -10,8 +10,11 @@ public class ShipManager : MonoBehaviour
 
     [SerializeField]
     private MovementSystem movementSystem;
+    [SerializeField]
+    private GameManager gameManager;
 
-    public bool PlayersTurn { get; private set; } = true;
+    public bool isNotMoving { get; private set; } = true;
+    private bool isPlayerTurn;
 
     [SerializeField]
     private Ship selectedShip;
@@ -19,7 +22,7 @@ public class ShipManager : MonoBehaviour
 
     public void HandleShipSelection(GameObject ship)
     {
-        if (PlayersTurn == false)
+        if (isNotMoving == false)
         {
             return;
         }
@@ -32,10 +35,15 @@ public class ShipManager : MonoBehaviour
         PrepareShipForMovement(shipReference);
     }
 
+    public void StartPlayerTurn(Ship ship)
+    {
+        PrepareShipForMovement(ship);
+    }
+
     public void HandleTerrainSelected(GameObject hexGO)
     {
-        //check if it is not hte player's turn or if there is no ship selcted, ignore it
-        if(selectedShip == null || PlayersTurn == false)
+        //check if it is not the player's turn or if there is no ship selected, ignore it
+        if(gameManager.state != GameState.PlayerMove || selectedShip == null || isNotMoving == false)
         {
             return;
         }
@@ -50,7 +58,7 @@ public class ShipManager : MonoBehaviour
         //else, process the selected hexagon
         HandleTargetHexSelected(selectedHex);
     }
-
+    
     private void HandleTargetHexSelected(Hex selectedHex)
     {
         if (previouslySelectedHex == null || previouslySelectedHex != selectedHex)
@@ -61,7 +69,7 @@ public class ShipManager : MonoBehaviour
         else
         {
             movementSystem.MoveShip(selectedShip, this.hexgrid);
-            PlayersTurn = false;                                    //TODO :change here if player's turn can take more than 1 move
+            isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
             selectedShip.MovementFinished += ResetTurn;
             ClearOldSelection();
         }
@@ -91,7 +99,8 @@ public class ShipManager : MonoBehaviour
     private void ResetTurn(Ship selectedShip)
     {
         selectedShip.MovementFinished -= ResetTurn;
-        PlayersTurn = true;
+        isNotMoving = true;
+        gameManager.UpdateGameState(GameState.PlayerFire);
     }
 
     private void PrepareShipForMovement(Ship shipReference)

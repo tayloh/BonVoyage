@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,23 @@ public class GameManager : MonoBehaviour
 
     public GameState state; 
     private bool isGameOver = false;
+    public static event Action<GameState> OnGameStateChanged;
+
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> pirateShips = new List<Ship>();
+
+    [SerializeField]
+    private GameObject playerShipsParent;
+    [SerializeField]
+    private GameObject pirateShipsParent;
+
+    private List<Ship> playerShipsTurn = new List<Ship>();
+    private List<Ship> pirateShipsTurn = new List<Ship>();
+    private int actualPlayerShipIndex = -1;
+    private int actualPirateShipIndex = -1;
+
+    [SerializeField]
+    private ShipManager shipManager;
 
     private void Awake()
     {
@@ -18,27 +34,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        foreach(Ship ship in playerShipsParent.GetComponentsInChildren<Ship>())
+        {
+            playerShips.Add(ship);
+        }
 
-        /*//testing turn list function
-        Ship ship1 = new Ship();
-        ship1.name = "ship1";
-        playerShips.Add(ship1);
-        Ship ship2 = new Ship();
-        ship2.name = "ship2";
-        playerShips.Add(ship2);
+        //Generating the random order of ships for both player and pirates
+        PrepareTurn();
+        //Starting the game with first turn of the player
+        UpdateGameState(GameState.PlayerMove);
+    }
 
-        Ship ship3 = new Ship();
-        ship3.name = "ship3";
-        pirateShips.Add(ship3);
-        Ship ship4 = new Ship();
-        ship4.name = "ship4";
-        pirateShips.Add(ship4);
+    private void PrepareTurn()
+    {
+        playerShipsTurn.AddRange(playerShips);
+        playerShipsTurn.Shuffle();
+        pirateShipsTurn.AddRange(pirateShips);
+        pirateShipsTurn.Shuffle();
 
-        DisplayShipList(playerShips);
-        DisplayShipList(pirateShips);
-        DisplayShipList(TurnList());
-        DisplayShipList(playerShips);
-        DisplayShipList(pirateShips);*/
+        UpdateGameState(GameState.PlayerMove);
     }
 
     public void AddPlayerShip(Ship shipToAdd)
@@ -46,7 +60,51 @@ public class GameManager : MonoBehaviour
         playerShips.Add(shipToAdd);
     }
 
-    private List<Ship> TurnList()
+    public void UpdateGameState(GameState newState)
+    {
+        state = newState;
+
+        switch (newState)
+        {
+            case GameState.PlayerMove:
+                Debug.Log("This is Player's turn to move");
+                NextTurnPlayer();
+                break;
+            case GameState.PlayerFire:
+                Debug.Log("This is Player's turn to fire");
+
+                break;
+            case GameState.PirateTurn:
+
+                break;
+            case GameState.Victory:
+
+                break;
+            case GameState.Defeat:
+
+                break;
+        }
+        OnGameStateChanged?.Invoke(newState);
+    }
+    
+    private void NextTurnPlayer()
+    {//sets the next turn with one of the player's ship
+        if(playerShipsTurn.Count > actualPlayerShipIndex)
+        {
+            shipManager.StartPlayerTurn(playerShipsTurn[actualPlayerShipIndex + 1]);
+        }
+        else
+        {
+            shipManager.StartPlayerTurn(playerShipsTurn[0]);
+        }
+    }
+
+    private void NextTurnPirate()
+    {
+
+    }
+
+    private List<Ship> TurnBothList()
     {
         List<Ship> turnShipsList = new List<Ship>();
         turnShipsList.AddRange(pirateShips);
@@ -55,6 +113,8 @@ public class GameManager : MonoBehaviour
         
         return turnShipsList;
     }
+
+    
 
     private void DisplayShipList(List<Ship> list)
     {
@@ -87,17 +147,10 @@ public static class ListExtensions
 
 public enum GameState
 {
-    PlayerTurn,
+    PlayerMove,
+    PlayerFire,
     PirateTurn,
     Victory,
     Defeat
 }
 
-//Elements to connect to the script:
-public class Ship
-{
-    private int health;
-    private bool isAlive;
-    //for debugging only:
-    public string name;
-}
