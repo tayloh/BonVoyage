@@ -2486,9 +2486,9 @@ MonoBehaviour:
   movementSpeed: 20
   limiter_x: 100
   limiter_z: 100
-  scrollSpeed: 2000
-  minLimiter_y: 5
-  maxLimiter_y: 120
+  scrollSpeed: 6000
+  minLimiter_y: 2
+  maxLimiter_y: 20
   RotSpeed: 2000
   RotMaxX: 90
   RotMinX: 0

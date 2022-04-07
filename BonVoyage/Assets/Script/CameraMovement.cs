@@ -31,13 +31,13 @@ public class CameraMovement : MonoBehaviour
     {
         switch (option)
         {
-            case 0: 
+            case 0:
                 return new Vector3(transform.forward.x, 0, transform.forward.z).normalized;
             case 1:
                 return new Vector3(transform.right.x, 0, transform.right.z).normalized;
             default:
                 throw new Exception($"Invalid option {option}");
-            
+
         }
     }
 
@@ -73,12 +73,22 @@ public class CameraMovement : MonoBehaviour
 
         // Calculate new position
         resultingMoveDir = resultingMoveDir.normalized;
-        CamPos += resultingMoveDir * movementSpeed * Time.deltaTime;
+        CamPos += resultingMoveDir * movementSpeed * Time.deltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
+        if (CamPos.y > minLimiter_y && CamPos.y < maxLimiter_y)
+        {
+            CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
+        }
+        // If the camera is at the ceiling or the floor, move it only in y direction when scrolling
+        else
+        {
+            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.deltaTime;
+        }
+
+
         //zoom limiter
         CamPos.y = Mathf.Clamp(CamPos.y, minLimiter_y, maxLimiter_y);
         //makes sure that the values cant go beyond the limiters
