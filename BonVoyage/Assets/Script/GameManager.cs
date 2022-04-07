@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     private GameObject playerShipsParent;
     [SerializeField]
     private GameObject pirateShipsParent;
+    [SerializeField]
+    private GameObject fireButton;
 
     private List<Ship> playerShipsTurn = new List<Ship>();
     private List<Ship> pirateShipsTurn = new List<Ship>();
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.PlayerFire:
                 Debug.Log("This is Player's turn to fire");
-
+                fireButton.SetActive(true);
                 break;
             case GameState.PirateTurn:
 

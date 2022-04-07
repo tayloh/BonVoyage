@@ -20,7 +20,7 @@ public class ShipManager : MonoBehaviour
     private Ship selectedShip;
     private Hex previouslySelectedHex;
 
-    public void HandleShipSelection(GameObject ship)
+    public void HandleShipSelection(GameObject ship) //not used here sinced the ship is not chosen by the player
     {
         if (isNotMoving == false)
         {
@@ -130,5 +130,23 @@ public class ShipManager : MonoBehaviour
         this.selectedShip.Deselect();
         movementSystem.HideRange(this.hexgrid);
         this.selectedShip = null;
+    }
+
+    public void TriggerFiring()
+    {
+        StartCoroutine("FireActiveShip");
+    }
+
+    private IEnumerator FireActiveShip()
+    {
+        //TODO
+        //fire canons from selectedShip
+        //...
+        throw new NotImplementedException();
+
+        //wait for the end of firing animation
+        //...
+        gameManager.UpdateGameState(GameState.PirateTurn);
+        yield return null;
     }
 }

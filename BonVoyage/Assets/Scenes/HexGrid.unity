@@ -1257,7 +1257,6 @@ Transform:
   m_Children:
   - {fileID: 99714484}
   - {fileID: 541896040}
-  - {fileID: 1413327833}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1341,7 +1340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &302905736
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1405,7 +1404,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 302905738}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1520174882}
+        m_TargetAssemblyTypeName: ShipManager, Assembly-CSharp
+        m_MethodName: TriggerFiring
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &302905738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1419,15 +1430,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.123353474, g: 0.8490566, b: 0.23347795, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: f8f2182f61107634d971a5ba1b62d61a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1967,6 +1978,7 @@ MonoBehaviour:
   state: 0
   playerShipsParent: {fileID: 289156635}
   pirateShipsParent: {fileID: 1951956767}
+  fireButton: {fileID: 302905735}
   shipManager: {fileID: 1520174882}
 --- !u!4 &442071960
 Transform:
@@ -7485,15 +7497,19 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 289156636}
+    m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 5326358309581350044, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 25c2ca4db54a826429a4dc0fbb4f8dd2, type: 2}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (3)
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7926,7 +7942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1611023552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9634,8 +9650,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1520174882}
         m_TargetAssemblyTypeName: ShipManager, Assembly-CSharp
-        m_MethodName: HandleShipSelection
-        m_Mode: 0
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9742,7 +9758,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1413327833}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
