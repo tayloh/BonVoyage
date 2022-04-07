@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
+    public GameState state; 
     private bool isGameOver = false;
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> pirateShips = new List<Ship>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -59,6 +67,7 @@ public class GameManager : MonoBehaviour
 
 }
 
+//Utitlities for lists
 public static class ListExtensions
 {
     public static void Shuffle<T>(this IList<T> list)
@@ -76,6 +85,13 @@ public static class ListExtensions
     }
 }
 
+public enum GameState
+{
+    PlayerTurn,
+    PirateTurn,
+    Victory,
+    Defeat
+}
 
 //Elements to connect to the script:
 public class Ship
