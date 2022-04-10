@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
         {
             playerShips.Add(ship);
         }
+        foreach (Ship pship in pirateShipsParent.GetComponentsInChildren<Ship>())
+        {
+            pirateShips.Add(pship);
+        }
 
         //Generating the random order of ships for both player and pirates
         PrepareTurn();
@@ -69,15 +73,17 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.PlayerMove:
-                Debug.Log("This is Player's turn to move");
+                Debug.Log("It is Player's turn to move");
                 NextTurnPlayer();
                 break;
             case GameState.PlayerFire:
-                Debug.Log("This is Player's turn to fire");
+                Debug.Log("It is Player's turn to fire");
                 fireButton.SetActive(true);
                 break;
             case GameState.PirateTurn:
-
+                Debug.Log("It is Pirates' turn");
+                fireButton.SetActive(false);
+                NextTurnPirate();
                 break;
             case GameState.Victory:
 
@@ -91,19 +97,28 @@ public class GameManager : MonoBehaviour
     
     private void NextTurnPlayer()
     {//sets the next turn with one of the player's ship
-        if(playerShipsTurn.Count > actualPlayerShipIndex)
+        if(playerShipsTurn.Count - 1 > actualPlayerShipIndex)
         {
-            shipManager.StartPlayerTurn(playerShipsTurn[actualPlayerShipIndex + 1]);
+            actualPlayerShipIndex += 1;
         }
         else
         {
-            shipManager.StartPlayerTurn(playerShipsTurn[0]);
+            actualPlayerShipIndex = 0;
         }
+        shipManager.StartPlayerTurn(playerShipsTurn[actualPlayerShipIndex]);
     }
 
     private void NextTurnPirate()
     {
-
+        if (pirateShipsTurn.Count - 1 > actualPirateShipIndex)
+        {
+            actualPirateShipIndex += 1;
+        }
+        else
+        {
+            actualPirateShipIndex = 0;
+        }
+        shipManager.MovePirateShip(pirateShipsTurn[actualPirateShipIndex]);
     }
 
     private List<Ship> TurnBothList()

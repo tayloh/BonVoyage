@@ -10,7 +10,12 @@ public class Ship : MonoBehaviour
     public int MovementPoints { get => movementPoints; }
 
     [SerializeField]
+    private int fireRange = 3;
+    public int FireRange { get => fireRange; }
+
+    [SerializeField]
     private float _movementDuration = 1.0f;
+    public float MovementDuration { get => _movementDuration; }
     [SerializeField]
     private float _rotationDuration = 0.5f;
 

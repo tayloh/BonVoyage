@@ -96,6 +96,12 @@ public class ShipManager : MonoBehaviour
         return false;
     }
 
+    internal void MovePirateShip(Ship ship)
+    {
+        PirateAI pirateAI = ship.GetComponent<PirateAI>();
+        movementSystem.MoveShip(ship, hexgrid, pirateAI.ChoosePath());
+    }
+
     private void ResetTurn(Ship selectedShip)
     {
         selectedShip.MovementFinished -= ResetTurn;
@@ -142,11 +148,19 @@ public class ShipManager : MonoBehaviour
         //TODO
         //fire canons from selectedShip
         //...
-        throw new NotImplementedException();
 
         //wait for the end of firing animation
         //...
-        gameManager.UpdateGameState(GameState.PirateTurn);
+        switch (gameManager.state)
+        {
+            case GameState.PlayerFire:
+                gameManager.UpdateGameState(GameState.PirateTurn);
+                break;
+            case GameState.PirateTurn:
+                gameManager.UpdateGameState(GameState.PlayerMove);
+                break;
+        }
+        throw new NotImplementedException();
         yield return null;
     }
 }
