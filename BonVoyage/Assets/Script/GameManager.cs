@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     private GameObject pirateShipsParent;
     [SerializeField]
     private GameObject fireButton;
+    [SerializeField]
+    private GameObject gameOverText;
+    [SerializeField]
+    private GameObject victoryText;
 
     private List<Ship> playerShipsTurn = new List<Ship>();
     private List<Ship> pirateShipsTurn = new List<Ship>();
@@ -85,11 +89,14 @@ public class GameManager : MonoBehaviour
                 fireButton.SetActive(false);
                 NextTurnPirate();
                 break;
+            case GameState.Upgrade:
+                //player can upgrade his fleet
+                break;
             case GameState.Victory:
-
+                victoryText.SetActive(true);
                 break;
             case GameState.Defeat:
-
+                gameOverText.SetActive(true);
                 break;
         }
         OnGameStateChanged?.Invoke(newState);
@@ -167,6 +174,7 @@ public enum GameState
     PlayerMove,
     PlayerFire,
     PirateTurn,
+    Upgrade,
     Victory,
     Defeat
 }
