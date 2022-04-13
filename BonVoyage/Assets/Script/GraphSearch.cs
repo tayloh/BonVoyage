@@ -15,11 +15,9 @@ public class GraphSearch : MonoBehaviour
         nodesToVisitQueue.Enqueue(startPoint);
         costSoFar.Add(startPoint, 0);
         visitedNodes.Add(startPoint, null);
-        
+              
         Vector3 forward = hexGrid.GetTileAt(startPoint).Ship.gameObject.transform.forward;
         
-
-            //
         while (nodesToVisitQueue.Count > 0)
         {
             Vector3Int currentNode = nodesToVisitQueue.Dequeue();

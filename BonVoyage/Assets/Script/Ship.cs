@@ -10,9 +10,14 @@ public class Ship : MonoBehaviour
     public int MovementPoints { get => movementPoints; }
 
     [SerializeField]
-    private float _movementDuration = 1.0f;
+    private int fireRange = 3;
+    public int FireRange { get => fireRange; }
+
     [SerializeField]
-    private float _rotationDuration = 0.3f;
+    private float _movementDuration = 1.0f;
+    public float MovementDuration { get => _movementDuration; }
+    [SerializeField]
+    private float _rotationDuration = 0.5f;
 
     private GlowHighlight _glowHighlight;
 
@@ -62,7 +67,7 @@ public class Ship : MonoBehaviour
         endPosition.y = transform.position.y;
         Vector3 direction = endPosition - transform.position;
         Quaternion endRotation = Quaternion.LookRotation(direction, Vector3.up);
-
+        StartCoroutine(MovementCoroutine(endPosition));
         if (Mathf.Approximately(Mathf.Abs(Quaternion.Dot(startRotation, endRotation)), 1.0f) == false) //The rottation is needed only if the ship does not face the good direction
         {
             float timeElapsed = 0;
@@ -75,7 +80,6 @@ public class Ship : MonoBehaviour
             }
             transform.rotation = endRotation;
         }
-        StartCoroutine(MovementCoroutine(endPosition)); //To move to the beginning of the coroutine if we want to turn while moving
     }
 
     public IEnumerator MovementCoroutine(Vector3 endPosition)

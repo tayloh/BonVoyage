@@ -59,6 +59,11 @@ public class MovementSystem : MonoBehaviour
         Debug.Log("Moving ship " + selectedShip.name);
         selectedShip.MoveThroughPath(_currentPath.Select(pos => hexGrid.GetTileAt(pos).transform.position).ToList());        
     }
+    public void MoveShip(Ship selectedShip, HexGrid hexGrid, List<Vector3> path)
+    {
+        Debug.Log("Moving ship " + selectedShip.name);
+        selectedShip.MoveThroughPath(path);
+    }
 
     
 
