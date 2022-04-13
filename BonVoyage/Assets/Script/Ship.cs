@@ -28,7 +28,7 @@ public class Ship : MonoBehaviour
 
     public event Action<Ship> MovementFinished;
 
-    private Vector3Int hexCoord;
+    public Vector3Int hexCoord;
 
     private void Awake()
     {
@@ -119,7 +119,66 @@ public class Ship : MonoBehaviour
         previousTile.Ship = null;
         Hex newTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(newPosition - new Vector3(0, 1, 0)));
         newTile.Ship = this;
+
+        hexCoord = newTile.HexCoords;
+        HighLightAttackableTiles(0);
         Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
+
+        // Temporary...
+        StartCoroutine(DumbCoroutine());
+    }
+
+    private IEnumerator DumbCoroutine()
+    {
+        yield return new WaitForSeconds(3);
+
+        RemoveHighLightAttackableTiles(0);
+
+    }
+
+    public void HighLightAttackableTiles(int broadside)
+    {
+        if (broadside != 0 && broadside != 1)
+        {
+            throw new Exception("Broadside can only be 0=right, or 1=left");
+        }
+
+        //Vector3Int hexPos = hexGrid.GetClosestHex(..);
+        Debug.Log("Attempting highlight: " + hexCoord);
+        List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+
+        foreach (var tile in res)
+        {
+            Hex hex = hexGrid.GetTileAt(tile);
+            if (hex != null)
+            {
+                hex.EnableHighLight();
+            }
+            else
+            {
+                Debug.Log("Could not find tile: " + tile);
+            }
+            //Debug.Log(tile);
+        }
+    }
+
+    public void RemoveHighLightAttackableTiles(int broadside)
+    {
+        if (broadside != 0 && broadside != 1)
+        {
+            throw new Exception("Broadside can only be 0=right, or 1=left");
+        }
+
+        List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+        
+        foreach (var tile in res)
+        {
+            Hex hex = hexGrid.GetTileAt(tile);
+            if (hex != null)
+            {
+                hex.DisableHighlight();
+            }
+        }
     }
 
 }
