@@ -25,6 +25,7 @@ public class Hex : MonoBehaviour
 
     [SerializeField]
     private HexType hexType;
+    public HexType HexType { set => hexType = value; }
 
     public int GetCost()
     {

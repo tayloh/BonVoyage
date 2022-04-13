@@ -115,10 +115,13 @@ public class Ship : MonoBehaviour
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
     {        
         //set previoustile.Ship à null et set newtile.ship à ship
+        //updat ethe type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
         previousTile.Ship = null;
+        previousTile.HexType = HexType.Water;
         Hex newTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(newPosition - new Vector3(0, 1, 0)));
         newTile.Ship = this;
+        newTile.HexType = HexType.Obstacle;
         Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
     }
 
