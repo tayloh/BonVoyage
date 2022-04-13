@@ -25,10 +25,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject victoryText;
 
+    //if same number of ships:
     private List<Ship> playerShipsTurn = new List<Ship>();
     private List<Ship> pirateShipsTurn = new List<Ship>();
     private int actualPlayerShipIndex = -1;
     private int actualPirateShipIndex = -1;
+    //else:
+    private List<Ship> shipsTurn = new List<Ship>();
+    private int actualShipIndex = 0;
 
     [SerializeField]
     private ShipManager shipManager;
@@ -52,23 +56,26 @@ public class GameManager : MonoBehaviour
         //Generating the random order of ships for both player and pirates
         PrepareTurn();
         //Starting the game with first turn of the player
-        UpdateGameState(GameState.PlayerMove);
+        //UpdateGameState(GameState.PlayerMove);
     }
 
     private void PrepareTurn()
     {
-        playerShipsTurn.AddRange(playerShips);
+        /*playerShipsTurn.AddRange(playerShips);
         playerShipsTurn.Shuffle();
         pirateShipsTurn.AddRange(pirateShips);
-        pirateShipsTurn.Shuffle();
-
-        UpdateGameState(GameState.PlayerMove);
+        pirateShipsTurn.Shuffle();*/
+        //UpdateGameState(GameState.PlayerMove);
+        shipsTurn.AddRange(playerShips);
+        shipsTurn.AddRange(pirateShips);
+        shipsTurn.Shuffle();
+        NextTurn();
     }
 
-    public void AddPlayerShip(Ship shipToAdd)
+    /*public void AddPlayerShip(Ship shipToAdd)
     {
         playerShips.Add(shipToAdd);
-    }
+    }*/
 
     public void UpdateGameState(GameState newState)
     {
@@ -77,8 +84,9 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.PlayerMove:
-                Debug.Log("It is Player's turn to move");
-                NextTurnPlayer();
+                Debug.Log("It is Player's turn to move"); 
+                fireButton.SetActive(false);
+                //NextTurnPlayer();
                 break;
             case GameState.PlayerFire:
                 Debug.Log("It is Player's turn to fire");
@@ -87,7 +95,7 @@ public class GameManager : MonoBehaviour
             case GameState.PirateTurn:
                 Debug.Log("It is Pirates' turn");
                 fireButton.SetActive(false);
-                NextTurnPirate();
+                //NextTurnPirate();
                 break;
             case GameState.Upgrade:
                 //player can upgrade his fleet
@@ -102,7 +110,8 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(newState);
     }
     
-    private void NextTurnPlayer()
+  /* Not needed anymore :
+      private void NextTurnPlayer()
     {//sets the next turn with one of the player's ship
         if(playerShipsTurn.Count - 1 > actualPlayerShipIndex)
         {
@@ -126,19 +135,35 @@ public class GameManager : MonoBehaviour
             actualPirateShipIndex = 0;
         }
         shipManager.MovePirateShip(pirateShipsTurn[actualPirateShipIndex]);
-    }
+    }*/
 
-    private List<Ship> TurnBothList()
+    public void NextTurn()
     {
-        List<Ship> turnShipsList = new List<Ship>();
-        turnShipsList.AddRange(pirateShips);
-        turnShipsList.AddRange(playerShips);
-        turnShipsList.Shuffle(); //This shuffle randomly the list of all ships
-        
-        return turnShipsList;
+        Ship nextShip = GetNextShipForTurn();
+        if (!nextShip.CompareTag("Pirate"))
+        {
+            UpdateGameState(GameState.PlayerMove);
+            shipManager.StartPlayerTurn(nextShip);
+        }
+        else
+        {
+            UpdateGameState(GameState.PirateTurn);
+            shipManager.MovePirateShip(nextShip);
+        }
     }
 
-    
+    private Ship GetNextShipForTurn()
+    {
+        if (shipsTurn.Count - 1 > actualShipIndex)
+        {
+            actualShipIndex += 1;
+        }
+        else
+        {
+            actualShipIndex = 0;
+        }
+        return shipsTurn[actualShipIndex];
+    }
 
     private void DisplayShipList(List<Ship> list)
     {

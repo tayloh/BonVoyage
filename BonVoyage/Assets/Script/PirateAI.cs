@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Note that Pirate ships need the Pirate tag
 public class PirateAI : MonoBehaviour
 {
     private Ship ship;
@@ -22,7 +23,7 @@ public class PirateAI : MonoBehaviour
         List<Vector3Int> neighbours = hexGrid.GetAccessibleNeighboursFor(offsetPosOfShip, transform.forward);
         Vector3Int neighbourCoord = neighbours[0];
         Vector3 positionGoal = hexGrid.GetTileAt(neighbourCoord).transform.position;
-        StartCoroutine("EndPirateTurn");
+        StartCoroutine(EndPirateTurn());
         return new List<Vector3>() { positionGoal};    
     }
 
@@ -30,7 +31,7 @@ public class PirateAI : MonoBehaviour
     {
         yield return null;
         yield return new WaitForSecondsRealtime(ship.MovementDuration);
-        gameManager.UpdateGameState(GameState.PlayerMove);
+        gameManager.NextTurn(); ;
         yield return null;
     }
 }

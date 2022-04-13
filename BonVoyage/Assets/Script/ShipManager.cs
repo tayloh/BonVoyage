@@ -151,7 +151,7 @@ public class ShipManager : MonoBehaviour
 
         //wait for the end of firing animation
         //...
-        switch (gameManager.state)
+        /*switch (gameManager.state)
         {
             case GameState.PlayerFire:
                 gameManager.UpdateGameState(GameState.PirateTurn);
@@ -159,7 +159,8 @@ public class ShipManager : MonoBehaviour
             case GameState.PirateTurn:
                 gameManager.UpdateGameState(GameState.PlayerMove);
                 break;
-        }
+        }*/
+        gameManager.NextTurn();
         throw new NotImplementedException();
         yield return null;
     }
