@@ -79,6 +79,8 @@ public class Ship : MonoBehaviour
                 yield return null;
             }
             transform.rotation = endRotation;
+            // Start movement after rotation, though there's a bug so commented it out for now
+            //StartCoroutine(MovementCoroutine(endPosition));
         }
     }
 

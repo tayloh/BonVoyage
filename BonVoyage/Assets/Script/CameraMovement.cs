@@ -6,7 +6,8 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     //controls camera speed
-    public float movementSpeed = 20f;
+    public float MovementSpeed = 20f;
+    public bool EnableTransitions = true;
 
     //limiters to how far the camera can go in each direction
     //these values can be accessed via the inspector in unity
@@ -26,7 +27,7 @@ public class CameraMovement : MonoBehaviour
 
     // Transition parameters
     public float TransitionSpeed = 2f;
-    public Vector3 ShipCameraOffset = new Vector3(1, 10f, -1);
+    public Vector3 ShipCameraOffset = new Vector3(5, 10f, -5);
 
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _currentLerpGoal = Vector3.zero;
@@ -48,8 +49,12 @@ public class CameraMovement : MonoBehaviour
 
     private void _smoothTransition()
     {
+        var distanceLeft = (transform.position - _currentLerpGoal).magnitude;
+        var dynamicSpeedModifier = Mathf.Clamp(
+            Mathf.Pow(distanceLeft, 1.5f), 
+            0.05f, 2);
 
-        var lerpStep = TransitionSpeed * Time.fixedDeltaTime;
+        var lerpStep = dynamicSpeedModifier * TransitionSpeed * Time.fixedDeltaTime;
 
         _tLerp += lerpStep;
 
@@ -89,10 +94,12 @@ public class CameraMovement : MonoBehaviour
 
         //if (Input.GetKey(KeyCode.J)) SmoothlyTransitionTo(new Vector3(5, 8, 5), new Vector3(5, 5, 5));
 
-        if (_isTransitioning)
+        if (_isTransitioning && EnableTransitions)
         {
             _smoothTransition();
         }
+
+        ShipCameraOffset.y = transform.position.y;
 
         //stores current coordinate as a variable
         Vector3 CamPos = transform.position;
@@ -124,7 +131,7 @@ public class CameraMovement : MonoBehaviour
 
         // Calculate new position
         resultingMoveDir = resultingMoveDir.normalized;
-        CamPos += resultingMoveDir * movementSpeed * Time.fixedDeltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
+        CamPos += resultingMoveDir * MovementSpeed * Time.fixedDeltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");

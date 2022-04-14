@@ -144,8 +144,10 @@ public class GameManager : MonoBehaviour
     {
         Ship nextShip = GetNextShipForTurn();
 
+        var offset = cameraMovement.ShipCameraOffset;
+
         cameraMovement.SmoothlyTransitionTo(
-            nextShip.transform.position + cameraMovement.ShipCameraOffset, 
+            nextShip.transform.position + offset, 
             nextShip.transform.position);
 
         if (!nextShip.CompareTag("Pirate"))
