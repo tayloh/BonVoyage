@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ShipManager shipManager;
 
+    [SerializeField]
+    private CameraMovement cameraMovement;
+
     private void Awake()
     {
         Instance = this;
@@ -140,6 +143,11 @@ public class GameManager : MonoBehaviour
     public void NextTurn()
     {
         Ship nextShip = GetNextShipForTurn();
+
+        cameraMovement.SmoothlyTransitionTo(
+            nextShip.transform.position + cameraMovement.ShipCameraOffset, 
+            nextShip.transform.position);
+
         if (!nextShip.CompareTag("Pirate"))
         {
             UpdateGameState(GameState.PlayerMove);

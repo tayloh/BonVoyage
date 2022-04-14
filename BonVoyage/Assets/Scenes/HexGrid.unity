@@ -2351,6 +2351,7 @@ MonoBehaviour:
   gameOverText: {fileID: 608125999}
   victoryText: {fileID: 998349988}
   shipManager: {fileID: 1520174882}
+  cameraMovement: {fileID: 732777266}
 --- !u!4 &442071960
 Transform:
   m_ObjectHideFlags: 0
@@ -4522,15 +4523,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85136dd1055eec48b504ff42dabf90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 20
+  movementSpeed: 2.2
   limiter_x: 100
   limiter_z: 100
-  scrollSpeed: 2000
+  scrollSpeed: 250
   minLimiter_y: 5
   maxLimiter_y: 120
-  RotSpeed: 2000
+  RotSpeed: 80
   RotMaxX: 88
   RotMinX: 2
+  TransitionSpeed: 0.25
+  ShipCameraOffset: {x: 1, y: 10, z: -1}
 --- !u!114 &732777267
 MonoBehaviour:
   m_ObjectHideFlags: 0

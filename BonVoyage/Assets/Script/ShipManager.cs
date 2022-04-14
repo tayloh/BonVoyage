@@ -116,7 +116,8 @@ public class ShipManager : MonoBehaviour
         selectedShip.MovementFinished -= ResetTurn;
         isNotMoving = true;
         gameManager.UpdateGameState(GameState.PlayerFire);
-        //PrepareShipForFiring(selectedShip);
+        
+        //PrepareShipForFiring(activeShip);
     }
 
     private void PrepareShipForFiring(Ship ship)

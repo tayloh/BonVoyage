@@ -24,9 +24,52 @@ public class CameraMovement : MonoBehaviour
     public int RotMaxX = 90;
     public int RotMinX = 0;
 
+    // Transition parameters
+    public float TransitionSpeed = 2f;
+    public Vector3 ShipCameraOffset = new Vector3(1, 10f, -1);
 
-    // option = 0 => camera z axis
-    // option = 1 => camera x axis
+    private Vector3 _startPos = Vector3.zero;
+    private Vector3 _currentLerpGoal = Vector3.zero;
+    private Quaternion _startRotation = Quaternion.identity;
+    private Quaternion _currentRotationGoal = Quaternion.identity;
+    private float _tLerp = 0;
+    private bool _isTransitioning = false;
+
+    public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)
+    {
+        _startPos = transform.position;
+        _currentLerpGoal = position;
+        _startRotation = transform.rotation;
+        _currentRotationGoal = Quaternion.LookRotation(lookAt - position);
+
+        _tLerp = 0;
+        _isTransitioning = true;
+    }
+
+    private void _smoothTransition()
+    {
+
+        var lerpStep = TransitionSpeed * Time.fixedDeltaTime;
+
+        _tLerp += lerpStep;
+
+        transform.position = Vector3.Lerp(_startPos, _currentLerpGoal, _tLerp);
+        transform.rotation = Quaternion.Slerp(_startRotation, _currentRotationGoal, _tLerp);
+        
+        // Using smooth damp
+        //var velocity = Vector3.zero;
+        //var intermdiatePos = Vector3.SmoothDamp(_startPos, _currentLerpGoal, ref velocity, _tLerp, 0.2f); 
+        //transform.position = intermediatePos;
+
+        if (_tLerp >= 1)
+        {
+            _isTransitioning = false;
+        }
+
+    }
+
+    // option = 0 => XZ constrained camera forward/back
+    // option = 1 => XZ constrained camera left/right
     private Vector3 _getCameraMoveDirection(int option)
     {
         switch (option)
@@ -43,6 +86,14 @@ public class CameraMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+
+        //if (Input.GetKey(KeyCode.J)) SmoothlyTransitionTo(new Vector3(5, 8, 5), new Vector3(5, 5, 5));
+
+        if (_isTransitioning)
+        {
+            _smoothTransition();
+        }
+
         //stores current coordinate as a variable
         Vector3 CamPos = transform.position;
         //takes inputs for all directions at once and then applies it all at the same time at the end
@@ -73,19 +124,19 @@ public class CameraMovement : MonoBehaviour
 
         // Calculate new position
         resultingMoveDir = resultingMoveDir.normalized;
-        CamPos += resultingMoveDir * movementSpeed * Time.deltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
+        CamPos += resultingMoveDir * movementSpeed * Time.fixedDeltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (CamPos.y > minLimiter_y && CamPos.y < maxLimiter_y)
         {
-            CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
+            CamPos += transform.forward * scroll * scrollSpeed * Time.fixedDeltaTime;
         }
         // If the camera is at the ceiling or the floor, move it only in y direction when scrolling
         else
         {
-            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.deltaTime;
+            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.fixedDeltaTime;
         }
 
 
@@ -96,15 +147,19 @@ public class CameraMovement : MonoBehaviour
         CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
 
         //applies all changes
-        transform.position = CamPos;
 
-        if (Input.GetMouseButton(1))
+        if (!_isTransitioning)
+        {
+            transform.position = CamPos;
+        }
+
+        if (Input.GetMouseButton(1) && !_isTransitioning)
         {
             //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), 0, 0);
             //transform.eulerAngles += RotSpeed * new Vector3(0, Input.GetAxis("Mouse X"), 0);
             Vector3 currentEulerAngles = transform.eulerAngles;
 
-            Vector3 eulerAnglesRotation = Time.deltaTime * RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            Vector3 eulerAnglesRotation = Time.fixedDeltaTime * RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
             Vector3 resultingEulerAngles = currentEulerAngles + eulerAnglesRotation;
 
             resultingEulerAngles.x = Mathf.Clamp(resultingEulerAngles.x, RotMinX, RotMaxX);
