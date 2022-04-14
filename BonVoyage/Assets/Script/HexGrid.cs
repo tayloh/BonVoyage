@@ -18,6 +18,14 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    public void DisableHighlightOfAllHexes()
+    {
+        foreach (var hex in hexTileDict.Values)
+        {
+            hex.DisableHighlight();
+        }
+    }
+
     public Hex GetTileAt(Vector3Int hexCoordinates)
         //Return the hex situated at given coordinates, null if there is no corresponding hex
     {
@@ -62,6 +70,122 @@ public class HexGrid : MonoBehaviour
             List<Vector3Int> example;
             example = GetAccessibleNeighboursFor(new Vector3Int(5, 0, 7), new Vector3(1f, 0f, 0f));
         }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            List<Vector3Int> example;
+            List<Vector3Int> example_otherside;
+            example = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 0, 2);
+            example_otherside = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 1, 2);
+            example.AddRange(example_otherside);
+
+            foreach (var tile in example)   
+            {
+                Hex hex = GetTileAt(tile);
+                if (hex != null)
+                {
+                    GetTileAt(tile).EnableHighLight();
+                } 
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// Given offset coordinates, broadside (0 = right, 1 = left), and firing range
+    /// Returns the attackable tiles from the provided offset coordinate position
+    /// </summary>
+    public List<Vector3Int> GetAttackableTilesFor(Vector3Int hexcoordinates, int side, int range)
+    {
+        List<Vector3Int> result = new List<Vector3Int>();
+
+        Ship ship = GetTileAt(hexcoordinates).Ship;
+
+        if (hexTileDict.ContainsKey(hexcoordinates) == false || ship == null || range == 0)
+        {
+            return result;
+        }
+
+        // Forward: >
+        // Hex:     X
+        //
+        //   L2 L1
+        //   X  X
+        // X SHIP> X
+        //   X  X
+        //   R2 R1
+
+        int distBetweenHexCenters = 2;
+        Transform shipTransform = ship.transform;
+        Vector3 currHexWorldPosition = GetTileAt(hexcoordinates).gameObject.transform.position;
+
+        // R1, R2 or L1, L2
+        Vector3 dir1 = new Vector3();
+        Vector3 dir2 = new Vector3();
+
+        // Get directions for the arc from the ship broadside
+        switch (side)
+        {
+            case 0:
+                dir1 = (Quaternion.AngleAxis(60, Vector3.up) * shipTransform.forward).normalized;
+                dir2 = (Quaternion.AngleAxis(120, Vector3.up) * shipTransform.forward).normalized;
+                break;
+            
+            case 1:
+                dir1 = (Quaternion.AngleAxis(-60, Vector3.up) * shipTransform.forward).normalized;
+                dir2 = (Quaternion.AngleAxis(-120, Vector3.up) * shipTransform.forward).normalized;
+                break;
+
+            default:
+                throw new Exception("Invalid broadside number (0=right, 1=left");
+        }
+
+        Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir1, Color.red, 100f, false);
+        Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir2, Color.red, 100f, false);
+
+        // Get upper and lower bounds for the firing cone
+        Vector3[] hexLineUpper = new Vector3[range];
+        Vector3[] hexLineLower = new Vector3[range];
+
+        for (int i = 0; i < range; i++)
+        {
+            hexLineUpper[i] = currHexWorldPosition + (i + 1) * distBetweenHexCenters * dir1;
+        }
+
+        for (int i = 0; i < range; i++)
+        {
+            hexLineLower[i] = currHexWorldPosition + (i + 1) * distBetweenHexCenters * dir2;
+        }
+
+        //Debug.Log("Interpolating...");
+        // Interpolate between LineUpper and LineLower
+        for (int i = 0; i < range; i++)
+        {
+            Vector3 interpolateDir = hexLineLower[i] - hexLineUpper[i];
+            
+            float distance = interpolateDir.magnitude;
+            int numHexesInLine = (int) (distance / distBetweenHexCenters) + 1;
+
+            interpolateDir.Normalize();
+
+            Debug.DrawLine(hexLineUpper[i], hexLineUpper[i] + distBetweenHexCenters * (numHexesInLine-1) * interpolateDir, Color.red, 100f, false);
+
+            for (int j = 0; j < numHexesInLine; j++)
+            {
+                Vector3 pos = hexLineUpper[i] + distBetweenHexCenters * j * interpolateDir;
+                
+                pos.x = Mathf.Round(pos.x); // x-positions are always integers (just remove the floating point error)
+                pos.z = Mathf.Round(pos.z / 1.73f) * 1.73f; // z-positions are always a multiple of 1.73 (make sure they are)
+
+                Vector3Int hexPos = GetClosestHex(pos);
+                
+                //Debug.Log(pos + "->" + hexPos);
+
+                result.Add(hexPos);
+            }
+        }
+
+        return result;
     }
 
     public List<Vector3Int> GetAccessibleNeighboursFor(Vector3Int hexcoordinates, Vector3 forward)

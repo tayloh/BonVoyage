@@ -20,6 +20,13 @@ public class ShipManager : MonoBehaviour
     private Ship selectedShip;
     private Hex previouslySelectedHex;
 
+    private Ship activeShip;
+
+    public Ship GetActiveShip()
+    {
+        return activeShip;
+    }
+
     public void HandleShipSelection(GameObject ship) //not used here sinced the ship is not chosen by the player
     {
         if (isNotMoving == false)
@@ -31,12 +38,13 @@ public class ShipManager : MonoBehaviour
         {
             return;
         }
-
+ 
         PrepareShipForMovement(shipReference);
     }
 
     public void StartPlayerTurn(Ship ship)
     {
+        activeShip = ship;
         PrepareShipForMovement(ship);
     }
 
@@ -71,6 +79,7 @@ public class ShipManager : MonoBehaviour
             movementSystem.MoveShip(selectedShip, this.hexgrid);
             isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
             selectedShip.MovementFinished += ResetTurn;
+            
             ClearOldSelection();
         }
     }
@@ -107,6 +116,12 @@ public class ShipManager : MonoBehaviour
         selectedShip.MovementFinished -= ResetTurn;
         isNotMoving = true;
         gameManager.UpdateGameState(GameState.PlayerFire);
+        //PrepareShipForFiring(selectedShip);
+    }
+
+    private void PrepareShipForFiring(Ship ship)
+    {
+        ship.HighLightAttackableTiles(0);
     }
 
     private void PrepareShipForMovement(Ship shipReference)
@@ -145,12 +160,23 @@ public class ShipManager : MonoBehaviour
 
     private IEnumerator FireActiveShip()
     {
+        hexgrid.DisableHighlightOfAllHexes();
         //TODO
-        //fire canons from selectedShip
-        //...
+        //fire canons from selectedShip (selectedShip gets set to null when selection highlight
+        // dissappears so made a private variable to keep track of the current active ship
+
+        //Debug.Log("Attempting fire from " + activeShip.gameObject.GetComponent<FireAnimation>());
+        var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
+
+        fireAnimation.PlayFireAnimation(0);
+        yield return new WaitForSeconds(1); // it takes 1 second for one side to shoot (TODO shouldn't be hardcoded like this...)
+        fireAnimation.PlayFireAnimation(1);
+
 
         //wait for the end of firing animation
         //...
+        yield return new WaitForSeconds(1);
+
         /*switch (gameManager.state)
         {
             case GameState.PlayerFire:
@@ -161,7 +187,7 @@ public class ShipManager : MonoBehaviour
                 break;
         }*/
         gameManager.NextTurn();
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
         yield return null;
     }
 }

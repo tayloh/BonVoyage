@@ -28,7 +28,7 @@ public class Ship : MonoBehaviour
 
     public event Action<Ship> MovementFinished;
 
-    private Vector3Int hexCoord;
+    public Vector3Int hexCoord;
 
     private void Awake()
     {
@@ -115,14 +115,73 @@ public class Ship : MonoBehaviour
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
     {        
         //set previoustile.Ship à null et set newtile.ship à ship
-        //updat ethe type of hex, obstacle if there is a ship, water if not
+        //update the type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
         previousTile.Ship = null;
         previousTile.HexType = HexType.Water;
         Hex newTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(newPosition - new Vector3(0, 1, 0)));
         newTile.Ship = this;
         newTile.HexType = HexType.Obstacle;
+
+        // Need to put this somewhere else, it's here because I need to make sure the hexcoords are updated in time
+        hexCoord = newTile.HexCoords;
+        if (this.tag != "Pirate")
+        {
+            HighLightAttackableTiles(0);
+            HighLightAttackableTiles(1);
+        }
+
+
         Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
+
+    }
+
+
+    public void HighLightAttackableTiles(int broadside)
+    {
+        if (broadside != 0 && broadside != 1)
+        {
+            throw new Exception("Broadside can only be 0=right, or 1=left");
+        }
+
+        //Vector3Int hexPos = hexGrid.GetClosestHex(..);
+        Debug.Log("Attempting highlight: " + hexCoord);
+        List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+
+        foreach (var tile in res)
+        {
+            Hex hex = hexGrid.GetTileAt(tile);
+            if (hex != null)
+            {
+                hex.EnableHighLight();
+            }
+            else
+            {
+                Debug.Log("Could not find tile: " + tile);
+            }
+            //Debug.Log(tile);
+        }
+    }
+
+    // Requires that the ship is still on the same tile as it was when 
+    // HighLightAttackableTiles() was called
+    public void RemoveHighLightAttackableTiles(int broadside)
+    {
+        if (broadside != 0 && broadside != 1)
+        {
+            throw new Exception("Broadside can only be 0=right, or 1=left");
+        }
+
+        List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+        
+        foreach (var tile in res)
+        {
+            Hex hex = hexGrid.GetTileAt(tile);
+            if (hex != null)
+            {
+                hex.DisableHighlight();
+            }
+        }
     }
 
 }
