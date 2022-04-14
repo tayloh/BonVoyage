@@ -18,6 +18,14 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    public void DisableHighlightOfAllHexes()
+    {
+        foreach (var hex in hexTileDict.Values)
+        {
+            hex.DisableHighlight();
+        }
+    }
+
     public Hex GetTileAt(Vector3Int hexCoordinates)
         //Return the hex situated at given coordinates, null if there is no corresponding hex
     {
@@ -149,7 +157,7 @@ public class HexGrid : MonoBehaviour
             hexLineLower[i] = currHexWorldPosition + (i + 1) * distBetweenHexCenters * dir2;
         }
 
-        Debug.Log("Interpolating...");
+        //Debug.Log("Interpolating...");
         // Interpolate between LineUpper and LineLower
         for (int i = 0; i < range; i++)
         {
@@ -171,7 +179,7 @@ public class HexGrid : MonoBehaviour
 
                 Vector3Int hexPos = GetClosestHex(pos);
                 
-                Debug.Log(pos + "->" + hexPos);
+                //Debug.Log(pos + "->" + hexPos);
 
                 result.Add(hexPos);
             }

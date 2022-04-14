@@ -120,21 +120,19 @@ public class Ship : MonoBehaviour
         Hex newTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(newPosition - new Vector3(0, 1, 0)));
         newTile.Ship = this;
 
+        // Need to put this somewhere else, it's here because I need to make sure the hexcoords are updated in time
         hexCoord = newTile.HexCoords;
-        HighLightAttackableTiles(0);
+        if (this.tag != "Pirate")
+        {
+            HighLightAttackableTiles(0);
+            HighLightAttackableTiles(1);
+        }
+
+
         Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
 
-        // Temporary...
-        StartCoroutine(DumbCoroutine());
     }
 
-    private IEnumerator DumbCoroutine()
-    {
-        yield return new WaitForSeconds(3);
-
-        RemoveHighLightAttackableTiles(0);
-
-    }
 
     public void HighLightAttackableTiles(int broadside)
     {
@@ -162,6 +160,8 @@ public class Ship : MonoBehaviour
         }
     }
 
+    // Requires that the ship is still on the same tile as it was when 
+    // HighLightAttackableTiles() was called
     public void RemoveHighLightAttackableTiles(int broadside)
     {
         if (broadside != 0 && broadside != 1)
