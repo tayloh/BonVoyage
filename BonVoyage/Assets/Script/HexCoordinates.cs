@@ -27,7 +27,11 @@ public class HexCoordinates : MonoBehaviour
 
     public static Vector3Int ConvertPositionToOffset(Vector3 position)
         //convert actual position to int coordinates
-    {        
+    {
+        // Just always set y to zero since we're always in the XZ plane
+        // Needed to add this because ships won't be on y=0 when tiles are
+        // flat.
+        position.y = 0;
         int x = Mathf.CeilToInt(position.x / xOffset);
         int y = Mathf.RoundToInt(position.y / yOffset);
         int z = Mathf.RoundToInt(position.z / zOffset);
@@ -35,6 +39,7 @@ public class HexCoordinates : MonoBehaviour
     }
     public static Vector3Int ConvertVectorToOffset(Vector3 vector)
     {
+        vector.y = 0;
         if(vector == new Vector3(-1,0,0))
         {
             return new Vector3Int(-1, 0, 0); //exception 
