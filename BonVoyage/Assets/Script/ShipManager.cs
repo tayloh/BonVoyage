@@ -31,7 +31,7 @@ public class ShipManager : MonoBehaviour
         {
             return;
         }
-
+ 
         PrepareShipForMovement(shipReference);
     }
 
@@ -71,6 +71,7 @@ public class ShipManager : MonoBehaviour
             movementSystem.MoveShip(selectedShip, this.hexgrid);
             isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
             selectedShip.MovementFinished += ResetTurn;
+            
             ClearOldSelection();
         }
     }
@@ -107,6 +108,12 @@ public class ShipManager : MonoBehaviour
         selectedShip.MovementFinished -= ResetTurn;
         isNotMoving = true;
         gameManager.UpdateGameState(GameState.PlayerFire);
+        //PrepareShipForFiring(selectedShip);
+    }
+
+    private void PrepareShipForFiring(Ship ship)
+    {
+        ship.HighLightAttackableTiles(0);
     }
 
     private void PrepareShipForMovement(Ship shipReference)
@@ -141,6 +148,7 @@ public class ShipManager : MonoBehaviour
     public void TriggerFiring()
     {
         StartCoroutine("FireActiveShip");
+        
     }
 
     private IEnumerator FireActiveShip()
@@ -148,6 +156,7 @@ public class ShipManager : MonoBehaviour
         //TODO
         //fire canons from selectedShip
         //...
+
 
         //wait for the end of firing animation
         //...
