@@ -164,7 +164,7 @@ public class HexGrid : MonoBehaviour
             Vector3 interpolateDir = hexLineLower[i] - hexLineUpper[i];
             
             float distance = interpolateDir.magnitude;
-            int numHexesInLine = (int) (distance / distBetweenHexCenters) + 1;
+            int numHexesInLine = Mathf.RoundToInt(distance / distBetweenHexCenters) + 1;
 
             interpolateDir.Normalize();
 
@@ -179,7 +179,7 @@ public class HexGrid : MonoBehaviour
 
                 Vector3Int hexPos = GetClosestHex(pos);
                 
-                //Debug.Log(pos + "->" + hexPos);
+                Debug.Log(pos + "->" + hexPos);
 
                 result.Add(hexPos);
             }
