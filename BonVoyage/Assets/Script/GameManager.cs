@@ -119,10 +119,30 @@ public class GameManager : MonoBehaviour
             ship.transform.position);
     }
     
+    public bool CheckForWinCondition()
+    {
+        Debug.Log("Checking for win...");
+        Debug.Log(pirateShips.Count + " remaining pships");
+        if (pirateShips.Count == 0)
+        {
+            UpdateGameState(GameState.Victory);
+            isGameOver = true;
+        }
+        else if (playerShips.Count == 0)
+        {
+            UpdateGameState(GameState.Defeat);
+            isGameOver = true;
+        }
+        return isGameOver;
+    }
+
     public void NextTurn()
     {
+        if (CheckForWinCondition()) return;
 
         Ship nextShip = GetNextShipForTurn();
+
+        if (nextShip.IsDead) nextShip = GetNextShipForTurn();
 
         CameraTransition(nextShip);
 
@@ -153,7 +173,17 @@ public class GameManager : MonoBehaviour
 
     public void CleanupDeadShip(Ship ship)
     {
+        if (ship.gameObject.CompareTag("Pirate"))
+        {
+            pirateShips.Remove(ship);
+        }
+        else
+        {
+            playerShips.Remove(ship);
+        }
+
         shipsTurn.Remove(ship);
+
         Destroy(ship.gameObject);
     }
 
