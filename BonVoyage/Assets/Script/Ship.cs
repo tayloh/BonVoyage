@@ -15,6 +15,11 @@ public class Ship : MonoBehaviour
     private bool _dead = false;
     public bool IsDead { get => _dead; }
 
+    // ...
+    public bool HasFiredLeft = false;
+    public bool HasFiredRight = false;
+
+
     public event Action<Ship> DeathAnimationFinished;
 
     public event Action<Ship> MovementFinished;
@@ -219,12 +224,21 @@ public class Ship : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        StartCoroutine(TakeDamageAnimation());
+
         _health -= damage;
 
         if (_health <= 0)
         {
             Die();
         }
+
+    }
+
+    private IEnumerator TakeDamageAnimation()
+    {
+        yield return new WaitForSeconds(0.2f);
+        transform.Find("ExplosionPS").GetComponentInChildren<ParticleSystem>().Play();
     }
 
     private void Die()
@@ -237,9 +251,11 @@ public class Ship : MonoBehaviour
 
     private IEnumerator ShipSinksAnimation()
     {
+        yield return new WaitForSeconds(1.1f);
         while (transform.position.y > -1)
         {
             transform.position -= new Vector3(0, Time.deltaTime, 0);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(60, 0, 0)), Time.deltaTime);
             yield return null;
         }
         DeathAnimationFinished?.Invoke(this);

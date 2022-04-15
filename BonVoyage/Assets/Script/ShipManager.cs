@@ -71,24 +71,34 @@ public class ShipManager : MonoBehaviour
 
     private void PerformAttackOn(Ship ship)
     {
+        // To prevent being able to fire multiple times before the game state has changed
+        // The game state doesn't change until the fire animation has played
+        if (activeShip.HasFiredLeft || activeShip.HasFiredRight)
+        {
+            return;
+        }
 
         if (ship.gameObject.tag != "Pirate") return;
 
         // Get attackable tiles
-        List<Vector3Int> attackableTiles = activeShip.GetAttackableTilesFor(1);
-        attackableTiles.AddRange(activeShip.GetAttackableTilesFor(0));
+        List<Vector3Int> attackableRightSide = activeShip.GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = activeShip.GetAttackableTilesFor(1);
+
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
 
 
         // Find out if ship is in an attackable tile
         bool isAttackable = false;
-         
+        Vector3Int attackedPosition = Vector3Int.zero;
         foreach (var tilePos in attackableTiles)
         {
             Hex currentHex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
 
-            if (currentHex != null && currentHex.Ship != null)
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.GetInstanceID() == ship.gameObject.GetInstanceID())
             {
                 isAttackable = true;
+                attackedPosition = tilePos;
                 break;
             }
            
@@ -96,6 +106,15 @@ public class ShipManager : MonoBehaviour
 
         if (isAttackable)
         {
+            if (attackableLeftSide.Contains(attackedPosition))
+            {
+                activeShip.HasFiredLeft = true;
+            }
+            else
+            {
+                activeShip.HasFiredRight = true;
+            }
+
             ship.TakeDamage(activeShip.AttackDamage);
 
             TriggerFiring();
@@ -246,12 +265,18 @@ public class ShipManager : MonoBehaviour
         hexgrid.DisableHighlightOfAllHexes();
 
         var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
-
-        fireAnimation.PlayFireAnimation(0);
-        yield return new WaitForSeconds(fireAnimation.AnimationDuration); 
         
-        fireAnimation.PlayFireAnimation(1);
-        yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+        if (activeShip.HasFiredRight)
+        {
+            fireAnimation.PlayFireAnimation(0);
+            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+        }
+        else
+        {
+            fireAnimation.PlayFireAnimation(1);
+            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+        }
+
 
         /*switch (gameManager.state)
         {
@@ -262,8 +287,10 @@ public class ShipManager : MonoBehaviour
                 gameManager.UpdateGameState(GameState.PlayerMove);
                 break;
         }*/
+
+        activeShip.HasFiredLeft = false;
+        activeShip.HasFiredRight = false;
         gameManager.NextTurn();
 
-        yield return null;
     }
 }
