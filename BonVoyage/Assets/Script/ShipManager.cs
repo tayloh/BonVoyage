@@ -121,7 +121,7 @@ public class ShipManager : MonoBehaviour
 
     public void SkipPhase()
     {
-        /*switch (gameManager.state)
+        switch (gameManager.state)
         {
             case GameState.PlayerMove:
                 //Prepare terrain for attack phase by highlighting the attackable hexagons only
@@ -135,7 +135,7 @@ public class ShipManager : MonoBehaviour
                 hexgrid.DisableHighlightOfAllHexes();
                 gameManager.NextTurn();
                 break;
-        }*/
+        }
     }
 
     private void PrepareShipForFiring(Ship ship)

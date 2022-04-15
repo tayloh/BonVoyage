@@ -88,7 +88,6 @@ public class Ship : MonoBehaviour
     {
         Vector3 startPosition = transform.position;
         endPosition.y = startPosition.y;
-        UpdateShipTile(startPosition, endPosition);
 
         float timeElapsed = 0;
 
@@ -112,6 +111,7 @@ public class Ship : MonoBehaviour
             Debug.Log("Movement finished.");
             MovementFinished?.Invoke(this);
         }
+        UpdateShipTile(startPosition, endPosition);
     }
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
