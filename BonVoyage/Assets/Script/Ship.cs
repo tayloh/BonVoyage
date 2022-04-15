@@ -15,6 +15,14 @@ public class Ship : MonoBehaviour
     private bool _dead = false;
     public bool IsDead { get => _dead; }
 
+    public event Action<Ship> MovementFinished;
+
+    public Vector3Int hexCoord;
+
+    [SerializeField]
+    private HexGrid hexGrid;
+
+    [Header("Ship stats") ]
     [SerializeField]
     private int movementPoints = 1;
     public int MovementPoints { get => movementPoints; }
@@ -23,6 +31,7 @@ public class Ship : MonoBehaviour
     private int fireRange = 3;
     public int FireRange { get => fireRange; }
 
+    [Header("Movement animation")]
     [SerializeField]
     private float _movementDuration = 1.0f;
     public float MovementDuration { get => _movementDuration; }
@@ -31,14 +40,7 @@ public class Ship : MonoBehaviour
 
     private GlowHighlight _glowHighlight;
 
-    [SerializeField]
-    private HexGrid hexGrid;
-
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
-
-    public event Action<Ship> MovementFinished;
-
-    public Vector3Int hexCoord;
 
     private void Awake()
     {

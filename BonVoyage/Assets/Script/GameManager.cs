@@ -21,16 +21,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject fireButton;
     [SerializeField]
+    private GameObject skipButton;
+    [SerializeField]
     private GameObject gameOverText;
     [SerializeField]
     private GameObject victoryText;
 
-    //if same number of ships:
-    private List<Ship> playerShipsTurn = new List<Ship>();
-    private List<Ship> pirateShipsTurn = new List<Ship>();
-    private int actualPlayerShipIndex = -1;
-    private int actualPirateShipIndex = -1;
-    //else:
     private List<Ship> shipsTurn = new List<Ship>();
     private int actualShipIndex = 0;
 
@@ -58,27 +54,22 @@ public class GameManager : MonoBehaviour
 
         //Generating the random order of ships for both player and pirates
         PrepareTurn();
-        //Starting the game with first turn of the player
-        //UpdateGameState(GameState.PlayerMove);
     }
 
     private void PrepareTurn()
     {
-        /*playerShipsTurn.AddRange(playerShips);
-        playerShipsTurn.Shuffle();
-        pirateShipsTurn.AddRange(pirateShips);
-        pirateShipsTurn.Shuffle();*/
-        //UpdateGameState(GameState.PlayerMove);
         shipsTurn.AddRange(playerShips);
         shipsTurn.AddRange(pirateShips);
         shipsTurn.Shuffle();
-        NextTurn();
+        StartCoroutine(FirstTurn());
     }
 
-    /*public void AddPlayerShip(Ship shipToAdd)
+    private IEnumerator FirstTurn()
     {
-        playerShips.Add(shipToAdd);
-    }*/
+        new WaitForSecondsRealtime(1.0f);
+        NextTurn();
+        yield return null;
+    }
 
     public void UpdateGameState(GameState newState)
     {
@@ -89,16 +80,18 @@ public class GameManager : MonoBehaviour
             case GameState.PlayerMove:
                 Debug.Log("It is Player's turn to move"); 
                 fireButton.SetActive(false);
+                skipButton.SetActive(true);
                 //NextTurnPlayer();
                 break;
             case GameState.PlayerFire:
                 Debug.Log("It is Player's turn to fire");
                 fireButton.SetActive(true);
+                skipButton.SetActive(true);
                 break;
             case GameState.PirateTurn:
                 Debug.Log("It is Pirates' turn");
                 fireButton.SetActive(false);
-                //NextTurnPirate();
+                skipButton.SetActive(false);
                 break;
             case GameState.Upgrade:
                 //player can upgrade his fleet
@@ -112,34 +105,9 @@ public class GameManager : MonoBehaviour
         }
         OnGameStateChanged?.Invoke(newState);
     }
+
     
-  /* Not needed anymore :
-      private void NextTurnPlayer()
-    {//sets the next turn with one of the player's ship
-        if(playerShipsTurn.Count - 1 > actualPlayerShipIndex)
-        {
-            actualPlayerShipIndex += 1;
-        }
-        else
-        {
-            actualPlayerShipIndex = 0;
-        }
-        shipManager.StartPlayerTurn(playerShipsTurn[actualPlayerShipIndex]);
-    }
-
-    private void NextTurnPirate()
-    {
-        if (pirateShipsTurn.Count - 1 > actualPirateShipIndex)
-        {
-            actualPirateShipIndex += 1;
-        }
-        else
-        {
-            actualPirateShipIndex = 0;
-        }
-        shipManager.MovePirateShip(pirateShipsTurn[actualPirateShipIndex]);
-    }*/
-
+    
     public void NextTurn()
     {
         Ship nextShip = GetNextShipForTurn();
