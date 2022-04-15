@@ -179,7 +179,7 @@ public class HexGrid : MonoBehaviour
 
                 Vector3Int hexPos = GetClosestHex(pos);
                 
-                Debug.Log(pos + "->" + hexPos);
+                //Debug.Log(pos + "->" + hexPos);
 
                 result.Add(hexPos);
             }

@@ -8,10 +8,16 @@ public class FireAnimation : MonoBehaviour
     private ParticleSystem[] _leftSideParticleSystem;
     private ParticleSystem[] _rightSideParticleSystem;
 
+    private int _numCannons = 4;
+
+    public float AnimationDuration = 0;
+
     void Start()
     {
         _leftSideParticleSystem = transform.Find("Left").gameObject.GetComponentsInChildren<ParticleSystem>();
         _rightSideParticleSystem = transform.Find("Right").gameObject.GetComponentsInChildren<ParticleSystem>();
+
+        AnimationDuration = _numCannons * ShootingInterval;
     }
 
 

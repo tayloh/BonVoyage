@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
+
+    private int _health = 5;
+    public int Health { get => _health; }
+
+    private int _attack = 3;
+    public int AttackDamage { get => _attack; }
+
+    private bool _dead = false;
+    public bool IsDead { get => _dead; }
+
     [SerializeField]
     private int movementPoints = 1;
     public int MovementPoints { get => movementPoints; }
@@ -56,6 +66,12 @@ public class Ship : MonoBehaviour
 
     public void MoveThroughPath(List<Vector3> path)
     {
+        if (_dead)
+        {
+            MovementFinished?.Invoke(this);
+            return;
+        }
+
         _pathPositions = new Queue<Vector3>(path);
         Vector3 firstTarget = _pathPositions.Dequeue();
         StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));        
@@ -101,6 +117,7 @@ public class Ship : MonoBehaviour
         transform.position = endPosition;
 
         //The following part may not be useful if we want to move 1 cell at a time
+        UpdateShipTile(startPosition, endPosition); // moved this here, need to update pos before invoking move finished
         if (_pathPositions.Count > 0)
         {
             Debug.Log("Selecting next position...");
@@ -109,9 +126,11 @@ public class Ship : MonoBehaviour
         else
         {
             Debug.Log("Movement finished.");
+            
+            // Invoke the event after the coordinates have been updated
             MovementFinished?.Invoke(this);
+
         }
-        UpdateShipTile(startPosition, endPosition);
     }
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
@@ -127,17 +146,24 @@ public class Ship : MonoBehaviour
 
         // Need to put this somewhere else, it's here because I need to make sure the hexcoords are updated in time
         hexCoord = newTile.HexCoords;
-        if (this.tag != "Pirate")
-        {
-            HighLightAttackableTiles(0);
-            HighLightAttackableTiles(1);
-        }
+        //if (this.tag != "Pirate")
+        //{
+        //    HighLightAttackableTiles(0);
+        //    HighLightAttackableTiles(1);
+        //}
 
 
         Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
 
     }
 
+    /// <summary>
+    /// Left side = 1, Right side = 0;
+    /// </summary>
+    public List<Vector3Int> GetAttackableTilesFor(int broadside)
+    {
+        return hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+    }
 
     public void HighLightAttackableTiles(int broadside)
     {
@@ -183,6 +209,34 @@ public class Ship : MonoBehaviour
             {
                 hex.DisableHighlight();
             }
+        }
+    }
+
+
+    public void TakeDamage(int damage)
+    {
+        _health -= damage;
+
+        if (_health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log(this.name + " died.");
+
+        _dead = true;
+        StartCoroutine(ShipSinksAnimation());
+    }
+
+    private IEnumerator ShipSinksAnimation()
+    {
+        while (transform.position.y > -1)
+        {
+            transform.position -= new Vector3(0, Time.deltaTime, 0);
+            yield return null;
         }
     }
 

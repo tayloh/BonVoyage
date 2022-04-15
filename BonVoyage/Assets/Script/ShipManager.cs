@@ -48,6 +48,65 @@ public class ShipManager : MonoBehaviour
         PrepareShipForMovement(ship);
     }
 
+    public void HandleShipSelected(GameObject shipGO)
+    {
+
+        Ship ship = shipGO.GetComponent<Ship>();
+
+        GameState state = gameManager.state;
+
+        switch (state)
+        {
+            case GameState.PlayerFire:
+                PerformAttackOn(ship);
+                break;
+
+            // Add other states here (for instance upgrading a ship)
+            //case GameState.UpgradeStage:
+            //     PerformUpgradeOn(ship);
+            //     break;
+        }
+
+    }
+
+    private void PerformAttackOn(Ship ship)
+    {
+
+        if (ship.gameObject.tag != "Pirate") return;
+
+        // Get attackable tiles
+        List<Vector3Int> attackableTiles = activeShip.GetAttackableTilesFor(1);
+        attackableTiles.AddRange(activeShip.GetAttackableTilesFor(0));
+
+
+        // Find out if ship is in an attackable tile
+        bool isAttackable = false;
+         
+        foreach (var tilePos in attackableTiles)
+        {
+            Hex currentHex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
+
+            if (currentHex != null && currentHex.Ship != null)
+            {
+                isAttackable = true;
+                break;
+            }
+           
+        }
+
+        if (isAttackable)
+        {
+            ship.TakeDamage(activeShip.AttackDamage);
+
+            TriggerFiring();
+
+            Debug.Log(ship + " took " + activeShip.AttackDamage + " damage, and has health " + ship.Health);
+        }
+        
+        Debug.Log("Attempted attack " + isAttackable);
+
+    }
+
     public void HandleTerrainSelected(GameObject hexGO)
     {
         //check if it is not the player's turn or if there is no ship selected, ignore it
@@ -117,12 +176,16 @@ public class ShipManager : MonoBehaviour
         isNotMoving = true;
         gameManager.UpdateGameState(GameState.PlayerFire);
         
-        //PrepareShipForFiring(activeShip);
+        PrepareShipForFiring(activeShip);
     }
 
     private void PrepareShipForFiring(Ship ship)
     {
-        ship.HighLightAttackableTiles(0);
+        if (ship.gameObject.tag != "Pirate")
+        {
+            ship.HighLightAttackableTiles(0);
+            ship.HighLightAttackableTiles(1);
+        }
     }
 
     private void PrepareShipForMovement(Ship shipReference)
@@ -162,21 +225,14 @@ public class ShipManager : MonoBehaviour
     private IEnumerator FireActiveShip()
     {
         hexgrid.DisableHighlightOfAllHexes();
-        //TODO
-        //fire canons from selectedShip (selectedShip gets set to null when selection highlight
-        // dissappears so made a private variable to keep track of the current active ship
 
-        //Debug.Log("Attempting fire from " + activeShip.gameObject.GetComponent<FireAnimation>());
         var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
 
         fireAnimation.PlayFireAnimation(0);
-        yield return new WaitForSeconds(1); // it takes 1 second for one side to shoot (TODO shouldn't be hardcoded like this...)
+        yield return new WaitForSeconds(fireAnimation.AnimationDuration); 
+        
         fireAnimation.PlayFireAnimation(1);
-
-
-        //wait for the end of firing animation
-        //...
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(fireAnimation.AnimationDuration);
 
         /*switch (gameManager.state)
         {
@@ -188,7 +244,7 @@ public class ShipManager : MonoBehaviour
                 break;
         }*/
         gameManager.NextTurn();
-        //throw new NotImplementedException();
+
         yield return null;
     }
 }
