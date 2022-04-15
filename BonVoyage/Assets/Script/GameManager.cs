@@ -46,10 +46,14 @@ public class GameManager : MonoBehaviour
         foreach(Ship ship in playerShipsParent.GetComponentsInChildren<Ship>())
         {
             playerShips.Add(ship);
+
+            ship.DeathAnimationFinished += CleanupDeadShip;
         }
         foreach (Ship pship in pirateShipsParent.GetComponentsInChildren<Ship>())
         {
             pirateShips.Add(pship);
+
+            pship.DeathAnimationFinished += CleanupDeadShip;
         }
 
         //Generating the random order of ships for both player and pirates
@@ -85,7 +89,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.PlayerFire:
                 Debug.Log("It is Player's turn to fire");
-                fireButton.SetActive(true);
+                //fireButton.SetActive(true);
                 skipButton.SetActive(true);
                 break;
             case GameState.PirateTurn:
@@ -106,17 +110,21 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(newState);
     }
 
-    
-    
-    public void NextTurn()
+    private void CameraTransition(Ship ship)
     {
-        Ship nextShip = GetNextShipForTurn();
-
         var offset = cameraMovement.ShipCameraOffset;
 
         cameraMovement.SmoothlyTransitionTo(
-            nextShip.transform.position + offset, 
-            nextShip.transform.position);
+            ship.transform.position + offset,
+            ship.transform.position);
+    }
+    
+    public void NextTurn()
+    {
+
+        Ship nextShip = GetNextShipForTurn();
+
+        CameraTransition(nextShip);
 
         if (!nextShip.CompareTag("Pirate"))
         {
@@ -141,6 +149,12 @@ public class GameManager : MonoBehaviour
             actualShipIndex = 0;
         }
         return shipsTurn[actualShipIndex];
+    }
+
+    public void CleanupDeadShip(Ship ship)
+    {
+        shipsTurn.Remove(ship);
+        Destroy(ship.gameObject);
     }
 
     private void DisplayShipList(List<Ship> list)

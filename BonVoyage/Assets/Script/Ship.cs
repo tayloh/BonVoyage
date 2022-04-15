@@ -15,6 +15,8 @@ public class Ship : MonoBehaviour
     private bool _dead = false;
     public bool IsDead { get => _dead; }
 
+    public event Action<Ship> DeathAnimationFinished;
+
     public event Action<Ship> MovementFinished;
 
     public Vector3Int hexCoord;
@@ -240,6 +242,7 @@ public class Ship : MonoBehaviour
             transform.position -= new Vector3(0, Time.deltaTime, 0);
             yield return null;
         }
+        DeathAnimationFinished?.Invoke(this);
     }
 
 }
