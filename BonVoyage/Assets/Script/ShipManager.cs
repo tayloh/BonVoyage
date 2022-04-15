@@ -119,6 +119,25 @@ public class ShipManager : MonoBehaviour
         //PrepareShipForFiring(selectedShip);
     }
 
+    public void SkipPhase()
+    {
+        /*switch (gameManager.state)
+        {
+            case GameState.PlayerMove:
+                //Prepare terrain for attack phase by highlighting the attackable hexagons only
+                movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
+                activeShip.HighLightAttackableTiles(0); //highlight attackable hex
+                activeShip.HighLightAttackableTiles(1); //
+                ResetTurn(activeShip);
+                gameManager.UpdateGameState(GameState.PlayerFire);
+                break;
+            case GameState.PlayerFire:
+                hexgrid.DisableHighlightOfAllHexes();
+                gameManager.NextTurn();
+                break;
+        }*/
+    }
+
     private void PrepareShipForFiring(Ship ship)
     {
         ship.HighLightAttackableTiles(0);

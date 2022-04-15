@@ -88,6 +88,8 @@ public struct BFSResult
 
     public IEnumerable<Vector3Int> GetRangePositions()
     {
+        /*foreach (KeyValuePair<Vector3Int, Vector3Int?> kvp in visitedNodesDict)
+            Debug.Log("Key = "+kvp.Key +", Value = "+kvp.Value);*/
         return visitedNodesDict.Keys;
     }
 }

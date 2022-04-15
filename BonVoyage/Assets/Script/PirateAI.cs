@@ -40,8 +40,8 @@ public class PirateAI : MonoBehaviour
     private IEnumerator EndPirateTurn()
     {
         yield return null;
-        yield return new WaitForSecondsRealtime(ship.MovementDuration);
-        gameManager.NextTurn(); ;
+        yield return new WaitForSecondsRealtime(ship.MovementDuration + 0.1f);
+        gameManager.NextTurn(); 
         yield return null;
     }
 }
