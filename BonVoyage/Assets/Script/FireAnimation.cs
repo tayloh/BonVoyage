@@ -7,10 +7,15 @@ public class FireAnimation : MonoBehaviour
 
     private ParticleSystem[] _leftSideParticleSystem;
     private ParticleSystem[] _rightSideParticleSystem;
+    private AudioSource audioSource;
 
     private int _numCannons = 4;
 
     public float AnimationDuration = 0;
+
+    private void Awake()
+    {   
+    }
 
     void Start()
     {
@@ -18,6 +23,7 @@ public class FireAnimation : MonoBehaviour
         _rightSideParticleSystem = transform.Find("Right").gameObject.GetComponentsInChildren<ParticleSystem>();
 
         AnimationDuration = _numCannons * ShootingInterval;
+        audioSource = GetComponent<AudioSource>();     
     }
 
 
@@ -26,9 +32,14 @@ public class FireAnimation : MonoBehaviour
         StartCoroutine(_playRollingBroadSide(ShootingInterval, broadside));
     }
 
+    public void PlayFireSound()
+    {
+        audioSource.Play();
+    }
 
     private IEnumerator _playRollingBroadSide(float interval, int side)
     {
+        PlayFireSound();
         if (side == 1)
         {
             foreach (var item in _leftSideParticleSystem)
