@@ -9,6 +9,41 @@ public class HexGrid : MonoBehaviour
     private Dictionary<Vector3Int, List<Vector3Int>> hexTileNeighboursDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public GameObject hexParent;
 
+    private static float xOffset = 2;
+    private static float yOffset = 1;
+    private static float zOffset = 1.73f;
+
+    public int gridSideSize = 10;
+    [SerializeField]
+    private GameObject tile;
+
+    private void Awake()
+    {
+        xOffset = HexCoordinates.xOffset;
+        yOffset = HexCoordinates.yOffset;
+        zOffset = HexCoordinates.zOffset;
+
+        //Instantiating the grid
+        //middle row is drawn first to not draw it twice when drawing up and down rows:
+        for(int i = 0; i<2*gridSideSize-1; i++)
+        {
+            Instantiate(tile, new Vector3(i * xOffset, 0, 0), Quaternion.identity, hexParent.transform);
+        }
+        //upper and down rows:
+        int rowSize = 2 * gridSideSize - 2;
+        int rowIndex = 1;
+        while(rowSize >= gridSideSize)
+        {
+            for(int i=0; i<rowSize; i++)
+            {
+                Instantiate(tile, new Vector3((rowIndex/2f + i)*xOffset, 0, rowIndex * zOffset), Quaternion.identity, hexParent.transform);
+                Instantiate(tile, new Vector3((rowIndex / 2f + i) * xOffset, 0, -rowIndex * zOffset), Quaternion.identity, hexParent.transform);
+            }
+            rowSize -= 1;
+            rowIndex += 1;
+        }
+    }
+
     private void Start()
     {
         var allHex = hexParent.GetComponentsInChildren<Hex>();
@@ -16,6 +51,40 @@ public class HexGrid : MonoBehaviour
         {
             hexTileDict.Add(hexElement.HexCoords, hexElement);
         }
+    }
+
+    //TESTING
+    private void Update()
+    {
+        /*if (Input.GetKeyDown(KeyCode.A))
+        {
+            List<Vector3Int> example;
+            example = GetAccessibleNeighboursFor(new Vector3Int(5, 0, 7), new Vector3(1f, 0f, 0f));
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            List<Vector3Int> example;
+            List<Vector3Int> example_otherside;
+            example = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 0, 2);
+            example_otherside = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 1, 2);
+            example.AddRange(example_otherside);
+
+            foreach (var tile in example)   
+            {
+                Hex hex = GetTileAt(tile);
+                if (hex != null)
+                {
+                    GetTileAt(tile).EnableHighLight();
+                } 
+
+            }
+        }*/
+    }
+
+    private void GenerateGrid()
+    {
+
     }
 
     public void DisableHighlightOfAllHexes()
@@ -61,36 +130,7 @@ public class HexGrid : MonoBehaviour
         worldPosition.y = 0;
         return HexCoordinates.ConvertPositionToOffset(worldPosition);
     }
-
-    //TESTING
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            List<Vector3Int> example;
-            example = GetAccessibleNeighboursFor(new Vector3Int(5, 0, 7), new Vector3(1f, 0f, 0f));
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            List<Vector3Int> example;
-            List<Vector3Int> example_otherside;
-            example = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 0, 2);
-            example_otherside = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 1, 2);
-            example.AddRange(example_otherside);
-
-            foreach (var tile in example)   
-            {
-                Hex hex = GetTileAt(tile);
-                if (hex != null)
-                {
-                    GetTileAt(tile).EnableHighLight();
-                } 
-
-            }
-        }
-    }
-
+    
     /// <summary>
     /// Given offset coordinates, broadside (0 = right, 1 = left), and firing range
     /// Returns the attackable tiles from the provided offset coordinate position
