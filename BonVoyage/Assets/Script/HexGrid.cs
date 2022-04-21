@@ -42,7 +42,7 @@ public class HexGrid : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            HorizontalShifting(-1);
+            VerticalShifting(1);
         }
 
         /*if (Input.GetKeyDown(KeyCode.B))
@@ -52,7 +52,6 @@ public class HexGrid : MonoBehaviour
             example = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 0, 2);
             example_otherside = GetAttackableTilesFor(new Vector3Int(4, 0, 2), 1, 2);
             example.AddRange(example_otherside);
-
             foreach (var tile in example)   
             {
                 Hex hex = GetTileAt(tile);
@@ -60,42 +59,62 @@ public class HexGrid : MonoBehaviour
                 {
                     GetTileAt(tile).EnableHighLight();
                 } 
-
             }
         }*/
     }
 
     private void AdaptToPlayersView(Vector3 cameraPos)
     {
-        Vector3 originOffset = HexCoordinates.ConvertPositionToOffset(cameraPos);
-        Vector3 originShift = originOffset - originGrid;
-
+        Vector3Int originOffset = HexCoordinates.ConvertPositionToOffset(cameraPos);
+        Vector3Int originShift = originOffset - HexCoordinates.ConvertPositionToOffset(originGrid);
+        HorizontalShifting(originShift.x);
     }
 
-    private void HorizontalShifting(int direction) //fr direction>0
+    private void HorizontalShifting(int direction) //direction>0 is right
     {
-        while (Mathf.Abs(direction) > 0)
+        while (direction != 0)
         {
-            //Deleting farthest columns
-            //delete the extremity 
             Vector3 destroyHexWorldCoord;
+            Vector3 createHexWorldCoord;
             if (direction > 0)
             {
+                //Deleting farthest columns
+                //delete the extremity 
                 destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1), 0, originGrid.z);
                 DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 for (int row = 1; row < gridSideSize; row++)
                 {
                     //above central line
                     destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2))), 0, originGrid.z + row * zOffset);
-                    Debug.Log("destroy at " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     //under central line
                     destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2))), 0, originGrid.z - row * zOffset);
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
+
+                //Creating the new columns
+                createHexWorldCoord = new Vector3(originGrid.x + xOffset * gridSideSize, 0, originGrid.z);
+                GameObject newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
+                hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
+                for (int row = 1; row < gridSideSize; row++)
+                {
+                    //above central line
+                    createHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z + row * zOffset);
+                    newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
+                    hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
+                    //under central line
+                    createHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z - row * zOffset);
+                    newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
+                    hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
+                }
+
+                originGrid.x = originGrid.x + xOffset;
+                direction -= 1;
             }
             else
             {
+                //Deleting farthest columns
+                //delete the extremity 
                 destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1), 0, originGrid.z);
                 DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 for (int row = 1; row < gridSideSize; row++)
@@ -108,29 +127,8 @@ public class HexGrid : MonoBehaviour
                     destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1 - (row / 2)), 0, originGrid.z - row * zOffset);
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
-            }
 
-            //Creating the new columns
-            Vector3 createHexWorldCoord;
-            if (direction > 0)
-            {
-                createHexWorldCoord = new Vector3(originGrid.x + xOffset * gridSideSize, 0, originGrid.z);
-                GameObject newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
-                hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
-                for (int row = 1; row < gridSideSize; row++)
-                {
-                    //above central line
-                    createHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z + row * zOffset);
-                    newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
-                    hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
-                    //under central line
-                    createHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - (row / 2 + 1 * PositiveModulo(row, 2)/2f)), 0, originGrid.z - row * zOffset);
-                    newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
-                    hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
-                }
-            }
-            else
-            {
+                //Creating the new columns
                 createHexWorldCoord = new Vector3(originGrid.x - xOffset * gridSideSize, 0, originGrid.z);
                 GameObject newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
                 hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
@@ -144,18 +142,32 @@ public class HexGrid : MonoBehaviour
                     createHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z - row * zOffset);
                     newHex = Instantiate(tile, createHexWorldCoord, Quaternion.identity, hexParent.transform);
                     hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(createHexWorldCoord), newHex.GetComponent<Hex>());
-                }            
-            }
-            if(direction>0)
-            {
-                originGrid.x = originGrid.x + xOffset;
-            }
-            else
-            {
-                originGrid.x = originGrid.x - xOffset;
-            }
+                }
 
-            direction = direction > 0 ? direction - 1 : direction + 1;            
+                originGrid.x = originGrid.x - xOffset;
+                direction += 1;
+            }                     
+        }
+    }
+
+    private void VerticalShifting(int direction) //direction>0 is up
+    {
+        while(direction != 0)
+        {
+            Vector3 destroyHexWorldCoord;
+            Vector3 createHexWorldCoord;
+            if(direction>0) //moving up
+            {
+                //deleting bottom line
+                for(int i =0; i<gridSideSize; i++)
+                {
+                    destroyHexWorldCoord = new Vector3(originGrid.x - (gridSideSize / 2f - 0.5f - i) * xOffset, 0, originGrid.z - (gridSideSize-1) * zOffset);
+                    Debug.Log("destroy this : " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
+                    DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
+                }
+            }
+            direction -= 1;
+            //TODO update origin x and z
         }
     }
 
