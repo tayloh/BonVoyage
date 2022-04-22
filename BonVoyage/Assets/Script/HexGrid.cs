@@ -40,11 +40,15 @@ public class HexGrid : MonoBehaviour
     }
 
     //TESTING
+    public int horShift = 1;
+    public int verShift = 1;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            VerticalShifting(-3);
+            /*HorizontalShifting(horShift);
+            VerticalShifting(verShift);*/
+            AdaptToPlayersView(Camera.main.transform.position);
         }
 
         /*if (Input.GetKeyDown(KeyCode.B))
@@ -70,6 +74,7 @@ public class HexGrid : MonoBehaviour
         Vector3Int originOffset = HexCoordinates.ConvertPositionToOffset(cameraPos);
         Vector3Int originShift = originOffset - HexCoordinates.ConvertPositionToOffset(originGrid);
         HorizontalShifting(originShift.x);
+        VerticalShifting(originShift.z);
     }
 
     private void HorizontalShifting(int direction) //direction>0 is right
@@ -87,10 +92,12 @@ public class HexGrid : MonoBehaviour
                 for (int row = 1; row < gridSideSize; row++)
                 {
                     //above central line
-                    destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2))), 0, originGrid.z + row * zOffset);
+                    destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2)/2f)), 0, originGrid.z + row * zOffset);
+                    Debug.Log("tile to destroy " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     //under central line
-                    destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2))), 0, originGrid.z - row * zOffset);
+                    destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2)/2f)), 0, originGrid.z - row * zOffset);
+                    Debug.Log("tile to destroy " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
 
@@ -109,6 +116,7 @@ public class HexGrid : MonoBehaviour
 
                 originGrid.x = originGrid.x + xOffset;
                 direction -= 1;
+                Debug.Log("origin after hor shift " + originGrid);
             }
             else
             {
@@ -119,10 +127,10 @@ public class HexGrid : MonoBehaviour
                 for (int row = 1; row < gridSideSize; row++)
                 {
                     //above central line
-                    destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1 - (row / 2)), 0, originGrid.z + row * zOffset);
+                    destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z + row * zOffset);
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     //under central line
-                    destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1 - (row / 2)), 0, originGrid.z - row * zOffset);
+                    destroyHexWorldCoord = new Vector3(originGrid.x + xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2) / 2f)), 0, originGrid.z - row * zOffset);
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
 
@@ -141,6 +149,7 @@ public class HexGrid : MonoBehaviour
 
                 originGrid.x = originGrid.x - xOffset;
                 direction += 1;
+                Debug.Log("origin after hor shift " + originGrid);
             }
         }
     }
@@ -157,7 +166,6 @@ public class HexGrid : MonoBehaviour
                 for (int i = 0; i < gridSideSize; i++)
                 {
                     destroyHexWorldCoord = new Vector3(originGrid.x - (gridSideSize / 2f - 0.5f - i) * xOffset, 0, originGrid.z - (gridSideSize - 1) * zOffset);
-                    Debug.Log("destroy this : " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
 
@@ -185,9 +193,9 @@ public class HexGrid : MonoBehaviour
                     CreateTileAt(createHexWorldCoord);
                 }
                 direction -= 1;
-                //TODO update origin x and z
                 originGrid.z += zOffset;
                 originGrid.x -= side * xOffset / 2;
+                Debug.Log("origin after ver shift " + originGrid);
             }
             else //moving down
             {
@@ -195,7 +203,6 @@ public class HexGrid : MonoBehaviour
                 for (int i = 0; i < gridSideSize; i++)
                 {
                     destroyHexWorldCoord = new Vector3(originGrid.x - (gridSideSize / 2f - 0.5f - i) * xOffset, 0, originGrid.z + (gridSideSize - 1) * zOffset);
-                    Debug.Log("destroy this : " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
 
@@ -226,6 +233,7 @@ public class HexGrid : MonoBehaviour
                 //TODO update origin x and z
                 originGrid.z -= zOffset;
                 originGrid.x -= side * xOffset / 2;
+                Debug.Log("origin after ver shift " + originGrid);
             }
 
 
@@ -462,7 +470,6 @@ public class HexGrid : MonoBehaviour
                 }
                 break;
         }
-        Debug.Log("a neighbour of the ship is " + result[0] + " ; " + (result.Count > 1 ? result[1] : new Vector3Int(-1, -1, -1)) + " ; " + (result.Count > 2 ? result[2] : new Vector3Int(-1, -1, -1)));
         return result;
     }
 

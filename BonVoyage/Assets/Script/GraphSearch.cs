@@ -88,7 +88,6 @@ public struct BFSResult
 
     public IEnumerable<Vector3Int> GetRangePositions()
     {
-        Debug.Log("enter getrangeposition");
         /*foreach (KeyValuePair<Vector3Int, Vector3Int?> kvp in visitedNodesDict)
             Debug.Log("Key = "+kvp.Key +", Value = "+kvp.Value);*/
         if(visitedNodesDict == null)
