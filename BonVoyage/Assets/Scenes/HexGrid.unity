@@ -1710,8 +1710,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexParent: {fileID: 1488788713}
-  gridSideSize: 10
+  gridSideSize: 50
   tile: {fileID: 4936956383488517673, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
+  mainCamera: {fileID: 732777264}
   horShift: -1
   verShift: 1
 --- !u!4 &1679244514
