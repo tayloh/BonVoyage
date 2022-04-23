@@ -245,6 +245,11 @@ public class HexGrid : MonoBehaviour
         hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(worldCoord), newHex.GetComponent<Hex>());
     }
 
+    private int ComputeMinimalNumberOfHexToFillView(float viewDistance) //viewDistance is the max diagonal of the image rendered by the camera projected on the sea level
+    {
+        return Mathf.CeilToInt(viewDistance / 2 * zOffset + 1); //value of gridSideSize for viewDistance equals the inner radius of the hexGrid
+    }
+
     private void GenerateGrid()
     {
         int originShift = Mathf.RoundToInt((gridSideSize * 2 - 1) / 2);
