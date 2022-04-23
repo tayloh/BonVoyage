@@ -232,7 +232,12 @@ public class HexGrid : MonoBehaviour
                         localRayDir.Normalize();
 
                         Debug.DrawLine(localOrigin, localOrigin + localRayDir * distBetweenHexCenters, Color.green, 100f, false);
-                        result.Remove(GetClosestHex(localOrigin + localRayDir * 2));
+
+                        var pos = localOrigin + distBetweenHexCenters * localRayDir;
+                        pos.x = Mathf.Round(pos.x); // x-positions are always integers (just remove the floating point error)
+                        pos.z = Mathf.Round(pos.z / 1.73f) * 1.73f; // z-positions are always a multiple of 1.73 (make sure they are)
+
+                        result.Remove(GetClosestHex(pos));
 
                         //for (int j = 2; j < 4; j++)
                         //{
