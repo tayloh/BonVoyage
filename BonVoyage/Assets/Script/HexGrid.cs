@@ -211,21 +211,44 @@ public class HexGrid : MonoBehaviour
 
             var rayDir = (destination - origin).normalized;
 
-            Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
+            //Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
 
-            RaycastHit hit;
-            if (Physics.Raycast(origin, rayDir, out hit))
+            RaycastHit[] hits = Physics.RaycastAll(origin + rayDir*0.1f, rayDir, range * distBetweenHexCenters);
+            if (hits.Length != 0)
             {
-                //Debug.Log("Obstruction detected!" + hit.transform.name);
-                var hitGO = hit.transform.gameObject;
-                if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
+                foreach (var hit in hits)
                 {
-                    for (int j = 1; j < (hit.transform.position - destination).magnitude; j+=2)
+                    //Debug.Log("Obstruction detected!" + hit.transform.name);
+                    var hitGO = hit.transform.gameObject;
+                    if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
                     {
-                        var hexPos = GetClosestHex(hit.transform.position + rayDir*j);
-                        result.Remove(hexPos);
+                        Debug.Log(hitGO.name);
+                        var localOrigin = hitGO.transform.position;
+                        localOrigin.y += yOffset;
+
+                        var localRayDir = (destination - localOrigin);
+                        if (localRayDir.magnitude < 0.1) continue; // skip ships if they are on last tile (won't block anyway)
+
+                        localRayDir.Normalize();
+
+                        Debug.DrawLine(localOrigin, localOrigin + localRayDir * distBetweenHexCenters, Color.green, 100f, false);
+                        result.Remove(GetClosestHex(localOrigin + localRayDir * 2));
+
+                        //for (int j = 2; j < 4; j++)
+                        //{
+
+                        //    //Debug.Log(localOrigin + localRayDir * j);
+
+                        //    // Bug here
+                        //    var hexPos = GetClosestHex(localOrigin + localRayDir * j);
+                        //    //Debug.Log(hexPos);
+                            
+                            
+                        //    result.Remove(hexPos);
+                        //}
                     }
-                } 
+                }
+ 
             }
 
         }

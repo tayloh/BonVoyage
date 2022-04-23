@@ -48,6 +48,70 @@ public class ShipManager : MonoBehaviour
         PrepareShipForMovement(ship);
     }
 
+    public void StartPirateTurn(Ship ship)
+    {
+        Debug.Log("START OF PIRATE TURN:" + ship.gameObject.name);
+        activeShip = ship;
+        activeShip.MovementFinished += PirateAIAttack;
+
+        MovePirateShip(ship);
+    }
+
+    private void PirateAIAttack(Ship ship)
+    {
+        // Either we loop through all attackble tiles and attack the first
+        // available player ship (this effectivley requires a rewrite of the 
+        // PerformAttackOn function
+        // Or
+        // We can loop through all player ships, and do PerformAttackOn
+        // on each of them, which checks internally if the ship is attackable or not
+        // So, add to gamemanager a function (or field) that gets all player ships.
+
+        //var attackableLeftBroadSide = ship.GetAttackableTilesFor(1);
+        //var attackableRightBroadSide = ship.GetAttackableTilesFor(0);
+
+        //var allAttackable = attackableLeftBroadSide;
+        //allAttackable.AddRange(attackableRightBroadSide);
+
+        //Ship attackableShip = null;
+
+        //for (int i = 0; i < allAttackable.Count; i++)
+        //{
+        //    var currentHex = hexgrid.GetTileAt(allAttackable[i]);
+        //    if (currentHex != null)
+        //    {
+        //        if (currentHex.Ship != null)
+        //        {
+        //            attackableShip = currentHex.Ship;
+        //        }
+        //    }
+        //}
+
+        //if (attackableShip != null)
+        //{
+        //    attackableShip.TakeDamage(ship.AttackDamage);
+        //}
+
+        Debug.Log("PIRATE SHOOTS");
+
+        var playerShips = gameManager.GetPlayerShips();
+        var foundAttackable = false;
+
+        foreach (var playerShip in playerShips)
+        {
+            if(PerformAttackOn(playerShip))
+            {
+                foundAttackable = true;
+                break;
+            }
+        }
+
+        activeShip.MovementFinished -= PirateAIAttack;
+
+        if (!foundAttackable) gameManager.NextTurn();
+
+    }
+
     public void HandleShipSelected(GameObject shipGO)
     {
 
@@ -69,16 +133,17 @@ public class ShipManager : MonoBehaviour
 
     }
 
-    private void PerformAttackOn(Ship ship)
+    private bool PerformAttackOn(Ship ship)
     {
         // To prevent being able to fire multiple times before the game state has changed
         // The game state doesn't change until the fire animation has played
         if (activeShip.HasFiredLeft || activeShip.HasFiredRight)
         {
-            return;
+            return false;
         }
 
-        if (ship.gameObject.tag != "Pirate") return;
+        // If it's the players turn, make sure you can't friendly fire.
+        if (gameManager.state == GameState.PlayerFire && ship.gameObject.tag != "Pirate") return false;
 
         // Get attackable tiles
         List<Vector3Int> attackableRightSide = activeShip.GetAttackableTilesFor(0);
@@ -120,10 +185,12 @@ public class ShipManager : MonoBehaviour
             TriggerFiring();
 
             Debug.Log(ship + " took " + activeShip.AttackDamage + " damage, and has health " + ship.Health);
-        }
-        
-        Debug.Log("Attempted attack " + isAttackable);
 
+            return true;
+        }
+
+        //Debug.Log("Attempted attack " + isAttackable);
+        return false;
     }
 
     public void HandleTerrainSelected(GameObject hexGO)
@@ -207,7 +274,7 @@ public class ShipManager : MonoBehaviour
                 movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
                 activeShip.HighLightAttackableTiles(0); //highlight attackable hex
                 activeShip.HighLightAttackableTiles(1); //
-                ResetTurn(activeShip);
+                ResetTurn(selectedShip);
                 gameManager.UpdateGameState(GameState.PlayerFire);
                 break;
             case GameState.PlayerFire:
@@ -278,15 +345,15 @@ public class ShipManager : MonoBehaviour
         }
 
 
-        /*switch (gameManager.state)
-        {
-            case GameState.PlayerFire:
-                gameManager.UpdateGameState(GameState.PirateTurn);
-                break;
-            case GameState.PirateTurn:
-                gameManager.UpdateGameState(GameState.PlayerMove);
-                break;
-        }*/
+        //switch (gameManager.state)
+        //{
+        //    case GameState.PlayerFire:
+        //        gameManager.UpdateGameState(GameState.PirateTurn);
+        //        break;
+        //    case GameState.PirateTurn:
+        //        gameManager.UpdateGameState(GameState.PlayerMove);
+        //        break;
+        //}
 
         activeShip.HasFiredLeft = false;
         activeShip.HasFiredRight = false;
