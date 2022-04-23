@@ -157,6 +157,8 @@ public class HexGrid : MonoBehaviour
             hexLineLower[i] = currHexWorldPosition + (i + 1) * distBetweenHexCenters * dir2;
         }
 
+        var maxRangeTilePositions = new List<Vector3>();
+
         //Debug.Log("Interpolating...");
         // Interpolate between LineUpper and LineLower
         for (int i = 0; i < range; i++)
@@ -182,7 +184,50 @@ public class HexGrid : MonoBehaviour
                 //Debug.Log(pos + "->" + hexPos);
 
                 result.Add(hexPos);
+
+                // Store the tilepositions of the max range row
+                if (i == range - 1)
+                {
+                    maxRangeTilePositions.Add(pos);
+                }
             }
+        }
+
+        // Remove tiles that are obstructed by a ship.
+        // Essentially, trace a ray to each of the max range tiles
+        // if the ray hits a ship, the following tiles in the same direction
+        // are obstructed.
+        for (int i = 0; i < maxRangeTilePositions.Count; i++)
+        {
+            // Offset the y coordinate so we don't collide with hexes.
+            var yOffset = 0.25f;
+            var origin = currHexWorldPosition;
+            origin.y += yOffset;
+
+            var destination = maxRangeTilePositions[i];
+            destination.y += yOffset;
+
+            //Debug.Log(origin + "->" + destination);
+
+            var rayDir = (destination - origin).normalized;
+
+            Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
+
+            RaycastHit hit;
+            if (Physics.Raycast(origin, rayDir, out hit))
+            {
+                //Debug.Log("Obstruction detected!" + hit.transform.name);
+                var hitGO = hit.transform.gameObject;
+                if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
+                {
+                    for (int j = 1; j < (hit.transform.position - destination).magnitude; j+=2)
+                    {
+                        var hexPos = GetClosestHex(hit.transform.position + rayDir*j);
+                        result.Remove(hexPos);
+                    }
+                } 
+            }
+
         }
 
         return result;
