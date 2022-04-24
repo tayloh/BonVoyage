@@ -18,6 +18,7 @@ public class ShipManager : MonoBehaviour
 
     [SerializeField]
     private Ship selectedShip;
+    [SerializeField] private Ship _oldSelection;
     private Hex previouslySelectedHex;
 
     private Ship activeShip;
@@ -116,7 +117,8 @@ public class ShipManager : MonoBehaviour
             }
 
             ship.TakeDamage(activeShip.AttackDamage);
-
+            //after an attack it will incerease the last player ship selected.
+            if (_oldSelection != null) _oldSelection.Repair();
             TriggerFiring();
 
             Debug.Log(ship + " took " + activeShip.AttackDamage + " damage, and has health " + ship.Health);
@@ -228,6 +230,7 @@ public class ShipManager : MonoBehaviour
 
     private void PrepareShipForMovement(Ship shipReference)
     {
+        _oldSelection = shipReference;
         if (this.selectedShip != null)
         {
             ClearOldSelection();
