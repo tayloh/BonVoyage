@@ -41,9 +41,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Depth: 0.17
-    - _Displacement: 0.11
+    - _Displacement: 0.39
+    - _DitherThreshold: 0
+    - _FadeOpacity: 0.388
+    - _FarLimit: 22.21
+    - _NearLimit: 13.45
     - _NormalMapSpeedMain: 100
-    - _NormalMapSpeedSub: -500
+    - _NormalMapSpeedSub: -499.64
     - _NormalStrength: 0.282
     - _Smoothness: 0.442
     - _Strength: 0.257
