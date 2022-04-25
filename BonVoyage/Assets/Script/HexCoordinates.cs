@@ -6,10 +6,9 @@ using UnityEngine;
 public class HexCoordinates : MonoBehaviour
 {
     //Offset between hex tiles, can be checked in Edit->Grid and snap settings
-    private static float xOffset = 2;
-    private static float yOffset = 1;
-
-    private static float zOffset = 1.73f;
+    public static float xOffset = 2;
+    public static float yOffset = 1;
+    public static float zOffset = 1.73f;
 
     [Header("Offset coordinates")]
     [SerializeField]
