@@ -46,4 +46,25 @@ public class PirateAI : MonoBehaviour
         gameManager.NextTurn(); 
         yield return null;
     }
+
+    public bool HasAttackableInRange()
+    {
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
+
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
+
+        foreach (var tile in attackableTiles)
+        {
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.CompareTag("PlayerShip"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -66,12 +66,22 @@ public class ShipManager : MonoBehaviour
 
         if (PirateMovement)
         {
-            MovePirateShip(ship);
+            // Only move if there isn't a ship to attack from the current position
+            if (!ship.GetComponent<PirateAI>().HasAttackableInRange())
+            {
+                MovePirateShip(ship);
+            }
+            else
+            {
+                PirateAIAttack(ship);
+            }
+
         }
         else
         {
             PirateAIAttack(ship);
         }
+        
     }
 
     private void PirateAIAttack(Ship ship)
