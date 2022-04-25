@@ -4526,17 +4526,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85136dd1055eec48b504ff42dabf90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 18
+  MovementSpeed: 30
   EnableTransitions: 1
   limiter_x: 100
   limiter_z: 100
-  scrollSpeed: 280
+  scrollSpeed: 2000
   minLimiter_y: 5
   maxLimiter_y: 120
-  RotSpeed: 100
+  RotSpeed: 350
   RotMaxX: 88
   RotMinX: 2
-  TransitionSpeed: 0.5
+  TransitionSpeed: 1.5
   ShipCameraOffset: {x: 5, y: 10, z: -5}
 --- !u!114 &732777267
 MonoBehaviour:
@@ -9010,6 +9010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51892c0ec29eb6d40a47a18adb6e94ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PirateMovement: 1
   hexgrid: {fileID: 1679244513}
   movementSystem: {fileID: 1660746589}
   gameManager: {fileID: 442071959}
