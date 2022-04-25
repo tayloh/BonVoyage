@@ -4536,7 +4536,7 @@ MonoBehaviour:
   RotSpeed: 100
   RotMaxX: 88
   RotMinX: 2
-  TransitionSpeed: 0.75
+  TransitionSpeed: 0.5
   ShipCameraOffset: {x: 5, y: 10, z: -5}
 --- !u!114 &732777267
 MonoBehaviour:

@@ -158,6 +158,7 @@ public class HexGrid : MonoBehaviour
         }
 
         var maxRangeTilePositions = new List<Vector3>();
+        var vec3Positions = new List<Vector3>();
 
         //Debug.Log("Interpolating...");
         // Interpolate between LineUpper and LineLower
@@ -185,11 +186,49 @@ public class HexGrid : MonoBehaviour
 
                 result.Add(hexPos);
 
-                // Store the tilepositions of the max range row
-                if (i == range - 1)
+                // Need this for checking line of sight
+                vec3Positions.Add(pos);
+
+                // Store the tilepositions of the max range row (might remove this)
+                //if (i == range - 1)
+                //{
+                //    maxRangeTilePositions.Add(pos);
+                //}
+            }
+        }
+
+        // Raytrace from the ship position to all attackable tiles, if a ship is in the path
+        // remove the tile
+        for (int i = 0; i < vec3Positions.Count; i++)
+        {
+            var rayDir = vec3Positions[i] - currHexWorldPosition;
+            var distance = rayDir.magnitude;
+            rayDir.Normalize();
+
+            RaycastHit[] hits = Physics.RaycastAll(currHexWorldPosition + rayDir * 1.0f, rayDir, distance);
+            var isInLineOfSight = true;
+            Vector3Int tileToBeRemoved = Vector3Int.zero;
+
+            foreach (var hit in hits)
+            {
+                var hitGO = hit.transform.gameObject;
+
+                if (hitGO.CompareTag("Pirate") || hitGO.CompareTag("PlayerShip"))
                 {
-                    maxRangeTilePositions.Add(pos);
+                    // Check if there is a ship on the tile
+                    tileToBeRemoved = GetClosestHex(vec3Positions[i]);
+                    var shipTile = hitGO.GetComponent<Ship>().hexCoord;
+
+                    // If there is, it should not be removed, since the ship is attackable.
+                    if (shipTile == tileToBeRemoved) continue;
+
+                    isInLineOfSight = false;
+                    break;
                 }
+            }
+            if (!isInLineOfSight)
+            {
+                result.Remove(tileToBeRemoved);
             }
         }
 
@@ -197,66 +236,66 @@ public class HexGrid : MonoBehaviour
         // Essentially, trace a ray to each of the max range tiles
         // if the ray hits a ship, the following tiles in the same direction
         // are obstructed.
-        for (int i = 0; i < maxRangeTilePositions.Count; i++)
-        {
-            // Offset the y coordinate so we don't collide with hexes.
-            var yOffset = 0.25f;
-            var origin = currHexWorldPosition;
-            origin.y += yOffset;
+        //for (int i = 0; i < maxRangeTilePositions.Count; i++)
+        //{
+        //    // Offset the y coordinate so we don't collide with hexes.
+        //    var yOffset = 0.25f;
+        //    var origin = currHexWorldPosition;
+        //    origin.y += yOffset;
 
-            var destination = maxRangeTilePositions[i];
-            destination.y += yOffset;
+        //    var destination = maxRangeTilePositions[i];
+        //    destination.y += yOffset;
 
-            //Debug.Log(origin + "->" + destination);
+        //    //Debug.Log(origin + "->" + destination);
 
-            var rayDir = (destination - origin).normalized;
+        //    var rayDir = (destination - origin).normalized;
 
-            //Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
+        //    //Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
 
-            RaycastHit[] hits = Physics.RaycastAll(origin + rayDir*0.1f, rayDir, range * distBetweenHexCenters);
-            if (hits.Length != 0)
-            {
-                foreach (var hit in hits)
-                {
-                    //Debug.Log("Obstruction detected!" + hit.transform.name);
-                    var hitGO = hit.transform.gameObject;
-                    if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
-                    {
-                        Debug.Log(hitGO.name);
-                        var localOrigin = hitGO.transform.position;
-                        localOrigin.y += yOffset;
+        //    RaycastHit[] hits = Physics.RaycastAll(origin + rayDir*0.1f, rayDir, range * distBetweenHexCenters);
+        //    if (hits.Length != 0)
+        //    {
+        //        foreach (var hit in hits)
+        //        {
+        //            //Debug.Log("Obstruction detected!" + hit.transform.name);
+        //            var hitGO = hit.transform.gameObject;
+        //            if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
+        //            {
+        //                Debug.Log(hitGO.name);
+        //                var localOrigin = hitGO.transform.position;
+        //                localOrigin.y += yOffset;
 
-                        var localRayDir = (destination - localOrigin);
-                        if (localRayDir.magnitude < 0.1) continue; // skip ships if they are on last tile (won't block anyway)
+        //                var localRayDir = (destination - localOrigin);
+        //                if (localRayDir.magnitude < 0.1) continue; // skip ships if they are on last tile (won't block anyway)
 
-                        localRayDir.Normalize();
+        //                localRayDir.Normalize();
 
-                        Debug.DrawLine(localOrigin, localOrigin + localRayDir * distBetweenHexCenters, Color.green, 100f, false);
+        //                //Debug.DrawLine(localOrigin, localOrigin + localRayDir * distBetweenHexCenters, Color.green, 100f, false);
 
-                        var pos = localOrigin + distBetweenHexCenters * localRayDir;
-                        pos.x = Mathf.Round(pos.x); // x-positions are always integers (just remove the floating point error)
-                        pos.z = Mathf.Round(pos.z / 1.73f) * 1.73f; // z-positions are always a multiple of 1.73 (make sure they are)
+        //                var pos = localOrigin + distBetweenHexCenters * localRayDir;
+        //                pos.x = Mathf.Round(pos.x); // x-positions are always integers (just remove the floating point error)
+        //                pos.z = Mathf.Round(pos.z / 1.73f) * 1.73f; // z-positions are always a multiple of 1.73 (make sure they are)
 
-                        result.Remove(GetClosestHex(pos));
+        //                //result.Remove(GetClosestHex(pos));
 
-                        //for (int j = 2; j < 4; j++)
-                        //{
+        //                //for (int j = 2; j < 4; j++)
+        //                //{
 
-                        //    //Debug.Log(localOrigin + localRayDir * j);
+        //                //    //Debug.Log(localOrigin + localRayDir * j);
 
-                        //    // Bug here
-                        //    var hexPos = GetClosestHex(localOrigin + localRayDir * j);
-                        //    //Debug.Log(hexPos);
+        //                //    // Bug here
+        //                //    var hexPos = GetClosestHex(localOrigin + localRayDir * j);
+        //                //    //Debug.Log(hexPos);
                             
                             
-                        //    result.Remove(hexPos);
-                        //}
-                    }
-                }
+        //                //    result.Remove(hexPos);
+        //                //}
+        //            }
+        //        }
  
-            }
+        //    }
 
-        }
+        //}
 
         return result;
     }
