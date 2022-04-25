@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ShipManager : MonoBehaviour
 {
+
+    public bool PirateMovement = true;
+
     [SerializeField]
     private HexGrid hexgrid;
 
@@ -54,7 +57,14 @@ public class ShipManager : MonoBehaviour
         activeShip = ship;
         activeShip.MovementFinished += PirateAIAttack;
 
-        MovePirateShip(ship);
+        if (PirateMovement)
+        {
+            MovePirateShip(ship);
+        }
+        else
+        {
+            PirateAIAttack(ship);
+        }
     }
 
     private void PirateAIAttack(Ship ship)
