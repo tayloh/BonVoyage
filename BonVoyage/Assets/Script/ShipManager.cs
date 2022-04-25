@@ -49,6 +49,9 @@ public class ShipManager : MonoBehaviour
     public void StartPlayerTurn(Ship ship)
     {
         activeShip = ship;
+
+        // Moved repair to start of players turn
+        ship.Repair();
         PrepareShipForMovement(ship);
     }
 
@@ -57,6 +60,9 @@ public class ShipManager : MonoBehaviour
         Debug.Log("START OF PIRATE TURN:" + ship.gameObject.name);
         activeShip = ship;
         activeShip.MovementFinished += PirateAIAttack;
+
+        // Moved repair to start of players turn
+        ship.Repair();
 
         if (PirateMovement)
         {
@@ -193,7 +199,7 @@ public class ShipManager : MonoBehaviour
 
             ship.TakeDamage(activeShip.AttackDamage);
             //after an attack it will incerease the last player ship selected.
-            if (_oldSelection != null) _oldSelection.Repair();
+            //if (_oldSelection != null) _oldSelection.Repair();
             TriggerFiring();
 
             Debug.Log(ship + " took " + activeShip.AttackDamage + " damage, and has health " + ship.Health);
