@@ -21,6 +21,9 @@ public class HexGrid : MonoBehaviour
     [SerializeField]
     private GameObject tile;
 
+    [SerializeField]
+    private GameManager gameManager;
+
     private void Awake()
     {
         xOffset = HexCoordinates.xOffset;
@@ -320,6 +323,51 @@ public class HexGrid : MonoBehaviour
         return HexCoordinates.ConvertPositionToOffset(worldPosition);
     }
 
+    public bool LineCircleIntersect(Vector2 p1, Vector2 p2, Vector2 center, float radius, float maxDist)
+    {
+        Vector2 r0 = p1;
+        Vector2 rd = (p2 - p1).normalized;
+
+        float lambda = 0;
+        float a = Vector2.Dot(rd, rd);
+        float b = 2 * Vector2.Dot(rd, r0 - center);
+        float c = Vector2.Dot(r0 - center, r0 - center) - (radius * radius);
+
+        float x0 = 0;
+        float x1 = 0;
+
+        float discriminator = b * b - 4 * a * c;
+
+        if (discriminator < 0) return false;
+
+        else if (discriminator == 0)
+        {
+            x0 = -b / (2 * a);
+            x1 = x0;
+        }
+        else
+        {
+            x0 = (-b + Mathf.Sqrt(discriminator)) / (2 * a);
+            x1 = (-b - Mathf.Sqrt(discriminator)) / (2 * a);
+        }
+
+        if (x0 > x1)
+        {
+            float temp = x0;
+            x0 = x1;
+            x1 = temp;
+        }
+
+        lambda = x0;
+
+        if (lambda < 0 || lambda + 0.001f > maxDist)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// Given offset coordinates, broadside (0 = right, 1 = left), and firing range
     /// Returns the attackable tiles from the provided offset coordinate position
@@ -426,40 +474,78 @@ public class HexGrid : MonoBehaviour
             }
         }
 
-        // Raytrace from the ship position to all attackable tiles, if a ship is in the path
-        // remove the tile
+        // Direct 2D raytrace calculations
+        var shipWorldPositions = gameManager.GetShipWorldPositions();
+        
+
+        // Trace a ray to each vec3position on the grid of attackable tiles
         for (int i = 0; i < vec3Positions.Count; i++)
         {
-            var rayDir = vec3Positions[i] - currHexWorldPosition;
-            var distance = rayDir.magnitude;
-            rayDir.Normalize();
+            var lineStart = new Vector2(currHexWorldPosition.x, currHexWorldPosition.z);
+            var lineEnd = new Vector2(vec3Positions[i].x, vec3Positions[i].z);
+            var maxDistance = (lineEnd - lineStart).magnitude - distBetweenHexCenters / 2;
 
-            RaycastHit[] hits = Physics.RaycastAll(currHexWorldPosition + rayDir * 1.0f, rayDir, distance);
-            var isInLineOfSight = true;
-            Vector3Int tileToBeRemoved = Vector3Int.zero;
+            var foundIntersection = false;
 
-            foreach (var hit in hits)
+            // For each ray, check if it intersects with any ship (circle collider)
+            for (int j = 0; j < shipWorldPositions.Count; j++)
             {
-                var hitGO = hit.transform.gameObject;
+                
+                var origin = new Vector2(shipWorldPositions[j].x, shipWorldPositions[j].z);
+                var hasIntersection = LineCircleIntersect(lineStart, lineEnd, origin, 0.9f, maxDistance);
 
-                if (hitGO.CompareTag("Pirate") || hitGO.CompareTag("PlayerShip"))
+                // Check if there was an intersection or not
+                if (hasIntersection)
                 {
-                    // Check if there is a ship on the tile
-                    tileToBeRemoved = GetClosestHex(vec3Positions[i]);
-                    var shipTile = hitGO.GetComponent<Ship>().hexCoord;
-
-                    // If there is, it should not be removed, since the ship is attackable.
-                    if (shipTile == tileToBeRemoved) continue;
-
-                    isInLineOfSight = false;
+                    foundIntersection = true;
                     break;
                 }
             }
-            if (!isInLineOfSight)
+
+            if (foundIntersection)
             {
-                result.Remove(tileToBeRemoved);
+                var tileConsideredForRemoval = GetClosestHex(vec3Positions[i]);
+                result.Remove(tileConsideredForRemoval);
             }
+
         }
+
+
+
+        // Raytrace from the ship position to all attackable tiles, if a ship is in the path
+        // remove the tile
+        //for (int i = 0; i < vec3Positions.Count; i++)
+        //{
+        //    var rayDir = vec3Positions[i] - currHexWorldPosition;
+        //    var distance = rayDir.magnitude;
+        //    rayDir.Normalize();
+
+        //    RaycastHit[] hits = Physics.RaycastAll(currHexWorldPosition + rayDir * 1.0f, rayDir, distance);
+        //    var isInLineOfSight = true;
+        //    Vector3Int tileToBeRemoved = Vector3Int.zero;
+
+        //    foreach (var hit in hits)
+        //    {
+        //        var hitGO = hit.transform.gameObject;
+
+        //        if (hitGO.CompareTag("Pirate") || hitGO.CompareTag("PlayerShip"))
+        //        {
+        //            // Check if there is a ship on the tile
+        //            tileToBeRemoved = GetClosestHex(vec3Positions[i]);
+        //            var shipTile = hitGO.GetComponent<Ship>().hexCoord;
+
+        //            // If there is, it should not be removed, since the ship is attackable.
+        //            if (shipTile == tileToBeRemoved) continue;
+
+        //            isInLineOfSight = false;
+        //            break;
+        //        }
+        //    }
+        //    if (!isInLineOfSight)
+        //    {
+        //        //result.Remove(tileToBeRemoved);
+        //    }
+        //}
 
         // Remove tiles that are obstructed by a ship.
         // Essentially, trace a ray to each of the max range tiles

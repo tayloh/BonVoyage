@@ -1387,6 +1387,7 @@ MonoBehaviour:
   movementSystem: {fileID: 1660746589}
   gameManager: {fileID: 442071959}
   selectedShip: {fileID: 0}
+  _oldSelection: {fileID: 0}
 --- !u!4 &1520174883
 Transform:
   m_ObjectHideFlags: 0
@@ -1713,6 +1714,7 @@ MonoBehaviour:
   hexParent: {fileID: 1488788713}
   gridSideSize: 10
   tile: {fileID: 4936956383488517673, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
+  gameManager: {fileID: 442071959}
   horShift: -1
   verShift: 1
 --- !u!4 &1679244514

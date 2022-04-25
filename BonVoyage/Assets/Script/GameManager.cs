@@ -194,6 +194,25 @@ public class GameManager : MonoBehaviour
         return playerShips;
     }
 
+    public List<Vector3> GetShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Ship> GetPirateShips()
+    {
+        return pirateShips;
+    }
+
     private void DisplayShipList(List<Ship> list)
     {
         Debug.Log("the list " + list.ToString()+(" contains:"));
