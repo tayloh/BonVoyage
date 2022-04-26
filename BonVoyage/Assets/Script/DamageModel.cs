@@ -70,7 +70,6 @@ public class DamageModel : MonoBehaviour
         return Mathf.Max(0, 1 - (D / H));
     }
 
-    // Takes into account directional damage and accuracy
     private static AttackType _getDirectionalAttackType(Vector3 attackDir, Vector3 forwardDir, float decidingAngle)
     {   
         // Directional damage modifiers

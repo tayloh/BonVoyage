@@ -289,6 +289,8 @@ public class ShipManager : MonoBehaviour
         gameManager.UpdateGameState(GameState.PlayerFire);
         
         PrepareShipForFiring(activeShip);
+
+        if (!activeShip.HasAttackableInRange("Pirate")) { SkipPhase(); }
     }
 
     public void SkipPhase()
