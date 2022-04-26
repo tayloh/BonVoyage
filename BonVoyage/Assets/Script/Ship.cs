@@ -84,6 +84,15 @@ public class Ship : MonoBehaviour
         hexGrid.PlaceShip(hexCoord, this);
     }
 
+    private void Update()
+    {
+        // Make canvas face the camera, always
+        var canvas = gameObject.transform.Find("Canvas");
+
+        Camera camera = Camera.main;
+        canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+    }
+
     public float[] GetCannonDamageList()
     {
         float[] damagePerCannon = new float[_cannons.Count];
@@ -267,6 +276,30 @@ public class Ship : MonoBehaviour
         }
 
     }
+
+    public bool HasAttackableInRange(string tag)
+    {
+        if (tag != "PlayerShip" && tag != "Pirate") return false;
+
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
+
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
+
+        foreach (var tile in attackableTiles)
+        {
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.CompareTag(tag))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     IEnumerator ShowText(string damage, int sign = 1)
     {
         if (sign < 0)

@@ -334,6 +334,8 @@ MonoBehaviour:
   _healtSlider: {fileID: 7060101712778570514}
   _damageText: {fileID: 7718378495954600008}
   _health: 5
+  _repairPoint: 1
+  _attack: 3
   HasFiredLeft: 0
   HasFiredRight: 0
   hexCoord: {x: 0, y: 0, z: 0}
@@ -493,7 +495,7 @@ GameObject:
   - component: {fileID: 6161508388699186268}
   - component: {fileID: 4018008837170361544}
   m_Layer: 7
-  m_Name: Canvas (1)
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
