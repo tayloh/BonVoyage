@@ -50,7 +50,7 @@ public class HexGrid : MonoBehaviour
     private void Update()
     {
         
-            AdaptToPlayersView(Camera.main.transform.position);
+            //AdaptToPlayersView(Camera.main.transform.position);
         
 
         /*if (Input.GetKeyDown(KeyCode.B))
@@ -69,6 +69,11 @@ public class HexGrid : MonoBehaviour
                 } 
             }
         }*/
+    }
+
+    private void LateUpdate()
+    {
+        AdaptToPlayersView(Camera.main.transform.position);
     }
 
     private void AdaptToPlayersView(Vector3 cameraPos)

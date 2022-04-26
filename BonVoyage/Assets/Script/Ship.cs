@@ -9,7 +9,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
     private int _maxhealth;
+    
+    [SerializeField]
     private int _health = 5;
+
     private int _repairPoint = 1; // this how many  ok.
     public int Health { get => _health; }
 

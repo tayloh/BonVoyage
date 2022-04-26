@@ -56,6 +56,9 @@ public class CameraMovement : MonoBehaviour
 
         var lerpStep = dynamicSpeedModifier * TransitionSpeed * Time.deltaTime;
 
+        // First frame has a long deltaTime...
+        if (Time.deltaTime > 0.05) lerpStep = dynamicSpeedModifier * TransitionSpeed * (1 / 60);
+
         _tLerp += lerpStep;
 
         transform.position = Vector3.Lerp(_startPos, _currentLerpGoal, _tLerp);
