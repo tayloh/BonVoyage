@@ -455,7 +455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 52931522699038044, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexParent: {fileID: 1488788713}
   gridSideSize: 50
-  tile: {fileID: 4936956383488517673, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
+  tile: {fileID: 5601897981856771584, guid: c5d73a17ee93f4748a304dda11b8d36f, type: 3}
   mainCamera: {fileID: 732777264}
   horShift: -1
   verShift: 1
