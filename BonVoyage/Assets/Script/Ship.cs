@@ -2,11 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
 
+    [SerializeField] private Image _healtSlider;
+    [SerializeField] private Text _damageText;
+    private int _maxhealth;
+    
+    [SerializeField]
     private int _health = 5;
+
+    private int _repairPoint = 1; // this how many  ok.
     public int Health { get => _health; }
 
     private int _attack = 3;
@@ -29,7 +36,7 @@ public class Ship : MonoBehaviour
     [SerializeField]
     private HexGrid hexGrid;
 
-    [Header("Ship stats") ]
+    [Header("Ship stats")]
     [SerializeField]
     private int movementPoints = 1;
     public int MovementPoints { get => movementPoints; }
@@ -54,7 +61,12 @@ public class Ship : MonoBehaviour
         _glowHighlight = GetComponent<GlowHighlight>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
-        hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0,1,0));
+        hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
+        _maxhealth = _health;
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        if (_damageText != null) _damageText.gameObject.SetActive(false);
+
     }
 
     private void Start()
@@ -65,12 +77,12 @@ public class Ship : MonoBehaviour
 
     public void Deselect()
     {
-        _glowHighlight.ToggleGlow(false);
+        //_glowHighlight.ToggleGlow(false);
     }
 
     public void Select()
     {
-        _glowHighlight.ToggleGlow();
+        //_glowHighlight.ToggleGlow();
     }
 
     public void MoveThroughPath(List<Vector3> path)
@@ -83,7 +95,7 @@ public class Ship : MonoBehaviour
 
         _pathPositions = new Queue<Vector3>(path);
         Vector3 firstTarget = _pathPositions.Dequeue();
-        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));        
+        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));
     }
 
     public IEnumerator RotationCoroutine(Vector3 endPosition, float rotationDuration)
@@ -119,7 +131,7 @@ public class Ship : MonoBehaviour
         while (timeElapsed < _movementDuration)
         {
             timeElapsed += Time.deltaTime;
-            float lerpStep = timeElapsed/_movementDuration;
+            float lerpStep = timeElapsed / _movementDuration;
             transform.position = Vector3.Lerp(startPosition, endPosition, lerpStep);
             yield return null;
         }
@@ -135,7 +147,7 @@ public class Ship : MonoBehaviour
         else
         {
             Debug.Log("Movement finished.");
-            
+
             // Invoke the event after the coordinates have been updated
             MovementFinished?.Invoke(this);
 
@@ -143,7 +155,7 @@ public class Ship : MonoBehaviour
     }
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
-    {        
+    {
         //set previoustile.Ship à null et set newtile.ship à ship
         //update the type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
@@ -210,7 +222,7 @@ public class Ship : MonoBehaviour
         }
 
         List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
-        
+
         foreach (var tile in res)
         {
             Hex hex = hexGrid.GetTileAt(tile);
@@ -227,11 +239,27 @@ public class Ship : MonoBehaviour
         StartCoroutine(TakeDamageAnimation());
 
         _health -= damage;
-
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        StartCoroutine(ShowText("-" + damage.ToString(), -1));
         if (_health <= 0)
         {
             Die();
         }
+
+    }
+    IEnumerator ShowText(string damage, int sign = 1)
+    {
+        if (sign < 0)
+            _damageText.color = Color.red;
+        else
+            _damageText.color = Color.green;
+
+        if (_damageText == null) yield break;
+        _damageText.text = damage.ToString();
+        _damageText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        _damageText.gameObject.SetActive(false);
 
     }
 
@@ -259,6 +287,18 @@ public class Ship : MonoBehaviour
             yield return null;
         }
         DeathAnimationFinished?.Invoke(this);
+    }
+
+    public void Repair()
+    {
+        if (_health == _maxhealth) return;
+        _health += _repairPoint;
+        _health = Mathf.Clamp(_health, 0, _maxhealth);
+
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+
+        StartCoroutine(ShowText("+" + _repairPoint.ToString()));
     }
 
 }

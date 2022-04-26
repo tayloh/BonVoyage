@@ -33,7 +33,7 @@ public class PirateAI : MonoBehaviour
             neighbourCoord = neighbours[1]; //just to minize the possibility to choose an occupied tile, the AI will have to check it properly
         }
         Vector3 positionGoal = hexGrid.GetTileAt(neighbourCoord).transform.position;
-        StartCoroutine(EndPirateTurn());
+        //StartCoroutine(EndPirateTurn());
         return new List<Vector3>() { positionGoal};    
     }
 
@@ -41,7 +41,30 @@ public class PirateAI : MonoBehaviour
     {
         yield return null;
         yield return new WaitForSecondsRealtime(ship.MovementDuration + 0.1f);
+
+        // Updating the turn after pirate in shipmanager instead, see PirateAIAttack() and FireActiveShip()
         gameManager.NextTurn(); 
         yield return null;
+    }
+
+    public bool HasAttackableInRange()
+    {
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
+
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
+
+        foreach (var tile in attackableTiles)
+        {
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.CompareTag("PlayerShip"))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

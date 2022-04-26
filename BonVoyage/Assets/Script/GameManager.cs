@@ -154,7 +154,8 @@ public class GameManager : MonoBehaviour
         else
         {
             UpdateGameState(GameState.PirateTurn);
-            shipManager.MovePirateShip(nextShip);
+            shipManager.StartPirateTurn(nextShip);
+            //shipManager.MovePirateShip(nextShip);
         }
     }
 
@@ -185,6 +186,31 @@ public class GameManager : MonoBehaviour
         shipsTurn.Remove(ship);
 
         Destroy(ship.gameObject);
+    }
+
+    public List<Ship> GetPlayerShips()
+    {
+        // Does this give a reference to the internal list???
+        return playerShips;
+    }
+
+    public List<Vector3> GetShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Ship> GetPirateShips()
+    {
+        return pirateShips;
     }
 
     private void DisplayShipList(List<Ship> list)
@@ -221,6 +247,7 @@ public enum GameState
     PlayerMove,
     PlayerFire,
     PirateTurn,
+    PirateFire,
     Upgrade,
     Victory,
     Defeat

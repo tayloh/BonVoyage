@@ -23,6 +23,9 @@ public class HexGrid : MonoBehaviour
     [SerializeField]
     private Camera mainCamera;
 
+    [SerializeField]
+    private GameManager gameManager;
+
     private void Awake()
     {
         xOffset = HexCoordinates.xOffset;
@@ -47,7 +50,7 @@ public class HexGrid : MonoBehaviour
     private void Update()
     {
         
-            AdaptToPlayersView(Camera.main.transform.position);
+            //AdaptToPlayersView(Camera.main.transform.position);
         
 
         /*if (Input.GetKeyDown(KeyCode.B))
@@ -66,6 +69,11 @@ public class HexGrid : MonoBehaviour
                 } 
             }
         }*/
+    }
+
+    private void LateUpdate()
+    {
+        AdaptToPlayersView(Camera.main.transform.position);
     }
 
     private void AdaptToPlayersView(Vector3 cameraPos)
@@ -318,6 +326,51 @@ public class HexGrid : MonoBehaviour
         return HexCoordinates.ConvertPositionToOffset(worldPosition);
     }
 
+    public bool LineCircleIntersect(Vector2 p1, Vector2 p2, Vector2 center, float radius, float maxDist)
+    {
+        Vector2 r0 = p1;
+        Vector2 rd = (p2 - p1).normalized;
+
+        float lambda = 0;
+        float a = Vector2.Dot(rd, rd);
+        float b = 2 * Vector2.Dot(rd, r0 - center);
+        float c = Vector2.Dot(r0 - center, r0 - center) - (radius * radius);
+
+        float x0 = 0;
+        float x1 = 0;
+
+        float discriminator = b * b - 4 * a * c;
+
+        if (discriminator < 0) return false;
+
+        else if (discriminator == 0)
+        {
+            x0 = -b / (2 * a);
+            x1 = x0;
+        }
+        else
+        {
+            x0 = (-b + Mathf.Sqrt(discriminator)) / (2 * a);
+            x1 = (-b - Mathf.Sqrt(discriminator)) / (2 * a);
+        }
+
+        if (x0 > x1)
+        {
+            float temp = x0;
+            x0 = x1;
+            x1 = temp;
+        }
+
+        lambda = x0;
+
+        if (lambda < 0 || lambda + 0.001f > maxDist)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// Given offset coordinates, broadside (0 = right, 1 = left), and firing range
     /// Returns the attackable tiles from the provided offset coordinate position
@@ -384,6 +437,9 @@ public class HexGrid : MonoBehaviour
             hexLineLower[i] = currHexWorldPosition + (i + 1) * distBetweenHexCenters * dir2;
         }
 
+        var maxRangeTilePositions = new List<Vector3>();
+        var vec3Positions = new List<Vector3>();
+
         //Debug.Log("Interpolating...");
         // Interpolate between LineUpper and LineLower
         for (int i = 0; i < range; i++)
@@ -409,8 +465,155 @@ public class HexGrid : MonoBehaviour
                 //Debug.Log(pos + "->" + hexPos);
 
                 result.Add(hexPos);
+
+                // Need this for checking line of sight
+                vec3Positions.Add(pos);
+
+                // Store the tilepositions of the max range row (might remove this)
+                //if (i == range - 1)
+                //{
+                //    maxRangeTilePositions.Add(pos);
+                //}
             }
         }
+
+        // Direct 2D raytrace calculations
+        var shipWorldPositions = gameManager.GetShipWorldPositions();
+        
+
+        // Trace a ray to each vec3position on the grid of attackable tiles
+        for (int i = 0; i < vec3Positions.Count; i++)
+        {
+            var lineStart = new Vector2(currHexWorldPosition.x, currHexWorldPosition.z);
+            var lineEnd = new Vector2(vec3Positions[i].x, vec3Positions[i].z);
+            var maxDistance = (lineEnd - lineStart).magnitude - distBetweenHexCenters / 2;
+
+            var foundIntersection = false;
+
+            // For each ray, check if it intersects with any ship (circle collider)
+            for (int j = 0; j < shipWorldPositions.Count; j++)
+            {
+                
+                var origin = new Vector2(shipWorldPositions[j].x, shipWorldPositions[j].z);
+                var hasIntersection = LineCircleIntersect(lineStart, lineEnd, origin, 0.9f, maxDistance);
+
+                // Check if there was an intersection or not
+                if (hasIntersection)
+                {
+                    foundIntersection = true;
+                    break;
+                }
+            }
+
+            if (foundIntersection)
+            {
+                var tileConsideredForRemoval = GetClosestHex(vec3Positions[i]);
+                result.Remove(tileConsideredForRemoval);
+            }
+
+        }
+
+
+
+        // Raytrace from the ship position to all attackable tiles, if a ship is in the path
+        // remove the tile
+        //for (int i = 0; i < vec3Positions.Count; i++)
+        //{
+        //    var rayDir = vec3Positions[i] - currHexWorldPosition;
+        //    var distance = rayDir.magnitude;
+        //    rayDir.Normalize();
+
+        //    RaycastHit[] hits = Physics.RaycastAll(currHexWorldPosition + rayDir * 1.0f, rayDir, distance);
+        //    var isInLineOfSight = true;
+        //    Vector3Int tileToBeRemoved = Vector3Int.zero;
+
+        //    foreach (var hit in hits)
+        //    {
+        //        var hitGO = hit.transform.gameObject;
+
+        //        if (hitGO.CompareTag("Pirate") || hitGO.CompareTag("PlayerShip"))
+        //        {
+        //            // Check if there is a ship on the tile
+        //            tileToBeRemoved = GetClosestHex(vec3Positions[i]);
+        //            var shipTile = hitGO.GetComponent<Ship>().hexCoord;
+
+        //            // If there is, it should not be removed, since the ship is attackable.
+        //            if (shipTile == tileToBeRemoved) continue;
+
+        //            isInLineOfSight = false;
+        //            break;
+        //        }
+        //    }
+        //    if (!isInLineOfSight)
+        //    {
+        //        //result.Remove(tileToBeRemoved);
+        //    }
+        //}
+
+        // Remove tiles that are obstructed by a ship.
+        // Essentially, trace a ray to each of the max range tiles
+        // if the ray hits a ship, the following tiles in the same direction
+        // are obstructed.
+        //for (int i = 0; i < maxRangeTilePositions.Count; i++)
+        //{
+        //    // Offset the y coordinate so we don't collide with hexes.
+        //    var yOffset = 0.25f;
+        //    var origin = currHexWorldPosition;
+        //    origin.y += yOffset;
+
+        //    var destination = maxRangeTilePositions[i];
+        //    destination.y += yOffset;
+
+        //    //Debug.Log(origin + "->" + destination);
+
+        //    var rayDir = (destination - origin).normalized;
+
+        //    //Debug.DrawLine(origin, origin + rayDir * distBetweenHexCenters * range, Color.green, 100f, false);
+
+        //    RaycastHit[] hits = Physics.RaycastAll(origin + rayDir*0.1f, rayDir, range * distBetweenHexCenters);
+        //    if (hits.Length != 0)
+        //    {
+        //        foreach (var hit in hits)
+        //        {
+        //            //Debug.Log("Obstruction detected!" + hit.transform.name);
+        //            var hitGO = hit.transform.gameObject;
+        //            if (hitGO.CompareTag("PlayerShip") || hitGO.CompareTag("Pirate"))
+        //            {
+        //                Debug.Log(hitGO.name);
+        //                var localOrigin = hitGO.transform.position;
+        //                localOrigin.y += yOffset;
+
+        //                var localRayDir = (destination - localOrigin);
+        //                if (localRayDir.magnitude < 0.1) continue; // skip ships if they are on last tile (won't block anyway)
+
+        //                localRayDir.Normalize();
+
+        //                //Debug.DrawLine(localOrigin, localOrigin + localRayDir * distBetweenHexCenters, Color.green, 100f, false);
+
+        //                var pos = localOrigin + distBetweenHexCenters * localRayDir;
+        //                pos.x = Mathf.Round(pos.x); // x-positions are always integers (just remove the floating point error)
+        //                pos.z = Mathf.Round(pos.z / 1.73f) * 1.73f; // z-positions are always a multiple of 1.73 (make sure they are)
+
+        //                //result.Remove(GetClosestHex(pos));
+
+        //                //for (int j = 2; j < 4; j++)
+        //                //{
+
+        //                //    //Debug.Log(localOrigin + localRayDir * j);
+
+        //                //    // Bug here
+        //                //    var hexPos = GetClosestHex(localOrigin + localRayDir * j);
+        //                //    //Debug.Log(hexPos);
+                            
+                            
+        //                //    result.Remove(hexPos);
+        //                //}
+        //            }
+        //        }
+ 
+        //    }
+
+        //}
 
         return result;
     }

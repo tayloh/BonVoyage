@@ -54,7 +54,10 @@ public class CameraMovement : MonoBehaviour
             Mathf.Pow(distanceLeft, 1.5f), 
             0.05f, 2);
 
-        var lerpStep = dynamicSpeedModifier * TransitionSpeed * Time.fixedDeltaTime;
+        var lerpStep = dynamicSpeedModifier * TransitionSpeed * Time.deltaTime;
+
+        // First frame has a long deltaTime...
+        if (Time.deltaTime > 0.05) lerpStep = dynamicSpeedModifier * TransitionSpeed * (1 / 60);
 
         _tLerp += lerpStep;
 
@@ -88,6 +91,7 @@ public class CameraMovement : MonoBehaviour
 
         }
     }
+
 
     private void LateUpdate()
     {
@@ -131,19 +135,19 @@ public class CameraMovement : MonoBehaviour
 
         // Calculate new position
         resultingMoveDir = resultingMoveDir.normalized;
-        CamPos += resultingMoveDir * MovementSpeed * Time.fixedDeltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
+        CamPos += resultingMoveDir * MovementSpeed * Time.deltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (CamPos.y > minLimiter_y && CamPos.y < maxLimiter_y)
         {
-            CamPos += transform.forward * scroll * scrollSpeed * Time.fixedDeltaTime;
+            CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
         }
         // If the camera is at the ceiling or the floor, move it only in y direction when scrolling
         else
         {
-            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.fixedDeltaTime;
+            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.deltaTime;
         }
 
 
@@ -166,7 +170,7 @@ public class CameraMovement : MonoBehaviour
             //transform.eulerAngles += RotSpeed * new Vector3(0, Input.GetAxis("Mouse X"), 0);
             Vector3 currentEulerAngles = transform.eulerAngles;
 
-            Vector3 eulerAnglesRotation = Time.fixedDeltaTime * RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            Vector3 eulerAnglesRotation = Time.deltaTime * RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
             Vector3 resultingEulerAngles = currentEulerAngles + eulerAnglesRotation;
 
             resultingEulerAngles.x = Mathf.Clamp(resultingEulerAngles.x, RotMinX, RotMaxX);
