@@ -8,16 +8,18 @@ public class Ship : MonoBehaviour
 
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
-    private int _maxhealth;
+    private float _maxhealth;
     
     [SerializeField]
-    private int _health = 5;
+    private float _health = 5;
 
+    [SerializeField]
     private int _repairPoint = 1; // this how many  ok.
-    public int Health { get => _health; }
+    public float Health { get => _health; }
 
-    private int _attack = 3;
-    public int AttackDamage { get => _attack; }
+    [SerializeField]
+    private float _attack = 3;
+    public float AttackDamage { get => _attack; } // Not used anymore, see list of Cannons
 
     private bool _dead = false;
     public bool IsDead { get => _dead; }
@@ -56,6 +58,8 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
+    private List<Cannon> _cannons = new List<Cannon>();
+
     private void Awake()
     {
         _glowHighlight = GetComponent<GlowHighlight>();
@@ -67,12 +71,27 @@ public class Ship : MonoBehaviour
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
         if (_damageText != null) _damageText.gameObject.SetActive(false);
 
+        // Add cannons (both sides have the same amount of cannons)
+        for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
+        {
+            _cannons.Add(new Cannon(1));
+        }
     }
 
     private void Start()
     {
         Debug.Log("Ship script: hex coord of the ship " + hexCoord);
         hexGrid.PlaceShip(hexCoord, this);
+    }
+
+    public float[] GetCannonDamageList()
+    {
+        float[] damagePerCannon = new float[_cannons.Count];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = _cannons[i].Damage;
+        }
+        return damagePerCannon;
     }
 
     public void Deselect()
@@ -234,7 +253,7 @@ public class Ship : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         StartCoroutine(TakeDamageAnimation());
 
@@ -301,4 +320,16 @@ public class Ship : MonoBehaviour
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
     }
 
+}
+
+public class Cannon
+{
+    private float _damage;
+
+    public float Damage { get => _damage; }
+
+    public Cannon(float damage)
+    {
+        _damage = damage;
+    }
 }

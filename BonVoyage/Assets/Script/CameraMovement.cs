@@ -52,12 +52,12 @@ public class CameraMovement : MonoBehaviour
         var distanceLeft = (transform.position - _currentLerpGoal).magnitude;
         var dynamicSpeedModifier = Mathf.Clamp(
             Mathf.Pow(distanceLeft, 1.5f), 
-            0.05f, 2);
+            0.1f, 2);
 
-        var lerpStep = (1 / TransitionTime) * Time.deltaTime; //* dynamicSpeedModifier;
+        var lerpStep = (1 / TransitionTime) * Time.deltaTime * dynamicSpeedModifier;
 
         // First frame has a long deltaTime...
-        if (Time.deltaTime > 0.1) lerpStep = (1 / TransitionTime) * (1 / 60);
+        if (Time.deltaTime > 0.1) lerpStep = (1 / TransitionTime) * (1 / 60) * dynamicSpeedModifier;
 
         _tLerp += lerpStep;
 
