@@ -20,6 +20,8 @@ public class HexGrid : MonoBehaviour
     public int gridSideSize = 10;
     [SerializeField]
     private GameObject tile;
+    [SerializeField]
+    private Camera mainCamera;
 
     [SerializeField]
     private GameManager gameManager;
@@ -47,12 +49,9 @@ public class HexGrid : MonoBehaviour
     public int verShift = 1;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            /*HorizontalShifting(horShift);
-            VerticalShifting(verShift);*/
+        
             AdaptToPlayersView(Camera.main.transform.position);
-        }
+        
 
         /*if (Input.GetKeyDown(KeyCode.B))
         {
@@ -96,11 +95,9 @@ public class HexGrid : MonoBehaviour
                 {
                     //above central line
                     destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2)/2f)), 0, originGrid.z + row * zOffset);
-                    Debug.Log("tile to destroy " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     //under central line
                     destroyHexWorldCoord = new Vector3(originGrid.x - xOffset * (gridSideSize - 1 - (row / 2 + 1 * PositiveModulo(row, 2)/2f)), 0, originGrid.z - row * zOffset);
-                    Debug.Log("tile to destroy " + HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                     DestroyTileAt(HexCoordinates.ConvertPositionToOffset(destroyHexWorldCoord));
                 }
 
@@ -119,7 +116,6 @@ public class HexGrid : MonoBehaviour
 
                 originGrid.x = originGrid.x + xOffset;
                 direction -= 1;
-                Debug.Log("origin after hor shift " + originGrid);
             }
             else
             {
@@ -152,7 +148,6 @@ public class HexGrid : MonoBehaviour
 
                 originGrid.x = originGrid.x - xOffset;
                 direction += 1;
-                Debug.Log("origin after hor shift " + originGrid);
             }
         }
     }
@@ -198,7 +193,6 @@ public class HexGrid : MonoBehaviour
                 direction -= 1;
                 originGrid.z += zOffset;
                 originGrid.x -= side * xOffset / 2;
-                Debug.Log("origin after ver shift " + originGrid);
             }
             else //moving down
             {
@@ -236,7 +230,6 @@ public class HexGrid : MonoBehaviour
                 //TODO update origin x and z
                 originGrid.z -= zOffset;
                 originGrid.x -= side * xOffset / 2;
-                Debug.Log("origin after ver shift " + originGrid);
             }
 
 
@@ -253,6 +246,11 @@ public class HexGrid : MonoBehaviour
     {
         GameObject newHex = Instantiate(tile, worldCoord, Quaternion.identity, hexParent.transform);
         hexTileDict.Add(HexCoordinates.ConvertPositionToOffset(worldCoord), newHex.GetComponent<Hex>());
+    }
+
+    private int ComputeMinimalNumberOfHexToFillView(float viewDistance) //viewDistance is the max diagonal of the image rendered by the camera projected on the sea level
+    {
+        return Mathf.CeilToInt(viewDistance / 2 * zOffset + 1); //value of gridSideSize for viewDistance equals the inner radius of the hexGrid
     }
 
     private void GenerateGrid()
