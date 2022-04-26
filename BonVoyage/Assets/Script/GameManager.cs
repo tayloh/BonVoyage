@@ -70,7 +70,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator FirstTurn()
     {
-        new WaitForSecondsRealtime(1.0f);
+        //cameraMovement.SmoothlyTransitionTo(new Vector3(0, 40, 0), new Vector3(0, 0, 0));
+        yield return new WaitForSecondsRealtime(1.0f);
+        //cameraMovement.SmoothlyTransitionTo(new Vector3(0, 10, 0), new Vector3(0, 0, 10));
+        //yield return new WaitForSecondsRealtime(0.3f);
+
         NextTurn();
         yield return null;
     }
@@ -109,6 +113,7 @@ public class GameManager : MonoBehaviour
         }
         OnGameStateChanged?.Invoke(newState);
     }
+
 
     private void CameraTransition(Ship ship)
     {

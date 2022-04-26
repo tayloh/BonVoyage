@@ -26,7 +26,7 @@ public class CameraMovement : MonoBehaviour
     public int RotMinX = 0;
 
     // Transition parameters
-    public float TransitionSpeed = 2f;
+    public float TransitionTime = 2f;
     public Vector3 ShipCameraOffset = new Vector3(5, 10f, -5);
 
     private Vector3 _startPos = Vector3.zero;
@@ -52,12 +52,12 @@ public class CameraMovement : MonoBehaviour
         var distanceLeft = (transform.position - _currentLerpGoal).magnitude;
         var dynamicSpeedModifier = Mathf.Clamp(
             Mathf.Pow(distanceLeft, 1.5f), 
-            0.05f, 2);
+            0.1f, 2);
 
-        var lerpStep = dynamicSpeedModifier * TransitionSpeed * Time.deltaTime;
+        var lerpStep = (1 / TransitionTime) * Time.deltaTime * dynamicSpeedModifier;
 
         // First frame has a long deltaTime...
-        if (Time.deltaTime > 0.05) lerpStep = dynamicSpeedModifier * TransitionSpeed * (1 / 60);
+        if (Time.deltaTime > 0.1) lerpStep = (1 / TransitionTime) * (1 / 60) * dynamicSpeedModifier;
 
         _tLerp += lerpStep;
 

@@ -207,12 +207,10 @@ public class ShipManager : MonoBehaviour
                 activeShip.HasFiredRight = true;
             }
 
-            ship.TakeDamage(activeShip.AttackDamage);
+            ship.TakeDamage(DamageModel.CalculateDamageFor(activeShip, ship));
             //after an attack it will incerease the last player ship selected.
             //if (_oldSelection != null) _oldSelection.Repair();
             TriggerFiring();
-
-            Debug.Log(ship + " took " + activeShip.AttackDamage + " damage, and has health " + ship.Health);
 
             return true;
         }
@@ -291,6 +289,8 @@ public class ShipManager : MonoBehaviour
         gameManager.UpdateGameState(GameState.PlayerFire);
         
         PrepareShipForFiring(activeShip);
+
+        if (!activeShip.HasAttackableInRange("Pirate")) { SkipPhase(); }
     }
 
     public void SkipPhase()
