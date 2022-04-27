@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexParent: {fileID: 1488788713}
   gridSideSize: 50
-  tile: {fileID: 5601897981856771584, guid: c5d73a17ee93f4748a304dda11b8d36f, type: 3}
+  tile: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}
   mainCamera: {fileID: 732777264}
   horShift: -1
   verShift: 1
