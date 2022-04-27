@@ -2734,6 +2734,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 1060484200593801829, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1944772712}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (1)
