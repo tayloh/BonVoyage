@@ -9,12 +9,13 @@ public class FireAnimation : MonoBehaviour
     private ParticleSystem[] _rightSideParticleSystem;
     private AudioSource audioSource;
 
-    private int _numCannons = 4;
+    private int _numCannons = 4; //default value
 
     public float AnimationDuration = 0;
 
     private void Awake()
-    {   
+    {
+        _numCannons = GetComponent<Ship>().GetNumberOfCannons();
     }
 
     void Start()
@@ -56,6 +57,5 @@ public class FireAnimation : MonoBehaviour
                 yield return new WaitForSeconds(interval);
             }
         }
-
     }
 }

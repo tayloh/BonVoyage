@@ -9,7 +9,7 @@ public class Ship : MonoBehaviour
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
     private float _maxhealth;
-    
+
     [SerializeField]
     private float _health = 5;
 
@@ -72,10 +72,19 @@ public class Ship : MonoBehaviour
         if (_damageText != null) _damageText.gameObject.SetActive(false);
 
         // Add cannons (both sides have the same amount of cannons)
-        for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
+        /*for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
         {
-            _cannons.Add(new Cannon(1));
-        }
+            //TODO : associer les bons canons !!
+            _cannons.Add(new Cannon(1, gameObject.transform.Find("Left").GetChild(0)));
+        }*/
+        /*Transform leftParent = transform.GetChild(0); //left
+        Transform rightParent = transform.GetChild(1); //right
+        for (int i=0; i<leftParent.childCount; i++)
+        {
+            _cannons.Add(new Cannon(1, leftParent.GetChild(i)));
+            _cannons.Add(new Cannon(1, rightParent.GetChild(i)));
+        }*/
+        _cannons.AddRange(transform.GetComponentsInChildren<Cannon>());
     }
 
     private void Start()
@@ -362,18 +371,11 @@ public class Ship : MonoBehaviour
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
-    }
+    }    
 
-}
-
-public class Cannon
-{
-    private float _damage;
-
-    public float Damage { get => _damage; }
-
-    public Cannon(float damage)
+    public int GetNumberOfCannons()
     {
-        _damage = damage;
+        return _cannons.Count;
     }
 }
+

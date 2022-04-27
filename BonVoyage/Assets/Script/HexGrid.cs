@@ -73,6 +73,7 @@ public class HexGrid : MonoBehaviour
         if (Camera.main.transform.position != previousCamPos)
         {
             AdaptToPlayersView(Camera.main.transform.position);
+            previousCamPos = Camera.main.transform.position;
         }
     }
 
