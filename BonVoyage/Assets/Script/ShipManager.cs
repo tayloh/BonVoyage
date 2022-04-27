@@ -144,6 +144,14 @@ public class ShipManager : MonoBehaviour
 
         Ship ship = shipGO.GetComponent<Ship>();
 
+        // Be able to skip phase by clicking the active ship
+        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID())
+        {
+            // SkipPhase function handles the logic for checking that it's the players turn.
+            // So you can't spam click the active ship to skip everything.
+            SkipPhase();
+        }
+
         GameState state = gameManager.state;
 
         switch (state)
@@ -229,13 +237,14 @@ public class ShipManager : MonoBehaviour
 
         Hex selectedHex = hexGO.GetComponent<Hex>();
         //check if the selected hex is out of range or under the seleceted ship, ignore it
-        if (HandleHexOutOfRange(selectedHex.HexCoords) || HandleSelectedHexIsUnitHex(selectedHex.HexCoords))
+        if (HandleHexOutOfRange(selectedHex.HexCoords)|| HandleSelectedHexIsUnitHex(selectedHex.HexCoords))
         {
             return;
         }
 
         //else, process the selected hexagon
         HandleTargetHexSelected(selectedHex);
+        
     }
     
     // Is called on ship turn
@@ -271,8 +280,17 @@ public class ShipManager : MonoBehaviour
     {
         if (hexPosition == hexgrid.GetClosestHex(selectedShip.transform.position))
         {
-            selectedShip.Deselect();
-            ClearOldSelection();
+            // Skip to next phase if we click on hex tile of "selected" ship
+            //SkipPhase();
+
+            //selectedShip.Deselect();
+
+            // Can't clear the old selection here:
+            // if the player clicks the hex that has the selected ship on it
+            // the movment system HideRange() gets called which resets the available
+            // movement options. => Just do nothing when the selected ships hex is clicked.
+            //ClearOldSelection();
+            
             return true;
         }
         return false;
