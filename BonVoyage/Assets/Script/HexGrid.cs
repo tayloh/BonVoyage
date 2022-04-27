@@ -689,6 +689,7 @@ public class HexGrid : MonoBehaviour
         if (hexTileDict.ContainsKey(hexCoord))
         {
             hexTileDict[hexCoord].Ship = ship;
+            hexTileDict[hexCoord].HexType = HexType.Obstacle;
             Debug.Log("Ship placed at " + hexCoord);
         }
         else
