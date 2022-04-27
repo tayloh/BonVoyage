@@ -238,21 +238,33 @@ public class ShipManager : MonoBehaviour
         HandleTargetHexSelected(selectedHex);
     }
     
+    // Is called on ship turn
     private void HandleTargetHexSelected(Hex selectedHex)
     {
-        if (previouslySelectedHex == null || previouslySelectedHex != selectedHex)
-        {
-            previouslySelectedHex = selectedHex;
-            movementSystem.ShowPath(selectedHex.HexCoords, this.hexgrid);
-        }
-        else
-        {
-            movementSystem.MoveShip(selectedShip, this.hexgrid);
-            isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
-            selectedShip.MovementFinished += ResetTurn;
-            
-            ClearOldSelection();
-        }
+        // This was commented out to enable the player to just click once for moving their ship.
+        //if (previouslySelectedHex == null || previouslySelectedHex != selectedHex)
+        //{
+        //    previouslySelectedHex = selectedHex;
+
+        //    // When longer movements are possible, this shows the path that will be taken
+        //    // before the player commits to it by clicking again.
+        //    movementSystem.ShowPath(selectedHex.HexCoords, this.hexgrid);
+        //}
+        //else
+        //{
+        //    movementSystem.MoveShip(selectedShip, this.hexgrid);
+        //    isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
+        //    selectedShip.MovementFinished += ResetTurn;
+
+        //    ClearOldSelection();
+        //}
+
+        movementSystem.SetCurrentPathTo(selectedHex.HexCoords);
+        movementSystem.MoveShip(selectedShip, this.hexgrid);
+        isNotMoving = false;
+        selectedShip.MovementFinished += ResetTurn;
+
+        ClearOldSelection();
     }
 
     private bool HandleSelectedHexIsUnitHex(Vector3Int hexPosition)
