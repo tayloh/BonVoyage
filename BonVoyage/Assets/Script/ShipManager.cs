@@ -395,12 +395,13 @@ public class ShipManager : MonoBehaviour
         if (activeShip.HasFiredRight)
         {
             fireAnimation.PlayFireAnimation(0);
-            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+            Debug.Log("FIREANIME " + fireAnimation.GetFireAnimationTime());
+            yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
         else
         {
             fireAnimation.PlayFireAnimation(1);
-            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+            yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
 
 
