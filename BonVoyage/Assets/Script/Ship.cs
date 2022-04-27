@@ -91,6 +91,14 @@ public class Ship : MonoBehaviour
 
         Camera camera = Camera.main;
         canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+
+        // Make the canvas scale proportional to the height difference between canvas and camera
+        var heightDifference = Mathf.Abs(canvas.transform.position.y - camera.transform.position.y);
+        var scaledHeightDifference = Mathf.Clamp(heightDifference / 15, 0.5f, 3);
+
+        var canvasScale = new Vector3(0.0009f, 0.001f, 0.0009f) * scaledHeightDifference;
+
+        canvas.transform.localScale = canvasScale;
     }
 
     public float[] GetCannonDamageList()
@@ -324,6 +332,9 @@ public class Ship : MonoBehaviour
     private void Die()
     {
         Debug.Log(this.name + " died.");
+
+        // Make the hexagon it stood on a non obstacle.
+        hexGrid.GetTileAt(this.hexCoord).HexType = HexType.Water;
 
         _dead = true;
         StartCoroutine(ShipSinksAnimation());
