@@ -9,7 +9,7 @@ public class Ship : MonoBehaviour
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
     private float _maxhealth;
-    
+
     [SerializeField]
     private float _health = 5;
 
@@ -361,5 +361,10 @@ public class Ship : MonoBehaviour
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
     }    
+
+    public int GetNumberOfCannons()
+    {
+        return _cannons.Count;
+    }
 }
 
