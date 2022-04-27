@@ -9,7 +9,7 @@ public class Ship : MonoBehaviour
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
     private float _maxhealth;
-    
+
     [SerializeField]
     private float _health = 5;
 
@@ -58,7 +58,13 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
+    // Might need one list per broadside
     private List<Cannon> _cannons = new List<Cannon>();
+
+    public int NumCannons
+    {
+        get => _cannons.Count;
+    }
 
     private void Awake()
     {
@@ -72,10 +78,19 @@ public class Ship : MonoBehaviour
         if (_damageText != null) _damageText.gameObject.SetActive(false);
 
         // Add cannons (both sides have the same amount of cannons)
-        for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
+        /*for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
         {
-            _cannons.Add(new Cannon(1));
-        }
+            //TODO : associer les bons canons !!
+            _cannons.Add(new Cannon(1, gameObject.transform.Find("Left").GetChild(0)));
+        }*/
+        /*Transform leftParent = transform.GetChild(0); //left
+        Transform rightParent = transform.GetChild(1); //right
+        for (int i=0; i<leftParent.childCount; i++)
+        {
+            _cannons.Add(new Cannon(1, leftParent.GetChild(i)));
+            _cannons.Add(new Cannon(1, rightParent.GetChild(i)));
+        }*/
+        _cannons.AddRange(transform.GetComponentsInChildren<Cannon>());
     }
 
     private void Start()
@@ -91,6 +106,14 @@ public class Ship : MonoBehaviour
 
         Camera camera = Camera.main;
         canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+
+        // Make the canvas scale proportional to the height difference between canvas and camera
+        var heightDifference = Mathf.Abs(canvas.transform.position.y - camera.transform.position.y);
+        var scaledHeightDifference = Mathf.Clamp(heightDifference / 15, 0.5f, 3);
+
+        var canvasScale = new Vector3(0.0009f, 0.001f, 0.0009f) * scaledHeightDifference;
+
+        canvas.transform.localScale = canvasScale;
     }
 
     public float[] GetCannonDamageList()
@@ -281,9 +304,9 @@ public class Ship : MonoBehaviour
     {
         if (tag != "PlayerShip" && tag != "Pirate") return false;
 
-        // Get attackable tiles
-        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
-        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
+        // Get attackable tiles                 
+        List<Vector3Int> attackableRightSide = GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = GetAttackableTilesFor(1);
 
         List<Vector3Int> attackableTiles = attackableRightSide;
         attackableTiles.AddRange(attackableLeftSide);
@@ -297,6 +320,22 @@ public class Ship : MonoBehaviour
             }
         }
 
+        return false;
+    }
+
+    //0 = right, 1 = left
+    public bool CheckIfShipIsInBroadSide(Ship otherShip, int broadside)
+    {
+        var attackableTiles = GetAttackableTilesFor(broadside);
+        foreach (var tile in attackableTiles)
+        {
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && 
+                currentHex.Ship.gameObject.GetInstanceID() == otherShip.gameObject.GetInstanceID())
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -325,6 +364,9 @@ public class Ship : MonoBehaviour
     {
         Debug.Log(this.name + " died.");
 
+        // Make the hexagon it stood on a non obstacle.
+        hexGrid.GetTileAt(this.hexCoord).HexType = HexType.Water;
+
         _dead = true;
         StartCoroutine(ShipSinksAnimation());
     }
@@ -351,18 +393,11 @@ public class Ship : MonoBehaviour
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
-    }
+    }    
 
-}
-
-public class Cannon
-{
-    private float _damage;
-
-    public float Damage { get => _damage; }
-
-    public Cannon(float damage)
+    public int GetNumberOfCannons()
     {
-        _damage = damage;
+        return _cannons.Count;
     }
 }
+

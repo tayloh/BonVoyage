@@ -21,10 +21,34 @@ public class DamageModel : MonoBehaviour
         var distance = (targetedShip.gameObject.transform.position - attackingShip.gameObject.transform.position).magnitude;
         var accuracyCoefficient = _calculateAccuracyCoefficient(distance);
 
-        float attackingShipTotalDmg = 0;
-        foreach (var dmg in attackingShip.GetCannonDamageList())
+        var attackType = _getDirectionalAttackType(attackDir, forwardDir, BowSternAngle);
+
+        var allCannonsDmgList = attackingShip.GetCannonDamageList();
+        var currentBroadSideDmgList = new List<float>();
+
+        if (allCannonsDmgList.Length % 2 != 0) 
         {
-            var attackType = _getDirectionalAttackType(attackDir, forwardDir, BowSternAngle);
+            Debug.Log("CalculateDamageFor() inside DamageModel.cs is not updated for different number of cannons per side.");
+        } 
+        
+        if (attackingShip.HasFiredLeft)
+        {
+            for (int i = 0; i < attackingShip.NumCannons / 2; i++)
+            {
+                currentBroadSideDmgList.Add(allCannonsDmgList[i]);
+            }
+        }
+        else if (attackingShip.HasFiredRight)
+        {
+            for (int i = attackingShip.NumCannons / 2; i < attackingShip.NumCannons; i++)
+            {
+                currentBroadSideDmgList.Add(allCannonsDmgList[i]);
+            }
+        }
+
+        float attackingShipTotalDmg = 0;
+        foreach (var dmg in currentBroadSideDmgList)
+        {
             var resultingDmg = dmg;
 
             switch (attackType)
