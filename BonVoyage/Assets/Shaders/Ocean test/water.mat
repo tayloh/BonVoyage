@@ -41,18 +41,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Depth: 0.17
-    - _Displacement: 0.39
-    - _DitherThreshold: 0
-    - _FadeOpacity: 0.737
-    - _FarLimit: 500
-    - _NearLimit: 300
+    - _Displacement: 0
+    - _DitherThreshold: 8.25
+    - _FadeOpacity: 0.523
+    - _FarLimit: 169.21
+    - _NearLimit: 83.41
     - _NormalMapSpeedMain: 100
     - _NormalMapSpeedSub: -499.64
-    - _NormalStrength: 0.282
-    - _Smoothness: 0.442
-    - _Strength: 0.257
+    - _NormalStrength: 0.653
+    - _Smoothness: 0.587
+    - _Strength: 1.273
     - _WaveDisplacementScale: 20
-    - _WaveDisplacementSpeed: 100
+    - _WaveDisplacementSpeed: 101.53
     - _WaveSpeed: 10
     m_Colors:
     - _DeepWaterColor: {r: 0.20558919, g: 0.37470978, b: 0.7924528, a: 0.9372549}
