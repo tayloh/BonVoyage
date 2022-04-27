@@ -12,6 +12,7 @@ public class HexGrid : MonoBehaviour
     private static float xOffset = 2;
     private static float yOffset = 1;
     private static float zOffset = 1.73f;
+    private Vector3 previousCamPos = new Vector3();
 
     private int side = -1;
 
@@ -49,9 +50,10 @@ public class HexGrid : MonoBehaviour
     public int verShift = 1;
     private void Update()
     {
-        
-            //AdaptToPlayersView(Camera.main.transform.position);
-        
+        if(Camera.main.transform.position != previousCamPos)
+        {
+            AdaptToPlayersView(Camera.main.transform.position);
+        }       
 
         /*if (Input.GetKeyDown(KeyCode.B))
         {
@@ -69,11 +71,6 @@ public class HexGrid : MonoBehaviour
                 } 
             }
         }*/
-    }
-
-    private void LateUpdate()
-    {
-        AdaptToPlayersView(Camera.main.transform.position);
     }
 
     private void AdaptToPlayersView(Vector3 cameraPos)

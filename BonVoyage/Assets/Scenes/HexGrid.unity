@@ -2077,8 +2077,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexParent: {fileID: 1488788713}
-  gridSideSize: 30
-  tile: {fileID: 4936956383488517673, guid: 2379d654e4ce98a45888a2de73c21b5b, type: 3}
+  gridSideSize: 50
+  tile: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}
   mainCamera: {fileID: 732777264}
   gameManager: {fileID: 442071959}
   horShift: -1
