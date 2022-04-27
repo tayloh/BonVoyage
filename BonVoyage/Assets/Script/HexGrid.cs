@@ -50,10 +50,6 @@ public class HexGrid : MonoBehaviour
     public int verShift = 1;
     private void Update()
     {
-        if(Camera.main.transform.position != previousCamPos)
-        {
-            AdaptToPlayersView(Camera.main.transform.position);
-        }     
         /*if (Input.GetKeyDown(KeyCode.B))
         {
             List<Vector3Int> example;
@@ -74,7 +70,10 @@ public class HexGrid : MonoBehaviour
 
     private void LateUpdate()
     {
-        AdaptToPlayersView(Camera.main.transform.position);
+        if (Camera.main.transform.position != previousCamPos)
+        {
+            AdaptToPlayersView(Camera.main.transform.position);
+        }
     }
 
     private void AdaptToPlayersView(Vector3 cameraPos)
