@@ -2,15 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
 
-    private int _health = 5;
-    public int Health { get => _health; }
+    [SerializeField] private Image _healtSlider;
+    [SerializeField] private Text _damageText;
+    private float _maxhealth;
+    
+    [SerializeField]
+    private float _health = 5;
 
-    private int _attack = 3;
-    public int AttackDamage { get => _attack; }
+    [SerializeField]
+    private int _repairPoint = 1; // this how many  ok.
+    public float Health { get => _health; }
+
+    [SerializeField]
+    private float _attack = 3;
+    public float AttackDamage { get => _attack; } // Not used anymore, see list of Cannons
 
     private bool _dead = false;
     public bool IsDead { get => _dead; }
@@ -29,7 +38,7 @@ public class Ship : MonoBehaviour
     [SerializeField]
     private HexGrid hexGrid;
 
-    [Header("Ship stats") ]
+    [Header("Ship stats")]
     [SerializeField]
     private int movementPoints = 1;
     public int MovementPoints { get => movementPoints; }
@@ -49,12 +58,24 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
+    private List<Cannon> _cannons = new List<Cannon>();
+
     private void Awake()
     {
         _glowHighlight = GetComponent<GlowHighlight>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
-        hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0,1,0));
+        hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
+        _maxhealth = _health;
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        if (_damageText != null) _damageText.gameObject.SetActive(false);
+
+        // Add cannons (both sides have the same amount of cannons)
+        for (int i = 0; i < gameObject.transform.Find("Left").childCount; i++)
+        {
+            _cannons.Add(new Cannon(1));
+        }
     }
 
     private void Start()
@@ -63,14 +84,33 @@ public class Ship : MonoBehaviour
         hexGrid.PlaceShip(hexCoord, this);
     }
 
+    private void Update()
+    {
+        // Make canvas face the camera, always
+        var canvas = gameObject.transform.Find("Canvas");
+
+        Camera camera = Camera.main;
+        canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+    }
+
+    public float[] GetCannonDamageList()
+    {
+        float[] damagePerCannon = new float[_cannons.Count];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = _cannons[i].Damage;
+        }
+        return damagePerCannon;
+    }
+
     public void Deselect()
     {
-        _glowHighlight.ToggleGlow(false);
+        //_glowHighlight.ToggleGlow(false);
     }
 
     public void Select()
     {
-        _glowHighlight.ToggleGlow();
+        //_glowHighlight.ToggleGlow();
     }
 
     public void MoveThroughPath(List<Vector3> path)
@@ -83,7 +123,7 @@ public class Ship : MonoBehaviour
 
         _pathPositions = new Queue<Vector3>(path);
         Vector3 firstTarget = _pathPositions.Dequeue();
-        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));        
+        StartCoroutine(RotationCoroutine(firstTarget, _rotationDuration));
     }
 
     public IEnumerator RotationCoroutine(Vector3 endPosition, float rotationDuration)
@@ -119,7 +159,7 @@ public class Ship : MonoBehaviour
         while (timeElapsed < _movementDuration)
         {
             timeElapsed += Time.deltaTime;
-            float lerpStep = timeElapsed/_movementDuration;
+            float lerpStep = timeElapsed / _movementDuration;
             transform.position = Vector3.Lerp(startPosition, endPosition, lerpStep);
             yield return null;
         }
@@ -135,7 +175,7 @@ public class Ship : MonoBehaviour
         else
         {
             Debug.Log("Movement finished.");
-            
+
             // Invoke the event after the coordinates have been updated
             MovementFinished?.Invoke(this);
 
@@ -143,7 +183,7 @@ public class Ship : MonoBehaviour
     }
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
-    {        
+    {
         //set previoustile.Ship à null et set newtile.ship à ship
         //update the type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
@@ -210,7 +250,7 @@ public class Ship : MonoBehaviour
         }
 
         List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
-        
+
         foreach (var tile in res)
         {
             Hex hex = hexGrid.GetTileAt(tile);
@@ -222,16 +262,56 @@ public class Ship : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         StartCoroutine(TakeDamageAnimation());
 
         _health -= damage;
-
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        StartCoroutine(ShowText("-" + damage.ToString(), -1));
         if (_health <= 0)
         {
             Die();
         }
+
+    }
+
+    public bool HasAttackableInRange(string tag)
+    {
+        if (tag != "PlayerShip" && tag != "Pirate") return false;
+
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
+
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
+
+        foreach (var tile in attackableTiles)
+        {
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.CompareTag(tag))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    IEnumerator ShowText(string damage, int sign = 1)
+    {
+        if (sign < 0)
+            _damageText.color = Color.red;
+        else
+            _damageText.color = Color.green;
+
+        if (_damageText == null) yield break;
+        _damageText.text = damage.ToString();
+        _damageText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        _damageText.gameObject.SetActive(false);
 
     }
 
@@ -261,4 +341,28 @@ public class Ship : MonoBehaviour
         DeathAnimationFinished?.Invoke(this);
     }
 
+    public void Repair()
+    {
+        if (_health == _maxhealth) return;
+        _health += _repairPoint;
+        _health = Mathf.Clamp(_health, 0, _maxhealth);
+
+        if (_healtSlider != null)
+            _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+
+        StartCoroutine(ShowText("+" + _repairPoint.ToString()));
+    }
+
+}
+
+public class Cannon
+{
+    private float _damage;
+
+    public float Damage { get => _damage; }
+
+    public Cannon(float damage)
+    {
+        _damage = damage;
+    }
 }
