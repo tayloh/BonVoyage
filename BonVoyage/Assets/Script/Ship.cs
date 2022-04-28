@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
-
-    [SerializeField] private Image _healtSlider;
-    [SerializeField] private Text _damageText;
     private float _maxhealth;
 
     [SerializeField]
@@ -38,6 +36,13 @@ public class Ship : MonoBehaviour
     [SerializeField]
     private HexGrid hexGrid;
 
+
+    [Header("UI")]
+    [SerializeField] private Image _healtSlider;
+    [SerializeField] private Text _damageText;
+    [SerializeField] private TMP_Text _totalHealthText;
+    private TMP_Text _currentHealthText;
+
     [Header("Ship stats")]
     [SerializeField]
     private int movementPoints = 1;
@@ -66,10 +71,14 @@ public class Ship : MonoBehaviour
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
         hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
+        //setting up UI
         _maxhealth = _health;
         if (_healtSlider != null)
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
         if (_damageText != null) _damageText.gameObject.SetActive(false);
+        _currentHealthText = _totalHealthText.transform.GetChild(0).GetComponent<TMP_Text>();
+        _totalHealthText.text = "/" + _maxhealth.ToString();
+        _currentHealthText.text = _health.ToString();
         
         _cannons.AddRange(transform.GetComponentsInChildren<Cannon>());
     }
@@ -265,6 +274,7 @@ public class Ship : MonoBehaviour
         _health -= damage;
         if (_healtSlider != null)
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        _currentHealthText.text = _health.ToString();
         StartCoroutine(ShowText("-" + damage.ToString(), -1));
         if (_health <= 0)
         {
@@ -345,6 +355,7 @@ public class Ship : MonoBehaviour
 
         if (_healtSlider != null)
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        _currentHealthText.text = _health.ToString();
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
     }    
