@@ -38,10 +38,12 @@ public class Ship : MonoBehaviour
 
 
     [Header("UI")]
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private Image _healtSlider;
     [SerializeField] private Text _damageText;
     [SerializeField] private TMP_Text _totalHealthText;
     private TMP_Text _currentHealthText;
+    [SerializeField] private float _canvaSizeOnScreen = 1f;
 
     [Header("Ship stats")]
     [SerializeField]
@@ -79,7 +81,7 @@ public class Ship : MonoBehaviour
         _currentHealthText = _totalHealthText.transform.GetChild(0).GetComponent<TMP_Text>();
         _totalHealthText.text = "/" + _maxhealth.ToString();
         _currentHealthText.text = _health.ToString();
-        
+
         _cannons.AddRange(transform.GetComponentsInChildren<Cannon>());
     }
 
@@ -89,15 +91,15 @@ public class Ship : MonoBehaviour
         hexGrid.PlaceShip(hexCoord, this);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         // Make canvas face the camera, always
-        var canvas = gameObject.transform.Find("Canvas");
-
         Camera camera = Camera.main;
-        canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
+        
     }
-
+    
     public float[] GetCannonDamageList()
     {
         float[] damagePerCannon = new float[_cannons.Count];
@@ -354,11 +356,13 @@ public class Ship : MonoBehaviour
         _health = Mathf.Clamp(_health, 0, _maxhealth);
 
         if (_healtSlider != null)
+        {
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        }
         _currentHealthText.text = _health.ToString();
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
-    }    
+    }
 
     public int GetNumberOfCannons()
     {

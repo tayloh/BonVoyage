@@ -103,7 +103,7 @@ RectTransform:
   m_GameObject: {fileID: 2348493140737503511}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.98039216, y: 0.9090909, z: 0.9090909}
+  m_LocalScale: {x: 0.95, y: 0.8, z: 0.9090909}
   m_Children: []
   m_Father: {fileID: 2949150340587472832}
   m_RootOrder: 0
@@ -576,9 +576,11 @@ MonoBehaviour:
   HasFiredRight: 0
   hexCoord: {x: 0, y: 0, z: 0}
   hexGrid: {fileID: 0}
+  _canvas: {fileID: 6148926950678635924}
   _healtSlider: {fileID: 4654135876425271201}
   _damageText: {fileID: 5993496344594194057}
   _totalHealthText: {fileID: 8561685133605513445}
+  _canvaSizeOnScreen: 0.00005
   movementPoints: 1
   fireRange: 3
   _movementDuration: 1
