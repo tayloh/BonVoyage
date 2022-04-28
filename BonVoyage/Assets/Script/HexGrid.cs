@@ -421,8 +421,8 @@ public class HexGrid : MonoBehaviour
                 throw new Exception("Invalid broadside number (0=right, 1=left");
         }
 
-        Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir1, Color.red, 100f, false);
-        Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir2, Color.red, 100f, false);
+        //Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir1, Color.red, 100f, false);
+        //Debug.DrawLine(currHexWorldPosition, currHexWorldPosition + distBetweenHexCenters * range * dir2, Color.red, 100f, false);
 
         // Get upper and lower bounds for the firing cone
         Vector3[] hexLineUpper = new Vector3[range];
@@ -452,7 +452,7 @@ public class HexGrid : MonoBehaviour
 
             interpolateDir.Normalize();
 
-            Debug.DrawLine(hexLineUpper[i], hexLineUpper[i] + distBetweenHexCenters * (numHexesInLine - 1) * interpolateDir, Color.red, 100f, false);
+            //Debug.DrawLine(hexLineUpper[i], hexLineUpper[i] + distBetweenHexCenters * (numHexesInLine - 1) * interpolateDir, Color.red, 100f, false);
 
             for (int j = 0; j < numHexesInLine; j++)
             {
@@ -690,6 +690,7 @@ public class HexGrid : MonoBehaviour
         if (hexTileDict.ContainsKey(hexCoord))
         {
             hexTileDict[hexCoord].Ship = ship;
+            hexTileDict[hexCoord].HexType = HexType.Obstacle;
             Debug.Log("Ship placed at " + hexCoord);
         }
         else
