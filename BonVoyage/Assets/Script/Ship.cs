@@ -100,10 +100,11 @@ public class Ship : MonoBehaviour
     private void LateUpdate()
     {
         // Make canvas face the camera, always
-        var canvas = gameObject.transform.Find("Canvas");
+        //var canvas = gameObject.transform.Find("Canvas");
 
         Camera camera = Camera.main;
-        canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
     }
     
     public float[] GetCannonDamageList()
@@ -281,7 +282,9 @@ public class Ship : MonoBehaviour
 
         _health -= damage;
         if (_healtSlider != null)
+        {
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+        }            
         _currentHealthText.text = _health.ToString();
         StartCoroutine(ShowText("-" + damage.ToString(), -1));
         if (_health <= 0)
