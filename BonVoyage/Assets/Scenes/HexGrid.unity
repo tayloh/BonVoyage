@@ -456,7 +456,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 52931522699038044, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
@@ -1111,6 +1111,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  camera: {fileID: 1944772712}
+  cursorAttackTarget: {fileID: 0}
+  cursorMoveHere: {fileID: 0}
+  cursorRotateCamera: {fileID: 0}
+  cursorSkipTurn: {fileID: 0}
 --- !u!4 &966116046
 Transform:
   m_ObjectHideFlags: 0
@@ -1884,9 +1889,9 @@ Canvas:
   m_GameObject: {fileID: 1611023551}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 1944772712}
+  m_PlaneDistance: 9
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
