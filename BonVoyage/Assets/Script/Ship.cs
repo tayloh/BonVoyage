@@ -65,13 +65,7 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
-    // Might need one list per broadside
     private List<Cannon> _cannons = new List<Cannon>();
-
-    public int NumCannons
-    {
-        get => _cannons.Count;
-    }
 
     private void Awake()
     {
@@ -100,10 +94,10 @@ public class Ship : MonoBehaviour
     private void LateUpdate()
     {
         // Make canvas face the camera, always
-        var canvas = gameObject.transform.Find("Canvas");
-
         Camera camera = Camera.main;
-        canvas.transform.LookAt(canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
+        _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
+        
     }
     
     public float[] GetCannonDamageList()
@@ -295,9 +289,9 @@ public class Ship : MonoBehaviour
     {
         if (tag != "PlayerShip" && tag != "Pirate") return false;
 
-        // Get attackable tiles                 
-        List<Vector3Int> attackableRightSide = GetAttackableTilesFor(0);
-        List<Vector3Int> attackableLeftSide = GetAttackableTilesFor(1);
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
 
         List<Vector3Int> attackableTiles = attackableRightSide;
         attackableTiles.AddRange(attackableLeftSide);
@@ -311,22 +305,6 @@ public class Ship : MonoBehaviour
             }
         }
 
-        return false;
-    }
-
-    //0 = right, 1 = left
-    public bool CheckIfShipIsInBroadSide(Ship otherShip, int broadside)
-    {
-        var attackableTiles = GetAttackableTilesFor(broadside);
-        foreach (var tile in attackableTiles)
-        {
-            Hex currentHex = hexGrid.GetTileAt(tile);
-            if (currentHex != null && currentHex.Ship != null && 
-                currentHex.Ship.gameObject.GetInstanceID() == otherShip.gameObject.GetInstanceID())
-            {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -354,9 +332,6 @@ public class Ship : MonoBehaviour
     private void Die()
     {
         Debug.Log(this.name + " died.");
-
-        // Make the hexagon it stood on a non obstacle.
-        hexGrid.GetTileAt(this.hexCoord).HexType = HexType.Water;
 
         _dead = true;
         StartCoroutine(ShipSinksAnimation());

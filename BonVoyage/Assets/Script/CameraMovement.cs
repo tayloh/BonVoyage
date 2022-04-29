@@ -8,7 +8,6 @@ public class CameraMovement : MonoBehaviour
     //controls camera speed
     public float MovementSpeed = 20f;
     public bool EnableTransitions = true;
-    public bool EnableTransitionRotation = false;
 
     //limiters to how far the camera can go in each direction
     //these values can be accessed via the inspector in unity
@@ -63,11 +62,7 @@ public class CameraMovement : MonoBehaviour
         _tLerp += lerpStep;
 
         transform.position = Vector3.Lerp(_startPos, _currentLerpGoal, _tLerp);
-
-        if (EnableTransitionRotation)
-        {
-            transform.rotation = Quaternion.Slerp(_startRotation, _currentRotationGoal, _tLerp);
-        }
+        transform.rotation = Quaternion.Slerp(_startRotation, _currentRotationGoal, _tLerp);
         
         // Using smooth damp
         //var velocity = Vector3.zero;

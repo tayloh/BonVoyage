@@ -3,12 +3,7 @@ using UnityEngine;
 
 public class FireAnimation : MonoBehaviour
 {
-    public float ShootingInterval = 0.2f;
-
-    [SerializeField]
-    private GameObject _leftBroadSide;
-    [SerializeField]
-    private GameObject _rightBroadSide;
+    public float ShootingInterval = 0.5f;
 
     private ParticleSystem[] _leftSideParticleSystem;
     private ParticleSystem[] _rightSideParticleSystem;
@@ -16,19 +11,19 @@ public class FireAnimation : MonoBehaviour
 
     private int _numCannons = 4; //default value
 
-    public float GetFireAnimationTime()
+    public float AnimationDuration = 0;
+
+    private void Awake()
     {
-        return _numCannons * ShootingInterval;
+        _numCannons = GetComponent<Ship>().GetNumberOfCannons();
     }
 
     void Start()
     {
-        _leftSideParticleSystem = _leftBroadSide.GetComponentsInChildren<ParticleSystem>();
-        _rightSideParticleSystem = _rightBroadSide.GetComponentsInChildren<ParticleSystem>();
+        _leftSideParticleSystem = transform.Find("Left").gameObject.GetComponentsInChildren<ParticleSystem>();
+        _rightSideParticleSystem = transform.Find("Right").gameObject.GetComponentsInChildren<ParticleSystem>();
 
-        _numCannons = GetComponent<Ship>().GetNumberOfCannons() / 2;
-
-        //AnimationDuration = _numCannons * ShootingInterval;
+        AnimationDuration = _numCannons * ShootingInterval;
         audioSource = GetComponent<AudioSource>();     
     }
 
