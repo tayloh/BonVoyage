@@ -144,6 +144,14 @@ public class ShipManager : MonoBehaviour
 
         Ship ship = shipGO.GetComponent<Ship>();
 
+        // Be able to skip phase by clicking the active ship
+        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID())
+        {
+            // SkipPhase function handles the logic for checking that it's the players turn.
+            // So you can't spam click the active ship to skip everything.
+            SkipPhase();
+        }
+
         GameState state = gameManager.state;
 
         switch (state)
@@ -229,38 +237,60 @@ public class ShipManager : MonoBehaviour
 
         Hex selectedHex = hexGO.GetComponent<Hex>();
         //check if the selected hex is out of range or under the seleceted ship, ignore it
-        if (HandleHexOutOfRange(selectedHex.HexCoords) || HandleSelectedHexIsUnitHex(selectedHex.HexCoords))
+        if (HandleHexOutOfRange(selectedHex.HexCoords)|| HandleSelectedHexIsUnitHex(selectedHex.HexCoords))
         {
             return;
         }
 
         //else, process the selected hexagon
         HandleTargetHexSelected(selectedHex);
+        
     }
     
+    // Is called on ship turn
     private void HandleTargetHexSelected(Hex selectedHex)
     {
-        if (previouslySelectedHex == null || previouslySelectedHex != selectedHex)
-        {
-            previouslySelectedHex = selectedHex;
-            movementSystem.ShowPath(selectedHex.HexCoords, this.hexgrid);
-        }
-        else
-        {
-            movementSystem.MoveShip(selectedShip, this.hexgrid);
-            isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
-            selectedShip.MovementFinished += ResetTurn;
-            
-            ClearOldSelection();
-        }
+        // This was commented out to enable the player to just click once for moving their ship.
+        //if (previouslySelectedHex == null || previouslySelectedHex != selectedHex)
+        //{
+        //    previouslySelectedHex = selectedHex;
+
+        //    // When longer movements are possible, this shows the path that will be taken
+        //    // before the player commits to it by clicking again.
+        //    movementSystem.ShowPath(selectedHex.HexCoords, this.hexgrid);
+        //}
+        //else
+        //{
+        //    movementSystem.MoveShip(selectedShip, this.hexgrid);
+        //    isNotMoving = false;                                    //TODO :change here if player's turn can take more than 1 move
+        //    selectedShip.MovementFinished += ResetTurn;
+
+        //    ClearOldSelection();
+        //}
+
+        movementSystem.SetCurrentPathTo(selectedHex.HexCoords);
+        movementSystem.MoveShip(selectedShip, this.hexgrid);
+        isNotMoving = false;
+        selectedShip.MovementFinished += ResetTurn;
+
+        ClearOldSelection();
     }
 
     private bool HandleSelectedHexIsUnitHex(Vector3Int hexPosition)
     {
         if (hexPosition == hexgrid.GetClosestHex(selectedShip.transform.position))
         {
-            selectedShip.Deselect();
-            ClearOldSelection();
+            // Skip to next phase if we click on hex tile of "selected" ship
+            //SkipPhase();
+
+            //selectedShip.Deselect();
+
+            // Can't clear the old selection here:
+            // if the player clicks the hex that has the selected ship on it
+            // the movment system HideRange() gets called which resets the available
+            // movement options. => Just do nothing when the selected ships hex is clicked.
+            //ClearOldSelection();
+            
             return true;
         }
         return false;
@@ -365,12 +395,13 @@ public class ShipManager : MonoBehaviour
         if (activeShip.HasFiredRight)
         {
             fireAnimation.PlayFireAnimation(0);
-            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+            Debug.Log("FIREANIME " + fireAnimation.GetFireAnimationTime());
+            yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
         else
         {
             fireAnimation.PlayFireAnimation(1);
-            yield return new WaitForSeconds(fireAnimation.AnimationDuration);
+            yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
 
 

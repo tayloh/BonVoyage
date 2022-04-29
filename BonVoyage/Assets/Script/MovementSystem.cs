@@ -57,6 +57,11 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
+    public void SetCurrentPathTo(Vector3Int hexPos)
+    {
+        _currentPath = movementRange.GetPathTo(hexPos);
+    }
+
     public void MoveShip(Ship selectedShip, HexGrid hexGrid)
     {
         Debug.Log("Moving ship " + selectedShip.name);
