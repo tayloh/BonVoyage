@@ -16,6 +16,8 @@ public class MovementSystem : MonoBehaviour
         foreach (Vector3Int hexPos in movementRange.GetRangePositions())
         {
             hexGrid.GetTileAt(hexPos).DisableHighlight();
+            //update cursor
+            hexGrid.GetTileAt(hexPos).moveHereCursor = false;
         }
         movementRange = new BFSResult();
     }
@@ -32,6 +34,8 @@ public class MovementSystem : MonoBehaviour
                 continue;
             }
             hexGrid.GetTileAt(hexPosition).EnableHighLight();
+            //update cursor
+            hexGrid.GetTileAt(hexPosition).moveHereCursor = true;
         }
     }
 

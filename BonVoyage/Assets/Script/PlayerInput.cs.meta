@@ -3,7 +3,12 @@ guid: ea3a852f68eeede468ea589ee439a8ba
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - camera: {instanceID: 0}
+  - cursorAttackTarget: {fileID: 2800000, guid: 2fc41fa5fa33bee4c9ef5bbd79d9ce40, type: 3}
+  - cursorMoveHere: {fileID: 2800000, guid: bde4289f6fab16642aa4ffb7001dc9d1, type: 3}
+  - cursorRotateCamera: {fileID: 2800000, guid: d943ced977ecb294c94578eeed9257e7, type: 3}
+  - cursorSkipTurn: {fileID: 2800000, guid: d46b9b956416ee74cb290121a0d5a091, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

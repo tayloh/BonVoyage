@@ -281,9 +281,24 @@ public class Ship : MonoBehaviour
             if (hex != null)
             {
                 hex.DisableHighlight();
-                hex.Ship.isAttackable = false;
             }
         }
+    }
+
+    public void ResetAttackableShips()
+    {
+        for(int broadside = 0; broadside<2; broadside ++)
+        {
+            List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
+            foreach (var tile in res)
+            {
+                Hex hex = hexGrid.GetTileAt(tile);
+                if (hex != null && hex.Ship != null)
+                {
+                    hex.Ship.isAttackable = false;
+                }
+            }
+        }        
     }
 
 

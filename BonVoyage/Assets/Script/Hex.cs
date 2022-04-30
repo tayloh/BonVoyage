@@ -8,8 +8,11 @@ public class Hex : MonoBehaviour
 {
     [SerializeField]
     private GlowHighlight highlight;
+    [SerializeField]
 
     private HexCoordinates hexCoordinates;
+
+    public bool moveHereCursor = false;
 
     [SerializeField]
     private Ship ship;
@@ -25,6 +28,10 @@ public class Hex : MonoBehaviour
 
     [SerializeField]
     private HexType hexType;
+
+    public PlayerInput playerInput;
+    public PlayerInput PlayerInput { set => playerInput = value; }
+
     public HexType HexType { set => hexType = value; }
 
     public int GetCost()
@@ -84,6 +91,19 @@ public class Hex : MonoBehaviour
     internal void HighlightPath()
     {
         highlight.HighlightValidPath();
+    }
+
+    private void OnMouseOver()
+    {
+        if(moveHereCursor)
+        {
+            playerInput.UpdateCursor(CursorState.MoveHere);
+        }        
+    }
+
+    private void OnMouseExit()
+    {
+        playerInput.UpdateCursor(CursorState.General);
     }
 }
 

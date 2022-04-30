@@ -416,6 +416,7 @@ public class ShipManager : MonoBehaviour
 
         activeShip.HasFiredLeft = false;
         activeShip.HasFiredRight = false;
+        activeShip.ResetAttackableShips();
         gameManager.NextTurn();
 
     }

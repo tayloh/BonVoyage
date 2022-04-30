@@ -10,25 +10,26 @@ public class PlayerInput : MonoBehaviour
     [SerializeField]
     private Camera camera;
     [SerializeField]
-    private Texture2D cursorAttackTarget;
+    static private Texture2D cursorAttackTarget;
     [SerializeField]
-    private Texture2D cursorMoveHere;
+    static private Texture2D cursorMoveHere;
     [SerializeField]
-    private Texture2D cursorRotateCamera;
+    static private Texture2D cursorRotateCamera;
     [SerializeField]
-    private Texture2D cursorSkipTurn;
+    static private Texture2D cursorSkipTurn;
+
+    private void Awake()
+    {
+        cursorAttackTarget = Resources.Load<Texture2D>("CursorAttack");
+        cursorMoveHere = Resources.Load<Texture2D>("CursorMove");
+        cursorRotateCamera = Resources.Load<Texture2D>("CursorView");
+        cursorSkipTurn = Resources.Load<Texture2D>("CursorSkip");
+    }
 
     private void Update()
     {
-        DetectMouseClick();
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            UpdateCursor(CursorState.AttackTarget);
-        }
-        
-    }
-
-    
+        DetectMouseClick();        
+    }    
 
     private void DetectMouseClick()
     {

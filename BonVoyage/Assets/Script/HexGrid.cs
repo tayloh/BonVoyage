@@ -26,12 +26,16 @@ public class HexGrid : MonoBehaviour
 
     [SerializeField]
     private GameManager gameManager;
+    [SerializeField]
+    private PlayerInput playerInput;
 
     private void Awake()
     {
         xOffset = HexCoordinates.xOffset;
         yOffset = HexCoordinates.yOffset;
         zOffset = HexCoordinates.zOffset;
+
+        tile.GetComponent<Hex>().PlayerInput = playerInput;
 
         GenerateGrid();
     }

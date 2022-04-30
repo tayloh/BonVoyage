@@ -170,14 +170,10 @@ public class CameraMovement : MonoBehaviour
             transform.position = CamPos;
         }
 
-        if(Input.GetMouseButtonDown(1) && !_isTransitioning)
+        if (Input.GetMouseButton(1) && !_isTransitioning)
         {
             //updating cursor 
             playerInput.UpdateCursor(CursorState.RotateCamera);
-        }
-
-        if (Input.GetMouseButton(1) && !_isTransitioning)
-        {
             //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), 0, 0);
             //transform.eulerAngles += RotSpeed * new Vector3(0, Input.GetAxis("Mouse X"), 0);
             Vector3 currentEulerAngles = transform.eulerAngles;
