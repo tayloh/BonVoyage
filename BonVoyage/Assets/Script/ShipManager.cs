@@ -331,12 +331,15 @@ public class ShipManager : MonoBehaviour
                 //Prepare terrain for attack phase by highlighting the attackable hexagons only
                 movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
                 activeShip.HighLightAttackableTiles(0); //highlight attackable hex
-                activeShip.HighLightAttackableTiles(1); //
+                activeShip.HighLightAttackableTiles(1); //                
                 ResetTurn(selectedShip);
                 gameManager.UpdateGameState(GameState.PlayerFire);
                 break;
             case GameState.PlayerFire:
                 hexgrid.DisableHighlightOfAllHexes();
+                //update cursor
+                activeShip.ResetAttackableShips();
+                activeShip.IsPlaying = false;
                 gameManager.NextTurn();
                 break;
         }
