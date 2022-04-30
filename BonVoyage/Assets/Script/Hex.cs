@@ -93,9 +93,9 @@ public class Hex : MonoBehaviour
         highlight.HighlightValidPath();
     }
 
-    private void OnMouseOver()
+    private void OnMouseEnter()
     {
-        if(moveHereCursor)
+        if(moveHereCursor && !CameraMovement.isMoving)
         {
             playerInput.UpdateCursor(CursorState.MoveHere);
         }        

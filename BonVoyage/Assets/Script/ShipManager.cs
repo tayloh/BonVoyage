@@ -49,6 +49,7 @@ public class ShipManager : MonoBehaviour
     public void StartPlayerTurn(Ship ship)
     {
         activeShip = ship;
+        activeShip.IsPlaying = true;
 
         // Moved repair to start of players turn
         ship.Repair();
@@ -417,6 +418,7 @@ public class ShipManager : MonoBehaviour
         activeShip.HasFiredLeft = false;
         activeShip.HasFiredRight = false;
         activeShip.ResetAttackableShips();
+        activeShip.IsPlaying = false;
         gameManager.NextTurn();
 
     }

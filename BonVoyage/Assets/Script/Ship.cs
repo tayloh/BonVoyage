@@ -34,6 +34,8 @@ public class Ship : MonoBehaviour
     public Vector3Int hexCoord;
 
     private bool isAttackable = false;
+    private bool isPlaying = false;
+    public bool IsPlaying { set => isPlaying = value; }
 
     [SerializeField]
     private HexGrid hexGrid;
@@ -423,6 +425,10 @@ public class Ship : MonoBehaviour
         if(isAttackable)
         {
             playerInput.UpdateCursor(CursorState.AttackTarget);
+        }
+        if(isPlaying)
+        {
+            playerInput.UpdateCursor(CursorState.SkipTurn);
         }
     }
 

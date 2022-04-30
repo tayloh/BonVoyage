@@ -37,6 +37,7 @@ public class CameraMovement : MonoBehaviour
     private Quaternion _currentRotationGoal = Quaternion.identity;
     private float _tLerp = 0;
     private bool _isTransitioning = false;
+    static public bool isMoving = false;
 
     public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)
     {
@@ -169,6 +170,11 @@ public class CameraMovement : MonoBehaviour
         {
             transform.position = CamPos;
         }
+        
+        if(Input.GetMouseButtonDown(1) && !_isTransitioning)
+        {
+            isMoving = true;
+        }
 
         if (Input.GetMouseButton(1) && !_isTransitioning)
         {
@@ -190,6 +196,7 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetMouseButtonUp(1))
         {
             playerInput.UpdateCursor(CursorState.General);
+            isMoving = false;
         }
     }
 }
