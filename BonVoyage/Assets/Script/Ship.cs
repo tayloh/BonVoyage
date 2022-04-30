@@ -33,8 +33,11 @@ public class Ship : MonoBehaviour
 
     public Vector3Int hexCoord;
 
+    private bool isAttackable = false;
+
     [SerializeField]
     private HexGrid hexGrid;
+    private PlayerInput playerInput;
 
 
     [Header("UI")]
@@ -89,6 +92,8 @@ public class Ship : MonoBehaviour
         _currentHealthText.text = _health.ToString();
 
         _cannons.AddRange(transform.GetComponentsInChildren<Cannon>());
+
+        playerInput = GameObject.Find("PlayerInput").GetComponent<PlayerInput>(); //not the most efficient way to find it 
     }
 
     private void Start()
@@ -245,6 +250,11 @@ public class Ship : MonoBehaviour
             if (hex != null)
             {
                 hex.EnableHighLight();
+                Ship targetShip = hex.Ship;
+                if(targetShip != null && targetShip.tag != this.tag)
+                {
+                    targetShip.isAttackable = true;
+                }
             }
             else
             {
@@ -271,6 +281,7 @@ public class Ship : MonoBehaviour
             if (hex != null)
             {
                 hex.DisableHighlight();
+                hex.Ship.isAttackable = false;
             }
         }
     }
@@ -390,6 +401,19 @@ public class Ship : MonoBehaviour
         _currentHealthText.text = _health.ToString();
 
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
+    }
+
+    private void OnMouseEnter()
+    {
+        if(isAttackable)
+        {
+            playerInput.UpdateCursor(CursorState.AttackTarget);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        playerInput.UpdateCursor(CursorState.General);
     }
 
     public int GetNumberOfCannons()

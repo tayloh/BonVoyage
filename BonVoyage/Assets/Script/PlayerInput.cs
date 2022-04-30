@@ -21,11 +21,14 @@ public class PlayerInput : MonoBehaviour
     private void Update()
     {
         DetectMouseClick();
-        if (Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKeyDown(KeyCode.T))
         {
             UpdateCursor(CursorState.AttackTarget);
         }
+        
     }
+
+    
 
     private void DetectMouseClick()
     {
@@ -36,25 +39,24 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void UpdateCursor(CursorState state)
+    public void UpdateCursor(CursorState state)
     {
         switch (state)
         {
             case CursorState.General:
-                Cursor.SetCursor(null, new Vector2(0,0), CursorMode.Auto);
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
                 break;
             case CursorState.AttackTarget:
-                Cursor.SetCursor(cursorAttackTarget, new Vector2(0, 0), CursorMode.Auto);
-                Debug.Log("cursor updated ");
+                Cursor.SetCursor(cursorAttackTarget, new Vector2(16, 16), CursorMode.Auto);
                 break;
             case CursorState.MoveHere:
-
+                Cursor.SetCursor(cursorMoveHere, new Vector2(16, 32), CursorMode.Auto);
                 break;
             case CursorState.RotateCamera:
-
+                Cursor.SetCursor(cursorRotateCamera, new Vector2(16, 16), CursorMode.Auto);
                 break;
             case CursorState.SkipTurn:
-
+                Cursor.SetCursor(cursorSkipTurn, new Vector2(16, 16), CursorMode.Auto);
                 break;
             default:
                 new ArgumentNullException("state", "cursor state incorrect");
@@ -63,7 +65,7 @@ public class PlayerInput : MonoBehaviour
     }
 }
 
-enum CursorState
+public enum CursorState
 {
     General,
     AttackTarget,

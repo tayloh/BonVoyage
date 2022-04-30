@@ -885,6 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85136dd1055eec48b504ff42dabf90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 966116045}
   MovementSpeed: 30
   EnableTransitions: 1
   EnableTransitionRotation: 0
@@ -1112,10 +1113,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   camera: {fileID: 1944772712}
-  cursorAttackTarget: {fileID: 0}
-  cursorMoveHere: {fileID: 0}
-  cursorRotateCamera: {fileID: 0}
-  cursorSkipTurn: {fileID: 0}
+  cursorAttackTarget: {fileID: 2800000, guid: 2fc41fa5fa33bee4c9ef5bbd79d9ce40, type: 3}
+  cursorMoveHere: {fileID: 2800000, guid: bde4289f6fab16642aa4ffb7001dc9d1, type: 3}
+  cursorRotateCamera: {fileID: 2800000, guid: d943ced977ecb294c94578eeed9257e7, type: 3}
+  cursorSkipTurn: {fileID: 2800000, guid: d46b9b956416ee74cb290121a0d5a091, type: 3}
 --- !u!4 &966116046
 Transform:
   m_ObjectHideFlags: 0

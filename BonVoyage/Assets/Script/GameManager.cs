@@ -227,6 +227,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Ship GetActualShip()
+    {
+        return shipsTurn[actualShipIndex];
+    }
+
 }
 
 //Utitlities for lists

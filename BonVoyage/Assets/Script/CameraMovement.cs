@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
+    [SerializeField] private PlayerInput playerInput;
     //controls camera speed
     public float MovementSpeed = 20f;
     public bool EnableTransitions = true;
@@ -169,6 +170,12 @@ public class CameraMovement : MonoBehaviour
             transform.position = CamPos;
         }
 
+        if(Input.GetMouseButtonDown(1) && !_isTransitioning)
+        {
+            //updating cursor 
+            playerInput.UpdateCursor(CursorState.RotateCamera);
+        }
+
         if (Input.GetMouseButton(1) && !_isTransitioning)
         {
             //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), 0, 0);
@@ -182,6 +189,11 @@ public class CameraMovement : MonoBehaviour
 
             transform.eulerAngles = resultingEulerAngles;
             //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            playerInput.UpdateCursor(CursorState.General);
         }
     }
 }

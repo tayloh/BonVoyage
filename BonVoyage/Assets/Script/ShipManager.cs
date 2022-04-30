@@ -200,8 +200,7 @@ public class ShipManager : MonoBehaviour
                 isAttackable = true;
                 attackedPosition = tilePos;
                 break;
-            }
-           
+            }           
         }
 
         if (isAttackable)
