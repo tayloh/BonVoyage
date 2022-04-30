@@ -420,13 +420,13 @@ public class Ship : MonoBehaviour
         StartCoroutine(ShowText("+" + _repairPoint.ToString()));
     }
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
-        if(isAttackable)
+        if(isAttackable && !CameraMovement.isMoving)
         {
             playerInput.UpdateCursor(CursorState.AttackTarget);
         }
-        if(isPlaying)
+        if(isPlaying && !CameraMovement.isMoving)
         {
             playerInput.UpdateCursor(CursorState.SkipTurn);
         }

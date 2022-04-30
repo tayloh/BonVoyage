@@ -93,7 +93,7 @@ public class Hex : MonoBehaviour
         highlight.HighlightValidPath();
     }
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
         if(moveHereCursor && !CameraMovement.isMoving)
         {
