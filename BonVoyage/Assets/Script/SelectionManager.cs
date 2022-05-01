@@ -20,6 +20,8 @@ public class SelectionManager : MonoBehaviour
 
     public UnityEvent<GameObject> OnShipSelected;
     public UnityEvent<GameObject> TerrainSelected;
+    [SerializeField] private LayerMask hexLayermask;
+    private GlowHighlight lastHexpointed;
 
     private void Awake()
     {
@@ -35,9 +37,14 @@ public class SelectionManager : MonoBehaviour
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);//Using Raycasting to perform a raycast out into the scene
 
 
-        if ()
+        if (Physics.Raycast(ray,out hit ,1000,hexLayermask))
         {
-
+            GlowHighlight highLight = hit.collider.GetComponent<GlowHighlight>();
+            if (highLight.isGlowing) return;
+            if (lastHexpointed != null && lastHexpointed != highLight)
+                lastHexpointed.DisableGlow();
+                lastHexpointed = highLight;
+                lastHexpointed.EnableGlow();
 
         }
 
