@@ -151,6 +151,12 @@ public class GameManager : MonoBehaviour
 
         CameraTransition(nextShip);
 
+        StartCoroutine(DelayNextTurn(nextShip));
+    }
+
+    IEnumerator DelayNextTurn(Ship nextShip)
+    {
+        yield return new WaitForSeconds(1.5f);
         if (!nextShip.CompareTag("Pirate"))
         {
             UpdateGameState(GameState.PlayerMove);
@@ -162,8 +168,8 @@ public class GameManager : MonoBehaviour
             shipManager.StartPirateTurn(nextShip);
             //shipManager.MovePirateShip(nextShip);
         }
-    }
 
+    }
     private Ship GetNextShipForTurn()
     {
         if (shipsTurn.Count - 1 > actualShipIndex)
