@@ -151,9 +151,9 @@ public class GameManager : MonoBehaviour
 
         CameraTransition(nextShip);
 
-        StartCoroutine(DelayNextTurn(nextShip));
+        StartCoroutine(DelayNextTurn(nextShip));// calling the delay function
     }
-
+    // This function will help delay the  next ship in the turn  so the camera can fully repositioned
     IEnumerator DelayNextTurn(Ship nextShip)
     {
         yield return new WaitForSeconds(1.5f);
