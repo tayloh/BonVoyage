@@ -29,6 +29,19 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        RaycastHit hit;
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);//Using Raycasting to perform a raycast out into the scene
+
+
+        if ()
+        {
+
+
+        }
+
+    }
     public void HandleClick(Vector3 mousePosition)
     {
         GameObject result;
