@@ -204,6 +204,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowMaterial: {fileID: 2100000, guid: d4a05dfa9b67d6048b6a99bb518fde6a, type: 2}
   glowMaterialWhenInvalid: {fileID: 2100000, guid: 8a4a672c410be7f479f79efc701d0a82, type: 2}
+  shipGlowMaterial: {fileID: 2100000, guid: 1244b1306426a8a42a89b1e0a2daf945, type: 2}
+  isGlowing: 0
 --- !u!1 &969951994100378675
 GameObject:
   m_ObjectHideFlags: 0

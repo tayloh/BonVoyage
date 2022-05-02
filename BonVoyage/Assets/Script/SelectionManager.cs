@@ -37,14 +37,17 @@ public class SelectionManager : MonoBehaviour
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);//Using Raycasting to perform a raycast out into the scene
 
 
-        if (Physics.Raycast(ray,out hit ,1000,hexLayermask))
+        if (Physics.Raycast(ray, out hit, 1000, hexLayermask))
         {
             GlowHighlight highLight = hit.collider.GetComponent<GlowHighlight>();
             if (highLight.isGlowing) return;
             if (lastHexpointed != null && lastHexpointed != highLight)
+            {
                 lastHexpointed.DisableGlow();
-                lastHexpointed = highLight;
-                lastHexpointed.EnableGlow();
+
+            }
+            lastHexpointed = highLight;
+            lastHexpointed.EnableGlow();
 
         }
 
@@ -64,7 +67,7 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("clic on terrain detected");
                 TerrainSelected?.Invoke(result);
             }
-        }        
+        }
     }
 
     private void HandleClickDuringTurn(Vector3 mousePosition)

@@ -6,14 +6,14 @@ using UnityEngine;
 public class GlowHighlight : MonoBehaviour
 {
     Dictionary<Renderer, Material[]> glowMaterialDictionary = new Dictionary<Renderer, Material[]>();
-    Dictionary<Renderer, Material[]> shipGlowMaterialDictionary = new Dictionary<Renderer, Material[]>();
+    Dictionary<Renderer, Material[]> shipGlowMaterialDictionary = new Dictionary<Renderer, Material[]>();//
     Dictionary<Renderer, Material[]> originalMaterialDictionary = new Dictionary<Renderer, Material[]>();
     Dictionary<Color, Material> cachedGlowMaterials = new Dictionary<Color, Material>();
     Dictionary<Color, Material> cachedShipGlowMaterials = new Dictionary<Color, Material>();
 
     public Material glowMaterial;
     public Material glowMaterialWhenInvalid;
-    public Material shipGlowMaterial;
+    public Material shipGlowMaterial;// added martial for ship glowiG.
 
     [HideInInspector]
     public bool isGlowing = false;
@@ -131,6 +131,7 @@ public class GlowHighlight : MonoBehaviour
             renderer.materials = shipGlowMaterialDictionary[renderer];
         }
     }
+
     public void EnableGlow()
     {
         ResetGlowHighlight();

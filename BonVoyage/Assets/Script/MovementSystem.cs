@@ -8,7 +8,7 @@ public class MovementSystem : MonoBehaviour
 {
     private BFSResult movementRange = new BFSResult();
     private List<Vector3Int> _currentPath = new List<Vector3Int>();
-    
+
     public void HideRange(HexGrid hexGrid)
     {
         Debug.Log(movementRange + "called by Hiderange");
@@ -19,15 +19,21 @@ public class MovementSystem : MonoBehaviour
         }
         movementRange = new BFSResult();
     }
-    
+
     public void ShowRange(Ship selectedShip, HexGrid hexGrid)
     {
+
         CalculateRange(selectedShip, hexGrid);
         Vector3Int shipPos = hexGrid.GetClosestHex(selectedShip.transform.position);
         movementRange = movementRange;
+
+        // HighLight the on ship hex position 
+        hexGrid.GetTileAt(shipPos).EnableShipHighLight();
+
+
         foreach (Vector3Int hexPosition in movementRange.GetRangePositions())
         {
-            if(shipPos == hexPosition)
+            if (shipPos == hexPosition)
             {
                 continue;
             }
@@ -65,7 +71,7 @@ public class MovementSystem : MonoBehaviour
     public void MoveShip(Ship selectedShip, HexGrid hexGrid)
     {
         Debug.Log("Moving ship " + selectedShip.name);
-        selectedShip.MoveThroughPath(_currentPath.Select(pos => hexGrid.GetTileAt(pos).transform.position).ToList());        
+        selectedShip.MoveThroughPath(_currentPath.Select(pos => hexGrid.GetTileAt(pos).transform.position).ToList());
     }
     public void MoveShip(Ship selectedShip, HexGrid hexGrid, List<Vector3> path)
     {
@@ -73,7 +79,7 @@ public class MovementSystem : MonoBehaviour
         selectedShip.MoveThroughPath(path);
     }
 
-    
+
 
     public bool IsHexInRange(Vector3Int hexPosition)
     {
