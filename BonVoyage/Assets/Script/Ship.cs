@@ -113,7 +113,7 @@ public class Ship : MonoBehaviour
         _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
         _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
     }
-    
+
     public float[] GetCannonDamageList()
     {
         float[] damagePerCannon = new float[_cannons.Count];
@@ -251,11 +251,18 @@ public class Ship : MonoBehaviour
             Hex hex = hexGrid.GetTileAt(tile);
             if (hex != null)
             {
-                hex.EnableHighLight();
-                Ship targetShip = hex.Ship;
-                if(targetShip != null && targetShip.tag != this.tag)
+                if (isPlaying)
                 {
-                    targetShip.isAttackable = true;
+                    hex.EnableHighLight();
+                    Ship targetShip = hex.Ship;
+                    if (targetShip != null && targetShip.tag != this.tag)
+                    {
+                        targetShip.isAttackable = true;
+                    }
+                }
+                else
+                {
+                    hex.ToggleHexOfFiringArc(transform.tag, true);
                 }
             }
             else
@@ -289,7 +296,7 @@ public class Ship : MonoBehaviour
 
     public void ResetAttackableShips()
     {
-        for(int broadside = 0; broadside<2; broadside ++)
+        for (int broadside = 0; broadside < 2; broadside++)
         {
             List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
             foreach (var tile in res)
@@ -300,7 +307,7 @@ public class Ship : MonoBehaviour
                     hex.Ship.isAttackable = false;
                 }
             }
-        }        
+        }
     }
 
 
@@ -312,7 +319,7 @@ public class Ship : MonoBehaviour
         if (_healtSlider != null)
         {
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
-        }            
+        }
         _currentHealthText.text = _health.ToString();
         StartCoroutine(ShowText("-" + damage.ToString(), -1));
         if (_health <= 0)
@@ -352,7 +359,7 @@ public class Ship : MonoBehaviour
         foreach (var tile in attackableTiles)
         {
             Hex currentHex = hexGrid.GetTileAt(tile);
-            if (currentHex != null && currentHex.Ship != null && 
+            if (currentHex != null && currentHex.Ship != null &&
                 currentHex.Ship.gameObject.GetInstanceID() == otherShip.gameObject.GetInstanceID())
             {
                 return true;
@@ -422,19 +429,33 @@ public class Ship : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if(isAttackable && !CameraMovement.isMoving)
+        if (!CameraMovement.isMoving)
         {
-            playerInput.UpdateCursor(CursorState.AttackTarget);
+            if (isPlaying)
+            {
+                playerInput.UpdateCursor(CursorState.SkipTurn);
+            }
+            else
+            {
+                HighLightAttackableTiles(0);
+                HighLightAttackableTiles(1);
+            }
+            if (isAttackable)
+            {
+                playerInput.UpdateCursor(CursorState.AttackTarget);
+            }
         }
-        if(isPlaying && !CameraMovement.isMoving)
-        {
-            playerInput.UpdateCursor(CursorState.SkipTurn);
-        }
+
     }
 
     private void OnMouseExit()
     {
         playerInput.UpdateCursor(CursorState.General);
+        if(!isPlaying)
+        {
+            RemoveHighLightAttackableTiles(0);
+            RemoveHighLightAttackableTiles(1);
+        }        
     }
 
     public int GetNumberOfCannons()

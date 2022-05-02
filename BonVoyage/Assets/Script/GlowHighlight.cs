@@ -11,6 +11,8 @@ public class GlowHighlight : MonoBehaviour
 
     public Material glowMaterial;
     public Material glowMaterialWhenInvalid;
+    public Material greenGlowMaterial;
+    public Material redGlowMaterial;
 
     private bool isGlowing = false;
 
@@ -126,5 +128,21 @@ public class GlowHighlight : MonoBehaviour
 
         isGlowing = !state;
         ToggleGlow();
+    }
+
+    public void ToggleGlowPirateFiringArc(bool state)
+    {
+        if (isGlowing == state) return;
+
+        isGlowing = !state;
+        ToggleGlow(redGlowMaterial);
+    }
+
+    public void ToggleGlowPlayerFiringArc(bool state)
+    {
+        if (isGlowing == state) return;
+
+        isGlowing = !state;
+        ToggleGlow(greenGlowMaterial);
     }
 }
