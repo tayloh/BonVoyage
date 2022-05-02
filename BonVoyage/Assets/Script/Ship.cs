@@ -256,6 +256,12 @@ public class Ship : MonoBehaviour
                 if(targetShip != null && targetShip.tag != this.tag)
                 {
                     targetShip.isAttackable = true;
+                    
+                }
+                else if (targetShip != null && targetShip.tag == this.tag)
+                {
+                    // Disable highlight for ships of same type as yourself.
+                    hex.DisableHighlight();
                 }
             }
             else
