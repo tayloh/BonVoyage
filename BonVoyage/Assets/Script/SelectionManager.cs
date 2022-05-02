@@ -44,7 +44,7 @@ public class SelectionManager : MonoBehaviour
             if (lastHexpointed != null && lastHexpointed != highLight)
                 lastHexpointed.DisableGlow();
             lastHexpointed = highLight;
-            lastHexpointed.EnableGlow();
+            lastHexpointed.EnableMouseGlow();
 
         }
 
