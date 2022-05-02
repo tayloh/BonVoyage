@@ -42,10 +42,7 @@ public class SelectionManager : MonoBehaviour
             GlowHighlight highLight = hit.collider.GetComponent<GlowHighlight>();
             if (highLight.isGlowing) return;
             if (lastHexpointed != null && lastHexpointed != highLight)
-            {
                 lastHexpointed.DisableGlow();
-
-            }
             lastHexpointed = highLight;
             lastHexpointed.EnableGlow();
 
