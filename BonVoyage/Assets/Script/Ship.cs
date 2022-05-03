@@ -269,6 +269,11 @@ public class Ship : MonoBehaviour
                     {
                         targetShip.isAttackable = true;
                     }
+                    else if (targetShip != null && targetShip.tag == this.tag)
+                    {
+                        // Disable highlight for ships of same type as yourself.
+                        hex.DisableHighlight();
+                    }
                 }
                 else if (CameraMovement.isMoving == false && (gameManager.state == GameState.PlayerMove || gameManager.state == GameState.PlayerFire))
                 {
