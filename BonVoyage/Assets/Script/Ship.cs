@@ -42,7 +42,9 @@ public class Ship : MonoBehaviour
     private PlayerInput playerInput;
     [SerializeField]
     private GameManager gameManager;
-    [SerializeField] private MovementSystem movementSystem;
+    [SerializeField] 
+    private MovementSystem movementSystem;
+    private Collider _collider;
 
 
     [Header("UI")]
@@ -84,6 +86,7 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         _glowHighlight = GetComponent<GlowHighlight>();
+        _collider = GetComponent<Collider>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
         hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
@@ -152,6 +155,8 @@ public class Ship : MonoBehaviour
 
     public IEnumerator RotationCoroutine(Vector3 endPosition, float rotationDuration)
     {
+        _collider.enabled = false;
+
         Quaternion startRotation = transform.rotation;
         endPosition.y = transform.position.y;
         Vector3 direction = endPosition - transform.position;
@@ -204,6 +209,8 @@ public class Ship : MonoBehaviour
             MovementFinished?.Invoke(this);
 
         }
+        new WaitForEndOfFrame();
+        _collider.enabled = true;
     }
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
@@ -263,7 +270,7 @@ public class Ship : MonoBehaviour
                         targetShip.isAttackable = true;
                     }
                 }
-                else
+                else if (CameraMovement.isMoving == false && (gameManager.state == GameState.PlayerMove || gameManager.state == GameState.PlayerFire))
                 {
                     hex.HighlightHexOfFiringArc(transform.tag);
                 }
@@ -275,6 +282,15 @@ public class Ship : MonoBehaviour
             //Debug.Log(tile);
         }
     }
+
+    /*private IEnumerator ActivateHiglightFiringArc()
+    {
+        new WaitForEndOfFrame();
+        if (!CameraMovement.IsTransitioning)
+        {
+            hex.HighlightHexOfFiringArc(transform.tag);
+        }
+    }*/
 
     // Requires that the ship is still on the same tile as it was when 
     // HighLightAttackableTiles() was called
@@ -438,7 +454,10 @@ public class Ship : MonoBehaviour
             {
                 playerInput.UpdateCursor(CursorState.SkipTurn);
             }
-            else
+            else if (HasFiredLeft || HasFiredRight)
+            {                
+            }
+            else if (gameManager.state == GameState.PlayerMove || gameManager.state == GameState.PlayerFire)
             {
                 HighLightAttackableTiles(0);
                 HighLightAttackableTiles(1);
@@ -448,7 +467,6 @@ public class Ship : MonoBehaviour
                 playerInput.UpdateCursor(CursorState.AttackTarget);
             }
         }
-
     }
 
     private void OnMouseExit()
@@ -469,8 +487,7 @@ public class Ship : MonoBehaviour
                     gameManager.GetActualShip().HighLightAttackableTiles(0);
                     gameManager.GetActualShip().HighLightAttackableTiles(1);
                     break;
-            }
-            
+            }            
         }
     }
 
