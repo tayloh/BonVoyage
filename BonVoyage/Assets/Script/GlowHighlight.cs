@@ -60,6 +60,14 @@ public class GlowHighlight : MonoBehaviour
         }
     }
 
+    public void ResetHighlight()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = originalMaterialDictionary[renderer];
+        }
+    }
+
     internal void HighlightValidPath()
     {
         if (isGlowing == false)
@@ -130,19 +138,27 @@ public class GlowHighlight : MonoBehaviour
         ToggleGlow();
     }
 
-    public void ToggleGlowPirateFiringArc(bool state)
+    public void DisplayDefaultGlow()
     {
-        if (isGlowing == state) return;
-
-        isGlowing = !state;
-        ToggleGlow(redGlowMaterial);
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = glowMaterialDictionary[renderer];
+        }
     }
 
-    public void ToggleGlowPlayerFiringArc(bool state)
+    public void DisplayAsPirateFiringArc()
     {
-        if (isGlowing == state) return;
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = new Material[1] { redGlowMaterial };
+        }
+    }
 
-        isGlowing = !state;
-        ToggleGlow(greenGlowMaterial);
+    public void DisplayAsPlayerFiringArc()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = new Material[1] { greenGlowMaterial };
+        }
     }
 }

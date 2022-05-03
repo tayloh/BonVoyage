@@ -283,15 +283,6 @@ public class Ship : MonoBehaviour
         }
     }
 
-    /*private IEnumerator ActivateHiglightFiringArc()
-    {
-        new WaitForEndOfFrame();
-        if (!CameraMovement.IsTransitioning)
-        {
-            hex.HighlightHexOfFiringArc(transform.tag);
-        }
-    }*/
-
     // Requires that the ship is still on the same tile as it was when 
     // HighLightAttackableTiles() was called
     public void RemoveHighLightAttackableTiles(int broadside)
@@ -448,7 +439,7 @@ public class Ship : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (!CameraMovement.isMoving)
+        if (!CameraMovement.isMoving && !CameraMovement._isTransitioning)
         {
             if (isPlaying)
             {
@@ -476,18 +467,23 @@ public class Ship : MonoBehaviour
         {
             RemoveHighLightAttackableTiles(0);
             RemoveHighLightAttackableTiles(1);
-        
+
             //highlight again the tiles of the actual ship in case some of them were hidden
-            switch (gameManager.state)
+            Ship actualShip = gameManager.GetActualShip();
+            if(!actualShip.HasFiredLeft && !actualShip.HasFiredRight)
             {
-                case GameState.PlayerMove:
-                    movementSystem.ShowRange(gameManager.GetActualShip(), hexGrid);
-                    break;
-                case GameState.PlayerFire:
-                    gameManager.GetActualShip().HighLightAttackableTiles(0);
-                    gameManager.GetActualShip().HighLightAttackableTiles(1);
-                    break;
-            }            
+                switch (gameManager.state)
+                {
+                    case GameState.PlayerMove:
+                        movementSystem.ShowRange(gameManager.GetActualShip(), hexGrid);
+                        break;
+                    case GameState.PlayerFire:
+                        actualShip.HighLightAttackableTiles(0);
+                        actualShip.HighLightAttackableTiles(1);
+                        break;
+                }
+            }
+                        
         }
     }
 

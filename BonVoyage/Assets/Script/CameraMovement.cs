@@ -36,7 +36,7 @@ public class CameraMovement : MonoBehaviour
     private Quaternion _startRotation = Quaternion.identity;
     private Quaternion _currentRotationGoal = Quaternion.identity;
     private float _tLerp = 0;
-    private bool _isTransitioning = false;
+    static public bool _isTransitioning = false;
     static public bool isMoving = false;
 
     public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)

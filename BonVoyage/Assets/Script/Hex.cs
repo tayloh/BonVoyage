@@ -65,12 +65,14 @@ public class Hex : MonoBehaviour
 
     public void EnableHighLight()
     {
-        highlight.ToggleGlow(true);
+        //highlight.ToggleGlow(true);
+        highlight.DisplayDefaultGlow();
     }
 
     public void DisableHighlight()
     {
-        highlight.ToggleGlow(false);
+        //highlight.ToggleGlow(false);
+        highlight.ResetHighlight();
     }
 
     public void HighlightHexOfFiringArc(string tag)
@@ -78,12 +80,12 @@ public class Hex : MonoBehaviour
         switch (tag)
         {
             case "Pirate":
-                highlight.ToggleGlow(false);
-                highlight.ToggleGlowPirateFiringArc(true);
+                //highlight.ToggleGlow(false);
+                highlight.DisplayAsPirateFiringArc();
                 break;
             case "PlayerShip":
-                highlight.ToggleGlow(false);
-                highlight.ToggleGlowPlayerFiringArc(true);
+                //highlight.ToggleGlow(false);
+                highlight.DisplayAsPlayerFiringArc();
                 break;
             default:
                 throw new Exception("tag non accepted");
