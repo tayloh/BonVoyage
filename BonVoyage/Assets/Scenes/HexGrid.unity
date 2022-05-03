@@ -1288,6 +1288,14 @@ PrefabInstance:
       propertyPath: fireRange
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -1382,6 +1390,14 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1468,6 +1484,14 @@ PrefabInstance:
       propertyPath: fireRange
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1948,6 +1972,14 @@ PrefabInstance:
       propertyPath: fireRange
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -2124,6 +2156,14 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2246,6 +2286,14 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
 --- !u!1 &1910919478
@@ -2724,6 +2772,14 @@ PrefabInstance:
       propertyPath: fireRange
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
 --- !u!4 &2087006727 stripped
@@ -2814,6 +2870,14 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 7706661380037805750, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
@@ -2844,6 +2908,14 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 442071959}
+    - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: movementSystem
+      value: 
+      objectReference: {fileID: 1660746589}
     - target: {fileID: 4314193763186427619, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0

@@ -73,15 +73,17 @@ public class Hex : MonoBehaviour
         highlight.ToggleGlow(false);
     }
 
-    public void ToggleHexOfFiringArc(string tag, bool state)
+    public void HighlightHexOfFiringArc(string tag)
     {
         switch (tag)
         {
             case "Pirate":
-                highlight.ToggleGlowPirateFiringArc(state);
+                highlight.ToggleGlow(false);
+                highlight.ToggleGlowPirateFiringArc(true);
                 break;
             case "PlayerShip":
-                highlight.ToggleGlowPlayerFiringArc(state);
+                highlight.ToggleGlow(false);
+                highlight.ToggleGlowPlayerFiringArc(true);
                 break;
             default:
                 throw new Exception("tag non accepted");

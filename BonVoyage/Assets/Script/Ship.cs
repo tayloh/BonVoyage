@@ -40,6 +40,9 @@ public class Ship : MonoBehaviour
     [SerializeField]
     private HexGrid hexGrid;
     private PlayerInput playerInput;
+    [SerializeField]
+    private GameManager gameManager;
+    [SerializeField] private MovementSystem movementSystem;
 
 
     [Header("UI")]
@@ -262,7 +265,7 @@ public class Ship : MonoBehaviour
                 }
                 else
                 {
-                    hex.ToggleHexOfFiringArc(transform.tag, true);
+                    hex.HighlightHexOfFiringArc(transform.tag);
                 }
             }
             else
@@ -455,7 +458,20 @@ public class Ship : MonoBehaviour
         {
             RemoveHighLightAttackableTiles(0);
             RemoveHighLightAttackableTiles(1);
-        }        
+        
+            //highlight again the tiles of the actual ship in case some of them were hidden
+            switch (gameManager.state)
+            {
+                case GameState.PlayerMove:
+                    movementSystem.ShowRange(gameManager.GetActualShip(), hexGrid);
+                    break;
+                case GameState.PlayerFire:
+                    gameManager.GetActualShip().HighLightAttackableTiles(0);
+                    gameManager.GetActualShip().HighLightAttackableTiles(1);
+                    break;
+            }
+            
+        }
     }
 
     public int GetNumberOfCannons()
