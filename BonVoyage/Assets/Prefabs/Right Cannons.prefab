@@ -134,6 +134,10 @@ PrefabInstance:
     - {fileID: 7861959181310105398, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
     - {fileID: 1370994688994848234, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
     - {fileID: 94952713674347590, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
+    - {fileID: 2966803689746791305, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
+    - {fileID: 4811478892784687646, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
+    - {fileID: 2495120359132905054, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
+    - {fileID: 4751835289768813391, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0b62c45a9e6a7024693bf541e59fdffa, type: 3}
 --- !u!1 &7067438568713253275 stripped
 GameObject:
@@ -196,7 +200,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -307,7 +311,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -418,7 +422,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -529,7 +533,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

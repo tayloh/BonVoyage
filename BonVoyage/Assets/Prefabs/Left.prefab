@@ -54,7 +54,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -143,7 +143,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _range: 3
-  fireAnimation: {fileID: 0}
   model: {fileID: 0}
 --- !u!1 &3069987138805959821
 GameObject:
@@ -199,7 +198,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -288,7 +287,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _range: 3
-  fireAnimation: {fileID: 0}
   model: {fileID: 0}
 --- !u!1 &4498223048242761262
 GameObject:
@@ -344,7 +342,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -433,7 +431,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _range: 3
-  fireAnimation: {fileID: 0}
   model: {fileID: 0}
 --- !u!1 &5530234180481522709
 GameObject:
@@ -489,7 +486,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -578,7 +575,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _range: 3
-  fireAnimation: {fileID: 0}
   model: {fileID: 0}
 --- !u!1 &5895809124695723063
 GameObject:

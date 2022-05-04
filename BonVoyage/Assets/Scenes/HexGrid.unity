@@ -2810,6 +2810,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 31.90001
       objectReference: {fileID: 0}
+    - target: {fileID: 5326358309581350044, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (1)
@@ -2881,6 +2885,10 @@ PrefabInstance:
     - target: {fileID: 7706661380037805750, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
+      objectReference: {fileID: 0}
+    - target: {fileID: 9184587503288671966, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}

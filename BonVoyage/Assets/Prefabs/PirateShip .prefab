@@ -896,6 +896,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4346568641635612782}
     m_Modifications:
+    - target: {fileID: 1504571453400453925, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3508102872786619506, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3892942777239489324, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -940,6 +948,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5166188398744449633, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343349814279701928, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7029871377074811201, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
       propertyPath: m_Name
       value: Right Variant
@@ -963,6 +979,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4346568641635612782}
     m_Modifications:
+    - target: {fileID: 2722440536690930056, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5855729115790822218, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7224542679630602456, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438861090565620312, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8790827783291993719, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
       propertyPath: m_Name
       value: Left Variant
