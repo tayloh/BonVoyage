@@ -78,6 +78,8 @@ public class Ship : MonoBehaviour
     // Might need one list per broadside
     private List<Cannon> _cannons = new List<Cannon>();
 
+    private AudioSource _audioSource;
+
     public int NumCannons
     {
         get => _cannons.Count;
@@ -87,6 +89,7 @@ public class Ship : MonoBehaviour
     {
         _glowHighlight = GetComponent<GlowHighlight>();
         _collider = GetComponent<Collider>();
+        _audioSource = GetComponent<AudioSource>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
         hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
@@ -417,6 +420,7 @@ public class Ship : MonoBehaviour
 
     private IEnumerator ShipSinksAnimation()
     {
+        _audioSource.Play();
         yield return new WaitForSeconds(1.1f);
         while (transform.position.y > -1)
         {
