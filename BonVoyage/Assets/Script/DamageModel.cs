@@ -87,7 +87,7 @@ public class DamageModel : MonoBehaviour
     private static float _calculateAccuracyCoefficient(float D)
     {
 
-        float distBetweenHexCenters = HexCoordinates.xOffset * 2;
+        float distBetweenHexCenters = HexCoordinates.xOffset;
 
         float H = Mathf.RoundToInt(distBetweenHexCenters * 10);
 

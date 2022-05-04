@@ -6,16 +6,26 @@ using UnityEngine;
 //Note that Pirate ships need the Pirate tag
 public class PirateAI : MonoBehaviour
 {
-    private Ship ship;
-    public static HexGrid hexGrid;
-    [SerializeField]
-    private static GameManager gameManager;
+    // High search depth doesn't work well for DFS since then
+    // it will probably find a path to every node in the grid
+    // but they will be very long paths. And, since we don't 
+    // allow loops, these nodes will not be considered later by shorter paths.
+    // TODO: Fix this by checking if the new path to an already visited node is shorter.
+    // Status: Fixed
+    
+    // Improvement: Collect all hex positions in nearby vicinity and do Djisktras alg
+    // to get shortest path to all of them, then check from which of them the AI can reach player ships,
+    // then evaluate those positions. (Basically, swap extended DFS to Dijkstras, kind of requires a reimplementation)
+    
+    public static int SearchDepth = 16;
 
-    // For DFS
-    private AttackPosDFS _DFS;
+    private Ship ship;
+    public HexGrid hexGrid;
+    [SerializeField]
+    private GameManager gameManager;
 
     // Needed:
-    // DFS search that considers ship direction,
+    // DFS search that considers ship direction <- this made the search space way too large
     // stops when depth is reached.
     // Store all visited nodes along with the ships direction at that node.
     // Then, loop through all positions in a path, check if a ship is attackable from that pos (so need to store direction at each tile as well)
@@ -24,11 +34,19 @@ public class PirateAI : MonoBehaviour
     private void Awake()
     {
         ship = GetComponent<Ship>();
-        _DFS = new AttackPosDFS();
     }
 
     public List<Vector3> ChoosePath()
     {
+        var nextPos = new AttackPosDFS(this, ship.hexCoord, ship.gameObject.transform.forward, ship.FireRange).FindNextPos();
+
+        // AI code is a little bit unstable right now, returns null if something went wrong, and we use previous method instead
+        if (nextPos != null)
+        {
+            Debug.Log("DFS New AI");
+            return nextPos;
+        }
+        Debug.Log("DFS Old AI");
         //TODO : choose how to move the pirate ship 
         //
         //
@@ -65,6 +83,9 @@ public class PirateAI : MonoBehaviour
         List<Vector3Int> attackableRightSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(0);
         List<Vector3Int> attackableLeftSide = gameObject.GetComponent<Ship>().GetAttackableTilesFor(1);
 
+        //List<Vector3Int> attackableRightSide = _GetAttackableTilesFrom(this.ship.hexCoord, this.ship.transform.forward, 0, this.ship.FireRange);
+        //List<Vector3Int> attackableLeftSide = _GetAttackableTilesFrom(this.ship.hexCoord, this.ship.transform.forward, 1, this.ship.FireRange);
+
         List<Vector3Int> attackableTiles = attackableRightSide;
         attackableTiles.AddRange(attackableLeftSide);
 
@@ -80,11 +101,11 @@ public class PirateAI : MonoBehaviour
         return false;
     }
 
-    private static List<Vector3Int> _GetAttackableTilesFrom(Vector3Int hexcoordinates, Vector3 forwardDir, int side, int range)
+    private List<Vector3Int> _GetAttackableTilesFrom(Vector3Int hexcoordinates, Vector3 forwardDir, int side, int range)
     {
         List<Vector3Int> result = new List<Vector3Int>();
 
-        if (hexGrid.GetTileAt(hexcoordinates) != null || range == 0)
+        if (hexGrid.GetTileAt(hexcoordinates) == null || range == 0)
         {
             return result;
         }
@@ -98,7 +119,7 @@ public class PirateAI : MonoBehaviour
         //   X  X
         //   R2 R1
 
-        float distBetweenHexCenters = HexCoordinates.xOffset * 2;
+        float distBetweenHexCenters = HexCoordinates.xOffset;
 
         Vector3 currHexWorldPosition = hexGrid.GetTileAt(hexcoordinates).gameObject.transform.position;
 
@@ -218,57 +239,245 @@ public class PirateAI : MonoBehaviour
         return result;
     }
 
-    private class AttackPosDFS
+    private bool _HasAttackableFrom(Vector3Int hexcoordinates, Vector3 forwardDir, int range)
     {
-        private Stack<Vector3> _directions;
-        private Stack<Vector3Int> _offsetPositions;
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = _GetAttackableTilesFrom(hexcoordinates, forwardDir, 0, range);
+        List<Vector3Int> attackableLeftSide = _GetAttackableTilesFrom(hexcoordinates, forwardDir, 1, range);
 
-        public AttackPosDFS()
+        List<Vector3Int> attackableTiles = attackableRightSide;
+        attackableTiles.AddRange(attackableLeftSide);
+
+        foreach (var tile in attackableTiles)
         {
-            _directions = new Stack<Vector3>();
-            _offsetPositions = new Stack<Vector3Int>();
+            Hex currentHex = hexGrid.GetTileAt(tile);
+            if (currentHex != null && currentHex.Ship != null && currentHex.Ship.gameObject.CompareTag("PlayerShip"))
+            {
+                //var from = hexGrid.GetTileAt(hexcoordinates);
+                //from.EnableHighLight();
+
+                //currentHex.EnableHighLight();
+                //Debug.Log("DFS DEBUG: " + hexcoordinates + "->" + currentHex.HexCoords);
+                //Debug.DrawLine(from.transform.position, from.transform.position + forwardDir * 2, Color.red, 100f, false);
+
+                //foreach (var item in attackableTiles)
+                //{
+                //    if (hexGrid.GetTileAt(item) != null) hexGrid.GetTileAt(item).EnableHighLight();
+                //}
+                return true;
+            }
         }
 
-        // TODO: Finish implementing DFS search with our tile system and stuff integrated
-        //public List<Vector3> FindPathToAttackPosFrom(Vector3 currentPos, Vector3 currentForwardDir, int depth)
-        //{
-        //    if (depth == 0) return new List<Vector3>() { currentPos };
-
-        //    Stack<Vector3> path = _DFS(currentPos, currentForwardDir, depth);
-            
-        //}
-
-        //private Stack<Vector3> _DFS (Vector3 currentPos, Vector3 currentForwardDir, int depth)
-        //{
-        //    if (depth == 0) 
-        //    {
-        //        Stack<Vector3> vector3positions = new Stack<Vector3>();
-
-        //        foreach (var item in _offsetPositions)
-        //        {
-        //            Vector3 pos = hexGrid.GetTileAt(item).transform.position;
-        //            vector3positions.Push(pos);
-        //        }
-
-        //        return vector3positions;
-        //    }
-        //    else
-        //    {
-        //        foreach (var item in hexGrid.GetAccessibleNeighboursFor(_offsetPositions.Pop(), _directions.Pop()))
-        //        {
-        //            _DFS(hexGrid.GetTileAt(item).transform.position, )
-        //        }
-        //    }
-        //}
-
+        return false;
     }
-    // TODO
-    private class DFSHexNode
+
+    private class AttackPosDFS
     {
-        // hex
-        // direction
-        // position
-        // etc
+        private static int DFSLoopLimit = 5000;
+
+        private Vector3Int _startPos;
+        private Vector3 _startDir;
+
+        private int _shipRange;
+
+        PirateAI _pirateAI;
+
+        public AttackPosDFS(PirateAI aiRef, Vector3Int startPos, Vector3 startDir, int shipRange)
+        {
+            _startPos = startPos;
+            _startDir = startDir;
+            _shipRange = shipRange;
+            _pirateAI = aiRef;
+        }
+
+        public List<Vector3> FindNextPos()
+        {
+            List<DFSPathNode> result = _DFSFindPathToAttackPos(PirateAI.SearchDepth);
+            DFSPathNode desiredNode = _FindBestNode(result);
+
+            if (desiredNode == null)
+            {
+                return null;
+            }
+
+            Vector3Int nextPos = _GetFirstPosInPath(desiredNode);
+
+            if (nextPos != Vector3Int.zero && nextPos != _pirateAI.ship.hexCoord)
+            {
+                return new List<Vector3> { _pirateAI.hexGrid.GetTileAt(nextPos).transform.position };
+            }
+
+            return null;
+        }
+
+        private DFSPathNode _FindBestNode(List<DFSPathNode> attackNodes)
+        {
+            if (attackNodes.Count == 0) return null;
+
+            int minMoves = int.MaxValue;
+            DFSPathNode bestNode = attackNodes[0];
+
+            foreach (var node in attackNodes)
+            {
+                if (node.Path.Count < minMoves)
+                {
+                    minMoves = node.Path.Count;
+                    bestNode = node;
+                }
+            }
+
+            return bestNode;
+        }
+
+        private Vector3Int _GetFirstPosInPath(DFSPathNode node)
+        {
+            if (node.Path.Count > 1) return node.Path[1]; // [0] is current position
+
+            return Vector3Int.zero;
+        }
+
+        private List<DFSPathNode> _DFSFindPathToAttackPos(int maxDepth)
+        {
+            var availableAttackNodes = new List<DFSPathNode>();
+
+            var startHex = _pirateAI.hexGrid.GetTileAt(_startPos);
+            if (startHex == null) return availableAttackNodes;
+
+            var visited = new List<DFSPathNode>();
+            var stack = new Stack<DFSPathNode>();
+
+            stack.Push(new DFSPathNode(_startPos, new List<Vector3Int> { _startPos }, _startDir.normalized));
+
+            var loopCount = 0;
+
+            while (stack.Count > 0)
+            {
+                var currNode = stack.Pop();
+
+                // Highlight search area for debugging
+                //foreach (var item in currNode.Path)
+                //{
+                //    _pirateAI.hexGrid.GetTileAt(item).EnableHighLight();
+                //}
+
+                // Pop the node first, and don't continue if it the path is longer than the max depth
+                if (currNode.Path.Count - 1 > maxDepth) // - 1 to remove starting tile
+                {
+                    continue;
+                }
+
+                // Check if we already visited this node, then skip it (don't want loops)
+                // But check if the new path is shorter, then replace it.
+                if (visited.Contains(currNode))
+                {
+                    continue;
+                }
+
+                visited.Add(currNode);
+
+                // Check if attackable in range => return path
+                var hasAttackable = _pirateAI._HasAttackableFrom(currNode.OffsetCoordinate, currNode.ShipDirection, _shipRange);
+                //Debug.Log(currNode.ShipDirection);
+                if (hasAttackable)
+                {
+                    availableAttackNodes.Add(currNode);
+                    //_pirateAI.hexGrid.GetTileAt(currNode.OffsetCoordinate).EnableHighLight();
+                    // For now, just return as soon as we find an attack pos
+                    //return availableAttackNodes;
+                }
+
+                var neighbours = _pirateAI.hexGrid.GetAccessibleNeighboursFor(currNode.OffsetCoordinate, currNode.ShipDirection);
+                foreach (var neighbour in neighbours)
+                {
+                    // Don't consider positions where the hexes are not initialized
+                    var neighbourHex = _pirateAI.hexGrid.GetTileAt(neighbour);
+                    if (neighbourHex == null) continue;
+
+                    var path = new List<Vector3Int>();
+                    path.AddRange(currNode.Path);
+                    path.Add(neighbour);
+
+                    var dir = neighbourHex.transform.position - _pirateAI.hexGrid.GetTileAt(currNode.OffsetCoordinate).transform.position;
+                    dir.Normalize();
+                    
+                    stack.Push(new DFSPathNode(neighbour, path, dir));
+                }
+                loopCount++;
+
+                if (loopCount > DFSLoopLimit)
+                {
+                    Debug.Log("DFS reached limit of " + DFSLoopLimit);
+                    return availableAttackNodes;
+                }
+
+            }
+
+            Debug.Log("DFS SEARCH: " + loopCount);
+            return availableAttackNodes;
+        }
+    }
+
+    private class DFSPathNode
+    {
+        public Vector3Int OffsetCoordinate;
+        public List<Vector3Int> Path;
+        public Vector3 ShipDirection;
+
+        public DFSPathNode(Vector3Int offsetCoordinate, List<Vector3Int> path, Vector3 shipDirection)
+        {
+            OffsetCoordinate = offsetCoordinate;
+            Path = path;
+            ShipDirection = shipDirection;
+        }
+
+        // override object.Equals
+        public override bool Equals(object obj)
+        {
+
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            DFSPathNode other = (DFSPathNode) obj;
+
+            // Must have same offset coordinate
+            if (this.OffsetCoordinate != other.OffsetCoordinate)
+            {
+                return false;
+            }
+
+            // Must have same length of path (replaces directions in equals)
+            // If they don't have the same path, then one of the paths might be better,
+            // so the path nodes are not equal.
+            if (this.Path.Count != other.Path.Count)
+            {
+                return false;
+            }
+
+            // Must have same ship direction: this was way too heavy
+            // since the search space increases dramatically, meaning we also
+            // need larger depth to find useful positions.
+
+            //var cosAngle = Vector3.Dot(this.ShipDirection.normalized, other.ShipDirection.normalized);
+
+            //if (!Mathf.Approximately(cosAngle, 1.0f))
+            //{
+            //    return false;
+            //}
+
+            return true;
+        }
+
+        // Auto generated
+        public override int GetHashCode()
+        {
+            int hashCode = -2141650902;
+            hashCode = hashCode * -1521134295 + OffsetCoordinate.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<Vector3Int>>.Default.GetHashCode(Path);
+            hashCode = hashCode * -1521134295 + ShipDirection.GetHashCode();
+            return hashCode;
+        }
     }
 
 }
