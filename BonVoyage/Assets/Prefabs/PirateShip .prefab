@@ -482,7 +482,6 @@ GameObject:
   - component: {fileID: 5576611990726243350}
   - component: {fileID: 7345994774789040781}
   - component: {fileID: 4517247852434856981}
-  - component: {fileID: 4314193763186427619}
   m_Layer: 7
   m_Name: 'PirateShip '
   m_TagString: Pirate
@@ -576,6 +575,8 @@ MonoBehaviour:
   HasFiredRight: 0
   hexCoord: {x: 0, y: 0, z: 0}
   hexGrid: {fileID: 0}
+  gameManager: {fileID: 0}
+  movementSystem: {fileID: 0}
   _canvas: {fileID: 6148926950678635924}
   _healtSlider: {fileID: 4654135876425271201}
   _damageText: {fileID: 5993496344594194057}
@@ -599,6 +600,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowMaterial: {fileID: 2100000, guid: 917f12a479b86064298c84affe7f479b, type: 2}
   glowMaterialWhenInvalid: {fileID: 0}
+  greenGlowMaterial: {fileID: 0}
+  redGlowMaterial: {fileID: 0}
 --- !u!136 &5576611990726243350
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -642,102 +645,6 @@ MonoBehaviour:
   ShootingInterval: 0.5
   _leftBroadSide: {fileID: 6211434847983448586}
   _rightBroadSide: {fileID: 7505187451818985832}
---- !u!82 &4314193763186427619
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3970430539600143060}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d3b639cb72b682242bf4b762d8723f8c, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &5931406982816378879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,14 +946,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
---- !u!4 &4588697601801548549 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3892942777239489324, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
-  m_PrefabInstance: {fileID: 696042522955823145}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7505187451818985832 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7029871377074811201, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+  m_PrefabInstance: {fileID: 696042522955823145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4588697601801548549 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3892942777239489324, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
   m_PrefabInstance: {fileID: 696042522955823145}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3444189794149190781
