@@ -31,6 +31,7 @@ public class DamageModel : MonoBehaviour
             Debug.Log("CalculateDamageFor() inside DamageModel.cs is not updated for different number of cannons per side.");
         } 
         
+        // This if and else if needs to change, need to be able to use smthing like ship.GetLeftSideCannons()
         if (attackingShip.HasFiredLeft)
         {
             for (int i = 0; i < attackingShip.NumCannons / 2; i++)
@@ -115,6 +116,15 @@ public class DamageModel : MonoBehaviour
         }
 
         return AttackType.Side;
+    }
+
+    public static AttackType GetDirectionalAttackType(Ship attackingShip, Ship targetedShip)
+    {
+        var attackDir = (attackingShip.gameObject.transform.position - targetedShip.gameObject.transform.position).normalized;
+        var forwardDir = targetedShip.gameObject.transform.forward;
+        var attackType = _getDirectionalAttackType(attackDir, forwardDir, DamageModel.BowSternAngle);
+        
+        return attackType;
     }
 
 }

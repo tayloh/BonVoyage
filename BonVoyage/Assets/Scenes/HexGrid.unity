@@ -888,7 +888,7 @@ MonoBehaviour:
   playerInput: {fileID: 966116045}
   MovementSpeed: 30
   EnableTransitions: 1
-  EnableTransitionRotation: 0
+  EnableTransitionRotation: 1
   limiter_x: 100
   limiter_z: 100
   scrollSpeed: 2000

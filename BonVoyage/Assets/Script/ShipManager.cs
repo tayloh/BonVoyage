@@ -65,12 +65,17 @@ public class ShipManager : MonoBehaviour
         // Moved repair to start of players turn
         ship.Repair();
 
+        var ai = ship.GetComponent<PirateAI>();
+
         if (PirateMovement)
         {
-            // Only move if there isn't a ship to attack from the current position
-            if (!ship.GetComponent<PirateAI>().HasAttackableInRange())
+            List<Vector3> path = ai.ChoosePath(); // Only one element (don't support multi tile movement yet)
+            Vector3 nextPos = path[0];
+
+            // Don't move if the AI determined the next pos is the same pos as before
+            if (!ai.IsNewPosSamePos(nextPos))
             {
-                MovePirateShip(ship);
+                MovePirateShip(ship, path);
             }
             else
             {
@@ -87,56 +92,51 @@ public class ShipManager : MonoBehaviour
 
     private void PirateAIAttack(Ship ship)
     {
-        // Either we loop through all attackble tiles and attack the first
-        // available player ship (this effectivley requires a rewrite of the 
-        // PerformAttackOn function
-        // Or
-        // We can loop through all player ships, and do PerformAttackOn
-        // on each of them, which checks internally if the ship is attackable or not
-        // So, add to gamemanager a function (or field) that gets all player ships.
-
-        //var attackableLeftBroadSide = ship.GetAttackableTilesFor(1);
-        //var attackableRightBroadSide = ship.GetAttackableTilesFor(0);
-
-        //var allAttackable = attackableLeftBroadSide;
-        //allAttackable.AddRange(attackableRightBroadSide);
-
-        //Ship attackableShip = null;
-
-        //for (int i = 0; i < allAttackable.Count; i++)
-        //{
-        //    var currentHex = hexgrid.GetTileAt(allAttackable[i]);
-        //    if (currentHex != null)
-        //    {
-        //        if (currentHex.Ship != null)
-        //        {
-        //            attackableShip = currentHex.Ship;
-        //        }
-        //    }
-        //}
-
-        //if (attackableShip != null)
-        //{
-        //    attackableShip.TakeDamage(ship.AttackDamage);
-        //}
-
-        Debug.Log("PIRATE SHOOTS");
-
-        var playerShips = gameManager.GetPlayerShips();
-        var foundAttackable = false;
-
-        foreach (var playerShip in playerShips)
-        {
-            if(PerformAttackOn(playerShip))
-            {
-                foundAttackable = true;
-                break;
-            }
-        }
 
         activeShip.MovementFinished -= PirateAIAttack;
 
-        if (!foundAttackable) gameManager.NextTurn();
+        var ai = ship.GetComponent<PirateAI>();
+        var bestShipToFireOn = ai.GetMostFavorableShipToAttack();
+
+        var didAttack = false;
+
+        if (bestShipToFireOn != null)
+        {
+            // 
+            didAttack = PerformAttackOn(bestShipToFireOn);
+
+            // This should never happen, but it does, problem in PerformAttackOn()?
+            // Edit: haven't encountered it in a while now, but it's bound to happen
+            if (!didAttack)
+            {
+                ai.AIDebug("PerformAttackOn() not agreeing with pirateAI");
+            }
+        }
+        else
+        {
+            //gameManager.NextTurn();
+        }
+
+        if (!didAttack)
+        {
+            gameManager.NextTurn();
+        }
+
+        //var playerShips = gameManager.GetPlayerShips();
+        //var foundAttackable = false;
+
+        //foreach (var playerShip in playerShips)
+        //{
+        //    if(PerformAttackOn(playerShip))
+        //    {
+        //        foundAttackable = true;
+        //        break;
+        //    }
+        //}
+
+        //activeShip.MovementFinished -= PirateAIAttack;
+
+        //if (!foundAttackable) gameManager.NextTurn();
 
     }
 
@@ -191,7 +191,7 @@ public class ShipManager : MonoBehaviour
 
         // Find out if ship is in an attackable tile
         bool isAttackable = false;
-        Vector3Int attackedPosition = Vector3Int.zero;
+        Vector3Int attackedPosition = new Vector3Int(-9999, -9999, -9999);
         foreach (var tilePos in attackableTiles)
         {
             Hex currentHex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
@@ -310,6 +310,11 @@ public class ShipManager : MonoBehaviour
     {
         PirateAI pirateAI = ship.GetComponent<PirateAI>();
         movementSystem.MoveShip(ship, hexgrid, pirateAI.ChoosePath());
+    }
+
+    internal void MovePirateShip(Ship ship, List<Vector3> path)
+    {
+        movementSystem.MoveShip(ship, hexgrid, path);
     }
 
     private void ResetTurn(Ship selectedShip)

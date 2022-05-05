@@ -6,18 +6,13 @@ using UnityEngine;
 //Note that Pirate ships need the Pirate tag
 public class PirateAI : MonoBehaviour
 {
-    // High search depth doesn't work well for DFS since then
-    // it will probably find a path to every node in the grid
-    // but they will be very long paths. And, since we don't 
-    // allow loops, these nodes will not be considered later by shorter paths.
-    // TODO: Fix this by checking if the new path to an already visited node is shorter.
-    // Status: Fixed
     
-    // Improvement: Collect all hex positions in nearby vicinity and do Djisktras alg
-    // to get shortest path to all of them, then check from which of them the AI can reach player ships,
-    // then evaluate those positions. (Basically, swap extended DFS to Dijkstras, kind of requires a reimplementation)
-    
-    public static int SearchDepth = 16;
+    public static int SearchDepth = 12; // AI maximum planned path is 12 hexes long
+    public static float DFSOutOfRangeDistance = 18; // Euclidian distance. Set this value slightly less than double SearchDepth.
+    public static float AIConsideredLowHpThreshold = 4; // Assume ships will deal 4 damage
+
+    public static Vector3 AIFailed = new Vector3(-9999, -9999, -9999); // use instead of Vector3.zero (not nullable)
+    public static Vector3Int AIFailedInt = new Vector3Int(-9999, -9999, -9999);
 
     private Ship ship;
     public HexGrid hexGrid;
@@ -38,18 +33,18 @@ public class PirateAI : MonoBehaviour
 
     public List<Vector3> ChoosePath()
     {
-        var nextPos = new AttackPosDFS(this, ship.hexCoord, ship.gameObject.transform.forward, ship.FireRange).FindNextPos();
+        AIDebug("----NEW SHIP TURN (" + ship.name + ")----");
 
-        // AI code is a little bit unstable right now, returns null if something went wrong, and we use previous method instead
-        if (nextPos != null)
+        var AIMove = _GetAIMoveAction();
+        var nextPos = _AIMoveHandler(AIMove);
+
+        if (nextPos != PirateAI.AIFailed)
         {
-            Debug.Log("DFS New AI");
-            return nextPos;
+            AIDebug("New AI chose path");
+            return new List<Vector3> { nextPos };
         }
-        Debug.Log("DFS Old AI");
-        //TODO : choose how to move the pirate ship 
-        //
-        //
+        AIDebug("Old AI chose path");
+
         //default for debugging : chooses the first available hex
         Vector3Int offsetPosOfShip = HexCoordinates.ConvertPositionToOffset(transform.position - new Vector3(0,1,0));
         List<Vector3Int> neighbours = hexGrid.GetAccessibleNeighboursFor(offsetPosOfShip, transform.forward);
@@ -65,6 +60,93 @@ public class PirateAI : MonoBehaviour
         Vector3 positionGoal = hexGrid.GetTileAt(neighbourCoord).transform.position;
         //StartCoroutine(EndPirateTurn());
         return new List<Vector3>() { positionGoal};    
+    }
+
+    public Ship GetMostFavorableShipToAttack()
+    {
+        var attackableShips = _GetAttackablePlayerShips();
+
+        AIDebug("Found " + attackableShips.Count + " available targets");
+
+        if (attackableShips.Count == 0) return null;
+        
+        if (attackableShips.Count == 1)
+        {
+            AIDebug("Attacking " + attackableShips[0].name);
+            return attackableShips[0];
+        }
+
+        // Prio: attacktype -> distance vs. health
+
+        // Build attacktype dict
+        var attackTypeDict = new Dictionary<AttackType, List<Ship>>();
+        attackTypeDict.Add(AttackType.Stern, new List<Ship>());
+        attackTypeDict.Add(AttackType.Side, new List<Ship>());
+        attackTypeDict.Add(AttackType.Bow, new List<Ship>());
+
+        foreach (var ship in attackableShips)
+        {
+            var attackType = DamageModel.GetDirectionalAttackType(this.ship, ship);
+            attackTypeDict[attackType].Add(ship);
+        }
+
+        // Filter on best directional attack
+        var shipsFilteredOnBestDirectional = new List<Ship>();
+        if (attackTypeDict[AttackType.Stern].Count > 0)
+        {
+            // Consider these ships (highest damage)
+            shipsFilteredOnBestDirectional = attackTypeDict[AttackType.Stern];
+        }
+        else if (attackTypeDict[AttackType.Side].Count > 0)
+        {
+            // Consider these ships (most accurate attack)
+            shipsFilteredOnBestDirectional = attackTypeDict[AttackType.Side];
+        }
+        else
+        {
+            // Consider all ships
+            shipsFilteredOnBestDirectional = attackableShips;
+        }
+
+        // Filter on shortest distance
+        var shortestDist = float.MaxValue;
+        var shortestDistShip = shipsFilteredOnBestDirectional[0];
+        foreach (var ship in shipsFilteredOnBestDirectional)
+        {
+            var distanceToShip = (this.transform.position - ship.transform.position).magnitude;
+            if (distanceToShip < shortestDist)
+            {
+                shortestDistShip = ship;
+                shortestDist = distanceToShip;
+            }
+        }
+
+        // Filter on health
+        var lowestHealth = float.MaxValue;
+        var lowestHealthShip = shipsFilteredOnBestDirectional[0];
+        foreach (var ship in shipsFilteredOnBestDirectional)
+        {
+            var shipHealth = ship.Health;
+            if (shipHealth < lowestHealth)
+            {
+                lowestHealthShip = ship;
+                lowestHealth = shipHealth;
+            }
+        }
+
+        // Weigth distance vs health
+        var bestShip = lowestHealthShip;
+        if (lowestHealthShip.Health > AIConsideredLowHpThreshold)
+        {
+            bestShip = shortestDistShip;
+        }
+
+        //var index = UnityEngine.Random.Range(0, attackableShips.Count);
+        //return attackableShips[index];
+
+        AIDebug("Attacking " + bestShip.name);
+
+        return bestShip;
     }
 
     private IEnumerator EndPirateTurn()
@@ -99,6 +181,36 @@ public class PirateAI : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool IsNewPosSamePos(Vector3 newPos)
+    {
+        if (newPos == hexGrid.GetTileAt(ship.hexCoord).transform.position)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<Ship> _GetAttackablePlayerShips()
+    {
+        var attackableTiles = this.ship.GetAttackableTilesFor(0);
+        attackableTiles.AddRange(this.ship.GetAttackableTilesFor(1));
+
+        List<Ship> attackableShips = new List<Ship>();
+
+        foreach (var tilePos in attackableTiles)
+        {
+            var tile = hexGrid.GetTileAt(tilePos);
+            
+            if (tile == null) continue;
+            if (tile.Ship == null) continue;
+            if (tile.Ship.CompareTag(this.gameObject.tag)) continue;
+
+            attackableShips.Add(tile.Ship);
+        }
+        return attackableShips;
     }
 
     private List<Vector3Int> _GetAttackableTilesFrom(Vector3Int hexcoordinates, Vector3 forwardDir, int side, int range)
@@ -271,6 +383,268 @@ public class PirateAI : MonoBehaviour
         return false;
     }
 
+    private List<Vector3Int> _GetNonObstacleNeighbours(Vector3Int hexCoords, Vector3 forwardDir)
+    {
+        var accessibleNeighbours = hexGrid.GetAccessibleNeighboursFor(hexCoords, forwardDir);
+        var result = new List<Vector3Int>();
+        foreach (var neighbour in accessibleNeighbours)
+        {
+            var tile = hexGrid.GetTileAt(neighbour);
+            if (tile == null) continue;
+
+            if (!tile.IsObstacle())
+            {
+                result.Add(neighbour);
+            }
+        }
+        return result;
+    }
+
+    private float _GetDistanceToClosestPlayerShip(Vector3 from)
+    {
+        var closestDistance = float.MaxValue;
+        var playerShips = gameManager.GetPlayerShipWorldPositions();
+        foreach (var shipPos in playerShips)
+        {
+            var distToShip = (shipPos - from).magnitude;
+            if (distToShip < closestDistance)
+            {
+                closestDistance = distToShip;
+            }
+        }
+        return closestDistance;
+    }
+
+    private float _GetDistanceToClosestPlayerShip()
+    {
+        return _GetDistanceToClosestPlayerShip(this.gameObject.transform.position);
+    }
+
+    private List<Ship> _GetShipsThatCanFireOnMe()
+    {
+        var result = new List<Ship>();
+        foreach (var shipPos in gameManager.GetPlayerShipOffsetPositions())
+        {
+            var tile = hexGrid.GetTileAt(shipPos);
+            if (tile == null) continue;
+
+            var playerShip = tile.Ship;
+            if (playerShip == null) continue;
+
+            var firingArc = playerShip.GetAttackableTilesFor(0);
+            firingArc.AddRange(playerShip.GetAttackableTilesFor(1));
+
+            foreach (var item in firingArc)
+            {
+                var tileInArc = hexGrid.GetTileAt(item);
+                if (tileInArc == null) continue;
+
+                if (tileInArc.Ship == null) continue;
+
+                if (tileInArc.Ship.gameObject.GetInstanceID() == this.ship.gameObject.GetInstanceID())
+                {
+                    result.Add(playerShip);
+                }
+            }
+        }
+
+        return result;
+
+    }
+
+    private int _GetNumberOfPlayerShipsAttackingPos(Vector3Int position)
+    {
+        var result = 0;
+        foreach (var shipPos in gameManager.GetPlayerShipOffsetPositions())
+        {
+            var tile = hexGrid.GetTileAt(shipPos);
+            if (tile == null) continue;
+
+            var playerShip = tile.Ship;
+            if (playerShip == null) continue;
+
+            var firingArc = playerShip.GetAttackableTilesFor(0);
+            firingArc.AddRange(playerShip.GetAttackableTilesFor(1));
+
+            foreach (var vec3int in firingArc)
+            {
+                if (vec3int == position)
+                {
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private bool _HasShipInFiringArc(Ship ship)
+    {
+        var AIFiringArc = this.ship.GetAttackableTilesFor(0);
+        AIFiringArc.AddRange(this.ship.GetAttackableTilesFor(1));
+
+        foreach (var item in AIFiringArc)
+        {
+            var tile = hexGrid.GetTileAt(item);
+            if (tile == null) continue;
+            if (tile.Ship == null) continue;
+
+            if (tile.Ship.gameObject.GetInstanceID() == ship.gameObject.GetInstanceID())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void AIDebug(string msg)
+    {
+        Debug.Log("AI - " + msg);
+    }
+
+    private Vector3 _AIMoveHandler(AIMoveAction moveAction)
+    {
+        var resultPos = Vector3.zero;
+        switch (moveAction)
+        {
+            // Handle flee
+            case AIMoveAction.FleeMove:
+                resultPos = _HandleFlee();
+                AIDebug("Flee Move");
+                break;
+            
+                // Handle stay
+            case AIMoveAction.StayMove:
+                resultPos = _HandleStay();
+                AIDebug("Stay Move");
+                break;
+            
+                // Handle outofrange
+            case AIMoveAction.OutOfRangeMove:
+                resultPos = _HandleOOR();
+                AIDebug("Out of range Move");
+                break;
+            
+                // Handle dfs
+            case AIMoveAction.DFSMove:
+                resultPos = _HandleDFS();
+                AIDebug("DFS Move");
+                break;
+        }
+        return resultPos;
+    }
+
+    private Vector3 _HandleFlee()
+    {
+        // Get the accessible neighbours
+        var accessibleNeighbours = _GetNonObstacleNeighbours(ship.hexCoord, ship.transform.forward);
+
+        // Choose the one that results in fewest player ships firing on it
+        var shipsAttackingCurrentPos = _GetNumberOfPlayerShipsAttackingPos(ship.hexCoord);
+        var lowestNumAttacking = shipsAttackingCurrentPos;
+        var neighbourPosToChoose = accessibleNeighbours[0]; // move here as default
+
+        foreach (var neighbour in accessibleNeighbours)
+        {
+            var tile = hexGrid.GetTileAt(neighbour);
+            if (tile == null) continue;
+
+            var numAttackingNeighbourPos = _GetNumberOfPlayerShipsAttackingPos(neighbour);
+            if (numAttackingNeighbourPos <= lowestNumAttacking) // Move even if it might not be beneficial
+            {
+                lowestNumAttacking = numAttackingNeighbourPos;
+                neighbourPosToChoose = neighbour;
+            }
+        }
+
+        var tileWorldPos = hexGrid.GetTileAt(neighbourPosToChoose).transform.position;
+        return tileWorldPos;
+    }
+
+    private Vector3 _HandleStay()
+    {
+        return hexGrid.GetTileAt(ship.hexCoord).transform.position;
+    }
+
+    private Vector3 _HandleDFS()
+    {
+        var dfs = new AttackPosDFS(this, ship.hexCoord, ship.gameObject.transform.forward, ship.FireRange);
+        return dfs.FindNextPos();
+    }
+
+    private Vector3 _HandleOOR()
+    {
+        // Choose the accessible hex closest to the closest player ship
+        var accessibleNeighbours = _GetNonObstacleNeighbours(ship.hexCoord, ship.transform.forward);
+
+        var neighbourToChoose = PirateAI.AIFailed; // dont use zero vector, could be close to a player ship
+        var closestDistance = float.MaxValue;
+        foreach (var neighbour in accessibleNeighbours)
+        {
+            // Use euclidian distance on world coords
+            var neighbourTile = hexGrid.GetTileAt(neighbour);
+            if (neighbourTile == null) continue;
+
+            var distanceToClosestPlayerShip = _GetDistanceToClosestPlayerShip(neighbourTile.transform.position);
+            if (distanceToClosestPlayerShip < closestDistance)
+            {
+                closestDistance = distanceToClosestPlayerShip;
+                neighbourToChoose = neighbourTile.transform.position;
+            }
+        }
+        return neighbourToChoose;
+    }
+
+    private AIMoveAction _GetAIMoveAction()
+    {
+        // ON LOW HEALTH
+        // Flee if low hp AND in enemy fire arc AND enemy shoots before me - IF NOT, then Stay
+        if (ship.Health <= PirateAI.AIConsideredLowHpThreshold)
+        {
+            var shipsFiringOnMe = _GetShipsThatCanFireOnMe();
+            if (shipsFiringOnMe.Count > 1)
+            {
+                return AIMoveAction.FleeMove;
+            }
+            // One ship fires on me but it has low hp (need turn order here as well ideally)
+            // and I can shoot it as well
+            else if (shipsFiringOnMe.Count > 0 && shipsFiringOnMe[0].Health < PirateAI.AIConsideredLowHpThreshold) 
+            {
+                if (_HasShipInFiringArc(shipsFiringOnMe[0]))
+                {
+                    return AIMoveAction.StayMove;
+                }
+
+                return AIMoveAction.FleeMove;
+            }
+            
+        }
+
+        // NOT ON LOW HEALTH
+        // OutOfRangeMove if further away from closest enemy than DFS estimated euclid distance of search
+        // Otherwise DFS move
+        var distToClosestPlayerShip = _GetDistanceToClosestPlayerShip();
+        if (distToClosestPlayerShip > PirateAI.DFSOutOfRangeDistance)
+        {
+            return AIMoveAction.OutOfRangeMove;
+        }
+        else
+        {
+            // This should be the most common move 
+            return AIMoveAction.DFSMove;
+        }
+
+    }
+
+    private enum AIMoveAction
+    {
+        DFSMove,
+        OutOfRangeMove,
+        FleeMove,
+        StayMove
+    }
+
     private class AttackPosDFS
     {
         private static int DFSLoopLimit = 5000;
@@ -290,33 +664,37 @@ public class PirateAI : MonoBehaviour
             _pirateAI = aiRef;
         }
 
-        public List<Vector3> FindNextPos()
+        public Vector3 FindNextPos()
         {
             List<DFSPathNode> result = _DFSFindPathToAttackPos(PirateAI.SearchDepth);
             DFSPathNode desiredNode = _FindBestNode(result);
 
             if (desiredNode == null)
             {
-                return null;
+                return PirateAI.AIFailed;
             }
 
             Vector3Int nextPos = _GetFirstPosInPath(desiredNode);
 
-            if (nextPos != Vector3Int.zero && nextPos != _pirateAI.ship.hexCoord)
+            if (nextPos != PirateAI.AIFailedInt) //&& nextPos != _pirateAI.ship.hexCoord)
             {
-                return new List<Vector3> { _pirateAI.hexGrid.GetTileAt(nextPos).transform.position };
+                return _pirateAI.hexGrid.GetTileAt(nextPos).transform.position;
             }
 
-            return null;
+            return PirateAI.AIFailed;
         }
 
         private DFSPathNode _FindBestNode(List<DFSPathNode> attackNodes)
         {
             if (attackNodes.Count == 0) return null;
 
+            // Apply heuristic for finding the most favorable node here
+            // Consider num ships that attack the position, and how far away it is
+
             int minMoves = int.MaxValue;
             DFSPathNode bestNode = attackNodes[0];
 
+            // Find shortest pathnode
             foreach (var node in attackNodes)
             {
                 if (node.Path.Count < minMoves)
@@ -326,14 +704,83 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
+            // Check if there are other nodes with the same path length
+            var nodesWithShortestPath = new List<DFSPathNode>();
+            foreach (var node in attackNodes)
+            {
+                if (node.Path.Count == bestNode.Path.Count)
+                {
+                    nodesWithShortestPath.Add(node);
+                }
+            }
+
+            // Check which node has the least player ships attacking it position
+            var nodeNumAttackDict = new Dictionary<DFSPathNode, int>();
+            var minAttackingShips = int.MaxValue;
+            foreach (var node in nodesWithShortestPath)
+            {
+                var attackingShips = _pirateAI._GetNumberOfPlayerShipsAttackingPos(node.OffsetCoordinate);
+                nodeNumAttackDict.Add(node, attackingShips);
+
+                if (attackingShips < minAttackingShips)
+                {
+                    minAttackingShips = attackingShips;
+                    bestNode = node;
+                }
+            }
+
+            // Check if there are other nodes with the same path length
+            var nodesWithLowNumAttackingShips = new List<DFSPathNode>();
+            foreach (var node in nodesWithShortestPath)
+            {
+                var nodeAtking = nodeNumAttackDict[node];
+                var bestAtking = nodeNumAttackDict[bestNode];
+                if (nodeAtking == bestAtking)
+                {
+                    nodesWithLowNumAttackingShips.Add(node);
+                }
+            }
+
+            // For those who neets both above conditions, check which node is closest to the
+            // closest player ship (sometimes the pirate ship will move away otherwise, which looks weird)
+            var shortestDistToPlayerShip = float.MaxValue;
+            foreach (var node in nodesWithLowNumAttackingShips)
+            {
+                var tile = _pirateAI.hexGrid.GetTileAt(node.OffsetCoordinate);
+                if (tile == null) continue;
+
+                var fromPos = tile.transform.position;
+                var distToClosestPlayerShip = _pirateAI._GetDistanceToClosestPlayerShip(fromPos);
+
+                if (distToClosestPlayerShip < shortestDistToPlayerShip)
+                {
+                    shortestDistToPlayerShip = distToClosestPlayerShip;
+                    bestNode = node;
+                }
+            }
+
             return bestNode;
         }
 
         private Vector3Int _GetFirstPosInPath(DFSPathNode node)
         {
-            if (node.Path.Count > 1) return node.Path[1]; // [0] is current position
 
-            return Vector3Int.zero;
+            // If the current position is the desired position, then
+            // take the first pos in the path since it is the current position
+            if (node.OffsetCoordinate == _pirateAI.ship.hexCoord)
+            {
+                return node.Path[0];
+            }
+
+            // If the path length is longer than 1, then 
+            // return the first position in the path
+            if (node.Path.Count > 1)
+            {
+                return node.Path[1]; 
+            }
+
+            // If none of the above are true, something went wrong
+            return PirateAI.AIFailedInt;
         }
 
         private List<DFSPathNode> _DFSFindPathToAttackPos(int maxDepth)
@@ -386,7 +833,7 @@ public class PirateAI : MonoBehaviour
                     //return availableAttackNodes;
                 }
 
-                var neighbours = _pirateAI.hexGrid.GetAccessibleNeighboursFor(currNode.OffsetCoordinate, currNode.ShipDirection);
+                var neighbours = _pirateAI._GetNonObstacleNeighbours(currNode.OffsetCoordinate, currNode.ShipDirection);
                 foreach (var neighbour in neighbours)
                 {
                     // Don't consider positions where the hexes are not initialized
@@ -406,13 +853,13 @@ public class PirateAI : MonoBehaviour
 
                 if (loopCount > DFSLoopLimit)
                 {
-                    Debug.Log("DFS reached limit of " + DFSLoopLimit);
+                    _pirateAI.AIDebug("DFS reached limit of " + DFSLoopLimit);
                     return availableAttackNodes;
                 }
 
             }
 
-            Debug.Log("DFS SEARCH: " + loopCount);
+            _pirateAI.AIDebug("DFS iteration count: " + loopCount);
             return availableAttackNodes;
         }
     }

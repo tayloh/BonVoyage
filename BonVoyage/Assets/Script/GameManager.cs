@@ -196,6 +196,8 @@ public class GameManager : MonoBehaviour
     public List<Ship> GetPlayerShips()
     {
         // Does this give a reference to the internal list???
+        // Editing the list returned by this method causes big trouble ._. 
+        // (will remove this method asap since it's only used in one place)
         return playerShips;
     }
 
@@ -209,6 +211,46 @@ public class GameManager : MonoBehaviour
         foreach (Ship ship in playerShips)
         {
             positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3> GetPlayerShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3> GetPirateShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3Int> GetPirateShipOffsetPositions()
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.hexCoord);
+        }
+        return positions;
+    }
+
+    public List<Vector3Int> GetPlayerShipOffsetPositions()
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.hexCoord);
         }
         return positions;
     }
