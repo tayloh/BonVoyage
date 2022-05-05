@@ -127,6 +127,24 @@ public class DamageModel : MonoBehaviour
         return attackType;
     }
 
+    public static string GetAttackTypeString(AttackType type)
+    {
+        switch (type)
+        {
+            case AttackType.Bow:
+                return "Bow";
+
+            case AttackType.Stern:
+                return "Stern";
+
+            case AttackType.Side:
+                return "Side";
+
+            default:
+                return "";
+        }
+    }
+
 }
 
 public enum AttackType

@@ -69,10 +69,17 @@ public class PirateAI : MonoBehaviour
         AIDebug("Found " + attackableShips.Count + " available targets");
 
         if (attackableShips.Count == 0) return null;
-        
+
+        var atkTypeOfBestShip = AttackType.Bow;
+        var atkNameOfBestShip = "";
         if (attackableShips.Count == 1)
         {
-            AIDebug("Attacking " + attackableShips[0].name);
+            var ship = attackableShips[0];
+
+            atkTypeOfBestShip = DamageModel.GetDirectionalAttackType(this.ship, ship);
+            atkNameOfBestShip = DamageModel.GetAttackTypeString(atkTypeOfBestShip);
+
+            AIDebug("Attacking " + ship.name + " (Type: " + atkNameOfBestShip + ", Health: " + ship.Health + ")" );
             return attackableShips[0];
         }
 
@@ -144,7 +151,10 @@ public class PirateAI : MonoBehaviour
         //var index = UnityEngine.Random.Range(0, attackableShips.Count);
         //return attackableShips[index];
 
-        AIDebug("Attacking " + bestShip.name);
+        atkTypeOfBestShip = DamageModel.GetDirectionalAttackType(this.ship, bestShip);
+        atkNameOfBestShip = DamageModel.GetAttackTypeString(atkTypeOfBestShip);
+
+        AIDebug("Attacking " + bestShip.name + " (Type: " + atkNameOfBestShip + ", Health: " + bestShip.Health + ")");
 
         return bestShip;
     }
