@@ -19,13 +19,6 @@ public class PirateAI : MonoBehaviour
     [SerializeField]
     private GameManager gameManager;
 
-    // Needed:
-    // DFS search that considers ship direction <- this made the search space way too large
-    // stops when depth is reached.
-    // Store all visited nodes along with the ships direction at that node.
-    // Then, loop through all positions in a path, check if a ship is attackable from that pos (so need to store direction at each tile as well)
-    // Choose to move towards (first tile in path to) the tile where it gets the best directional bonus on any ship within the depth
-
     private void Awake()
     {
         ship = GetComponent<Ship>();
