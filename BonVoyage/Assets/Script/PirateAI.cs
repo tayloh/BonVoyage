@@ -7,8 +7,8 @@ using UnityEngine;
 public class PirateAI : MonoBehaviour
 {
     
-    public static int SearchDepth = 12; // AI maximum planned path is 12 hexes long
-    public static float DFSOutOfRangeDistance = 18; // Euclidian distance. Set this value slightly less than double SearchDepth.
+    public static int SearchDepth = 9; // AI maximum planned path is 12 hexes long
+    public static float DFSOutOfRangeDistance = 14; // Euclidian distance. Set this value slightly less than double SearchDepth.
     public static float AIConsideredLowHpThreshold = 4; // Assume ships will deal 4 damage
 
     public static Vector3 AIFailed = new Vector3(-9999, -9999, -9999); // use instead of Vector3.zero (not nullable)
