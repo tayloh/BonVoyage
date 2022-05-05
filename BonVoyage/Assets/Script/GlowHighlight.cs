@@ -11,6 +11,8 @@ public class GlowHighlight : MonoBehaviour
 
     public Material glowMaterial;
     public Material glowMaterialWhenInvalid;
+    public Material greenGlowMaterial;
+    public Material redGlowMaterial;
 
     private bool isGlowing = false;
 
@@ -55,6 +57,14 @@ public class GlowHighlight : MonoBehaviour
             {
                 item.SetColor("_GlowColor", OriginalGlowColor);
             }
+        }
+    }
+
+    public void ResetHighlight()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = originalMaterialDictionary[renderer];
         }
     }
 
@@ -126,5 +136,29 @@ public class GlowHighlight : MonoBehaviour
 
         isGlowing = !state;
         ToggleGlow();
+    }
+
+    public void DisplayDefaultGlow()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = glowMaterialDictionary[renderer];
+        }
+    }
+
+    public void DisplayAsPirateFiringArc()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = new Material[1] { redGlowMaterial };
+        }
+    }
+
+    public void DisplayAsPlayerFiringArc()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = new Material[1] { greenGlowMaterial };
+        }
     }
 }

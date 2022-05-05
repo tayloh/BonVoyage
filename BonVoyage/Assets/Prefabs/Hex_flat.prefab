@@ -188,8 +188,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlight: {fileID: 0}
+  hexCoordinates: {fileID: 0}
+  moveHereCursor: 0
   ship: {fileID: 0}
   hexType: 1
+  playerInput: {fileID: 0}
 --- !u!114 &9034983346837404765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowMaterial: {fileID: 2100000, guid: d4a05dfa9b67d6048b6a99bb518fde6a, type: 2}
   glowMaterialWhenInvalid: {fileID: 2100000, guid: 8a4a672c410be7f479f79efc701d0a82, type: 2}
+  greenGlowMaterial: {fileID: 2100000, guid: 089283819a1a3b144b5c47c91f34f1a2, type: 2}
+  redGlowMaterial: {fileID: 2100000, guid: 2f9179b83e22c9341a0125f4729e3672, type: 2}
 --- !u!1 &969951994100378675
 GameObject:
   m_ObjectHideFlags: 0

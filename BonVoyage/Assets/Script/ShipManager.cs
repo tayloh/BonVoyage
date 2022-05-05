@@ -397,6 +397,8 @@ public class ShipManager : MonoBehaviour
     private IEnumerator FireActiveShip()
     {
         hexgrid.DisableHighlightOfAllHexes();
+        activeShip.RemoveHighLightAttackableTiles(0);
+        activeShip.RemoveHighLightAttackableTiles(1);
 
         var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
         
