@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cannon : MonoBehaviour
 {
     [SerializeField]
-    private float _damage = 1f;
+    private float _damage = 2f;
     [SerializeField]
     private float _range = 3f; //for now the range is a general range associated to the ship
     //[SerializeField]

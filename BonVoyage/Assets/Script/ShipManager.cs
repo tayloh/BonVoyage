@@ -96,7 +96,7 @@ public class ShipManager : MonoBehaviour
         activeShip.MovementFinished -= PirateAIAttack;
 
         var ai = ship.GetComponent<PirateAI>();
-        var bestShipToFireOn = ai.GetMostFavorableShipToAttack();
+        var bestShipToFireOn = ai.GetMostFavorableShipToAttackVariant();
 
         var didAttack = false;
 

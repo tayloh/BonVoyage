@@ -7,8 +7,8 @@ using UnityEngine;
 public class PirateAI : MonoBehaviour
 {
     
-    public static int SearchDepth = 9; // AI maximum planned path is 12 hexes long
-    public static float DFSOutOfRangeDistance = 14; // Euclidian distance. Set this value slightly less than double SearchDepth.
+    public static int SearchDepth = 10; // AI maximum planned path is 12 hexes long
+    public static float DFSOutOfRangeDistance = 17; // Euclidian distance. Set this value slightly less than double SearchDepth.
     public static float AIConsideredLowHpThreshold = 4; // Assume ships will deal 4 damage
 
     public static Vector3 AIFailed = new Vector3(-9999, -9999, -9999); // use instead of Vector3.zero (not nullable)
@@ -150,6 +150,158 @@ public class PirateAI : MonoBehaviour
         AIDebug("Attacking " + bestShip.name + " (Type: " + atkNameOfBestShip + ", Health: " + bestShip.Health + ")");
 
         return bestShip;
+    }
+
+    public Ship GetMostFavorableShipToAttackVariant()
+    {
+        var attackableShips = _GetAttackablePlayerShips();
+
+        AIDebug("Found " + attackableShips.Count + " available targets");
+
+        if (attackableShips.Count == 0) return null;
+
+        var lowHealthShips = _FilterShipsOnLowestHealth(attackableShips);
+        var bestDirectionalShips = _FilterShipsOnBestDirectional(lowHealthShips);
+        var closestShips = _FilterShipsOnShortestDistance(bestDirectionalShips);
+        var lowestMaxHealthShips = _FilterShipsOnLowestMaxHealth(closestShips);
+
+        return lowestMaxHealthShips[0];
+        
+    }
+
+    private List<Ship> _FilterShipsOnLowestMaxHealth(List<Ship> ships)
+    {
+        if (ships.Count == 1)
+        {
+            return ships;
+        }
+
+        var lowestMaxHealth = float.MaxValue;
+        var shipWithLowestMaxHealth = ships[0];
+        foreach (var ship in ships)
+        {
+            if (ship.MaxHealth < lowestMaxHealth)
+            {
+                lowestMaxHealth = ship.MaxHealth;
+                shipWithLowestMaxHealth = ship;
+            }
+        }
+
+        var result = new List<Ship>();
+        foreach (var ship in ships)
+        {
+            if (ship.MaxHealth == lowestMaxHealth)
+            {
+                result.Add(ship);
+            }
+        }
+        return result;
+    }
+
+    private List<Ship> _FilterShipsOnBestDirectional(List<Ship> ships)
+    {
+        if (ships.Count == 1)
+        {
+            return ships;
+        }
+
+        // Build attacktype dict
+        var attackTypeDict = new Dictionary<AttackType, List<Ship>>();
+        attackTypeDict.Add(AttackType.Stern, new List<Ship>());
+        attackTypeDict.Add(AttackType.Side, new List<Ship>());
+        attackTypeDict.Add(AttackType.Bow, new List<Ship>());
+
+        foreach (var ship in ships)
+        {
+            var attackType = DamageModel.GetDirectionalAttackType(this.ship, ship);
+            attackTypeDict[attackType].Add(ship);
+        }
+
+        // Filter on best directional attack
+        var shipsFilteredOnBestDirectional = new List<Ship>();
+        if (attackTypeDict[AttackType.Stern].Count > 0)
+        {
+            // Consider these ships (highest damage)
+            shipsFilteredOnBestDirectional = attackTypeDict[AttackType.Stern];
+        }
+        else if (attackTypeDict[AttackType.Side].Count > 0)
+        {
+            // Consider these ships (most accurate attack)
+            shipsFilteredOnBestDirectional = attackTypeDict[AttackType.Side];
+        }
+        else
+        {
+            // Consider all ships
+            shipsFilteredOnBestDirectional = ships;
+        }
+
+        return shipsFilteredOnBestDirectional;
+    }
+
+    private List<Ship> _FilterShipsOnShortestDistance(List<Ship> ships)
+    {
+
+        if (ships.Count == 1)
+        {
+            return ships;
+        }
+
+        // Filter on shortest distance
+        var shortestDist = float.MaxValue;
+        var shortestDistShip = ships[0];
+        foreach (var ship in ships)
+        {
+            var distanceToShip = (this.transform.position - ship.transform.position).magnitude;
+            if (distanceToShip < shortestDist)
+            {
+                shortestDistShip = ship;
+                shortestDist = distanceToShip;
+            }
+        }
+
+        var result = new List<Ship>();
+        foreach (var ship in ships)
+        {
+            var distanceToShip = (this.transform.position - ship.transform.position).magnitude;
+            if (distanceToShip == shortestDist)
+            {
+                result.Add(ship);
+            }
+        }
+        return result;
+    }
+
+    private List<Ship> _FilterShipsOnLowestHealth(List<Ship> ships)
+    {
+
+        if (ships.Count == 1)
+        {
+            return ships;
+        }
+
+        // Filter on health
+        var lowestHealth = float.MaxValue;
+        var lowestHealthShip = ships[0];
+        foreach (var ship in ships)
+        {
+            var shipHealth = ship.Health;
+            if (shipHealth < lowestHealth)
+            {
+                lowestHealthShip = ship;
+                lowestHealth = shipHealth;
+            }
+        }
+
+        var result = new List<Ship>();
+        foreach (var ship in ships)
+        {
+            var health = ship.Health;
+            if (health == lowestHealth)
+            {
+                result.Add(ship);
+            }
+        }
+        return result;
     }
 
     private IEnumerator EndPirateTurn()
@@ -840,7 +992,7 @@ public class PirateAI : MonoBehaviour
             var badDistanceThreshold = HexCoordinates.xOffset * 2.5;
             if (shortestDistToPlayerShip < badDistanceThreshold)
             {
-                _pirateAI.AIDebug("Moved to best modifier " + DamageModel.GetAttackTypeString(bestDirectionalModifier) + " from " + currentMod);
+                _pirateAI.AIDebug("Adjusted best node based on modifier " + DamageModel.GetAttackTypeString(bestDirectionalModifier) + " from " + currentMod);
                 bestNode = bestModifierNode;
             }
 

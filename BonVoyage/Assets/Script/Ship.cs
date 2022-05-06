@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
     private float _maxhealth;
+    public float MaxHealth { get => _maxhealth;}
 
     [SerializeField]
     private float _health = 5;

@@ -97,6 +97,8 @@ public class DamageModel : MonoBehaviour
             attackingShipTotalDmg += resultingDmg;
         }
 
+        attackingShipTotalDmg = Mathf.RoundToInt(attackingShipTotalDmg);
+
         return attackingShipTotalDmg;
     }
 
