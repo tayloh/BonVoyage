@@ -12,6 +12,7 @@ public class DamageModel : MonoBehaviour
     public static float BowSternAccuracyReduction = 0.5f;
     public static float SternDamageAmplifier = 1.5f;
     public static float BowDamageAmplifier = 0.5f;
+    public static float TileDistanceForWorstAccuracy = 10;
 
     public static float CalculateDamageFor(Ship attackingShip, Ship targetedShip)
     {
@@ -22,8 +23,6 @@ public class DamageModel : MonoBehaviour
         var accuracyCoefficient = _calculateAccuracyCoefficient(distance);
 
         var attackType = _getDirectionalAttackType(attackDir, forwardDir, BowSternAngle);
-        Debug.Log("DMG - " + attackingShip + "->" + targetedShip);
-        Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
 
         var allCannonsDmgList = attackingShip.GetCannonDamageList();
         var currentBroadSideDmgList = new List<float>();
@@ -54,16 +53,19 @@ public class DamageModel : MonoBehaviour
         {
             case AttackType.Bow:
                 accuracyCoefficient *= BowSternAccuracyReduction;
-                Debug.Log("Attack on Bow");
+                Debug.Log("DMG - Attack on Bow");
                 break;
             case AttackType.Stern:
                 accuracyCoefficient *= BowSternAccuracyReduction;
-                Debug.Log("Attack on Stern");
+                Debug.Log("DMG - Attack on Stern");
                 break;
             case AttackType.Side:
-                Debug.Log("Attack on Side");
+                Debug.Log("DMG - Attack on Side");
                 break;
         }
+
+        Debug.Log("DMG - " + attackingShip + "->" + targetedShip);
+        Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
 
         float attackingShipTotalDmg = 0;
         foreach (var dmg in currentBroadSideDmgList)
@@ -103,7 +105,7 @@ public class DamageModel : MonoBehaviour
     {
         float distBetweenHexCenters = HexCoordinates.xOffset;
 
-        float H = Mathf.RoundToInt(distBetweenHexCenters * 10);
+        float H = Mathf.RoundToInt(distBetweenHexCenters * TileDistanceForWorstAccuracy);
 
         return Mathf.Max(0, 1 - (D / H));
     }
@@ -112,6 +114,7 @@ public class DamageModel : MonoBehaviour
     {   
         // Directional damage modifiers
         var dotForwAttack = Vector3.Dot(forwardDir, attackDir);
+        Debug.Log("DMG - " + "cos theta:" + dotForwAttack);
         var angleOfAttackThreshold = Mathf.Cos(decidingAngle * Mathf.PI/180);
 
         if (dotForwAttack > angleOfAttackThreshold)
@@ -140,6 +143,15 @@ public class DamageModel : MonoBehaviour
         return attackType;
     }
 
+    /// <summary>
+    /// attackDir: direction from position that is attacked to position that is attacking
+    /// forwardDir: forward direction of ship that is attacked (or specify any desired forward direction)
+    /// </summary>
+    public static AttackType GetDirectionalAttackType(Vector3 attackDir, Vector3 forwardDir)
+    {
+        return _getDirectionalAttackType(attackDir, forwardDir, DamageModel.BowSternAngle);
+    }
+
     public static string GetAttackTypeString(AttackType type)
     {
         switch (type)
@@ -162,7 +174,7 @@ public class DamageModel : MonoBehaviour
 
 public enum AttackType
 {
-    Stern,
     Bow,
-    Side
+    Side,
+    Stern
 }

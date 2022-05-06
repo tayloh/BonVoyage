@@ -759,7 +759,7 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
-            // For those who neets both above conditions, check which node is closest to the
+            // For those who beets both above conditions, check which node is closest to the
             // closest player ship (sometimes the pirate ship will move away otherwise, which looks weird)
             // This will also result in better accuracy for the AI
             var shortestDistToPlayerShip = float.MaxValue;
@@ -776,6 +776,41 @@ public class PirateAI : MonoBehaviour
                     shortestDistToPlayerShip = distToClosestPlayerShip;
                     bestNode = node;
                 }
+            }
+
+            // Check what directional damage modifier the ship will get
+            // Weight this vs distance
+            // TODO: Need to associate the starting modifier with the node
+            var bestDirectionalModifier = AttackType.Bow;
+            var bestModifierNode = bestNode;
+            foreach (var node in nodesWithLowNumAttackingShips)
+            {
+                var tile = _pirateAI.hexGrid.GetTileAt(node.OffsetCoordinate);
+                if (tile == null) continue;
+                if (tile.Ship == null) continue;
+
+                var shipToAttack = tile.Ship;
+
+                // TODO
+                // This obviously doesn't work since I calculate the attack type from where the ship is standing 
+                // Need a function for just passing in the forward and attack dir
+                var directionalMod = DamageModel.GetDirectionalAttackType(_pirateAI.ship, shipToAttack);
+                
+                if (directionalMod > bestDirectionalModifier)
+                {
+                    _pirateAI.AIDebug(DamageModel.GetAttackTypeString(directionalMod));
+                    bestDirectionalModifier = directionalMod;
+                    bestModifierNode = node;
+                }
+            }
+
+            // Weigh modifier vs distance
+            // If ship is already close in terms of accuracy, then choose the best directional node
+            var badDistanceThreshold = HexCoordinates.xOffset * 3;
+            if (shortestDistToPlayerShip < badDistanceThreshold)
+            {
+                _pirateAI.AIDebug("Chose best modifier node");
+                bestNode = bestModifierNode;
             }
 
             return bestNode;
