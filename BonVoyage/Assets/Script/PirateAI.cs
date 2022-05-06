@@ -703,7 +703,12 @@ public class PirateAI : MonoBehaviour
                 if (node.Path.Count < minMoves)
                 {
                     minMoves = node.Path.Count;
-                    bestNode = node;
+
+                    // Be aware that when AI already stands in a spot where it can attack
+                    // the path length will be 1, which is the best it can be.
+                    // Thus, it will only move when there are no attackable ships in range anymore
+                    // So, need to fix that. (1)
+                    bestNode = node; 
                 }
             }
 
@@ -711,8 +716,18 @@ public class PirateAI : MonoBehaviour
             var nodesWithShortestPath = new List<DFSPathNode>();
             foreach (var node in attackNodes)
             {
-                if (node.Path.Count == bestNode.Path.Count)
+                if (bestNode.Path.Count == 1)
                 {
+                    // Fix to (1): if best node is current node (count==1)
+                    // also include nodes where path is 2 (moving once)
+                    if (node.Path.Count < 3)
+                    {
+                        nodesWithShortestPath.Add(node);
+                    }
+                }
+                else if (node.Path.Count == bestNode.Path.Count)
+                {
+                    // Otherwise, just add if path is same length
                     nodesWithShortestPath.Add(node);
                 }
             }
@@ -746,6 +761,7 @@ public class PirateAI : MonoBehaviour
 
             // For those who neets both above conditions, check which node is closest to the
             // closest player ship (sometimes the pirate ship will move away otherwise, which looks weird)
+            // This will also result in better accuracy for the AI
             var shortestDistToPlayerShip = float.MaxValue;
             foreach (var node in nodesWithLowNumAttackingShips)
             {
