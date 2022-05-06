@@ -22,6 +22,8 @@ public class DamageModel : MonoBehaviour
         var accuracyCoefficient = _calculateAccuracyCoefficient(distance);
 
         var attackType = _getDirectionalAttackType(attackDir, forwardDir, BowSternAngle);
+        Debug.Log("DMG - " + attackingShip + "->" + targetedShip);
+        Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
 
         var allCannonsDmgList = attackingShip.GetCannonDamageList();
         var currentBroadSideDmgList = new List<float>();
@@ -47,25 +49,37 @@ public class DamageModel : MonoBehaviour
             }
         }
 
+        // Apply effects of attack type on accuracy once
+        switch (attackType)
+        {
+            case AttackType.Bow:
+                accuracyCoefficient *= BowSternAccuracyReduction;
+                Debug.Log("Attack on Bow");
+                break;
+            case AttackType.Stern:
+                accuracyCoefficient *= BowSternAccuracyReduction;
+                Debug.Log("Attack on Stern");
+                break;
+            case AttackType.Side:
+                Debug.Log("Attack on Side");
+                break;
+        }
+
         float attackingShipTotalDmg = 0;
         foreach (var dmg in currentBroadSideDmgList)
         {
             var resultingDmg = dmg;
 
+            // Apply effects of attack type on dmg amp. per cannon (cannons can have different dmg)
             switch (attackType)
             {
                 case AttackType.Bow:
-                    accuracyCoefficient *= BowSternAccuracyReduction;
                     resultingDmg *= BowDamageAmplifier;
-                    Debug.Log("Attack on Bow");
                     break;
                 case AttackType.Stern:
-                    accuracyCoefficient *= BowSternAccuracyReduction;
                     resultingDmg *= SternDamageAmplifier;
-                    Debug.Log("Attack on Stern");
                     break;
                 case AttackType.Side:
-                    Debug.Log("Attack on Side");
                     break;
             }
 
@@ -87,7 +101,6 @@ public class DamageModel : MonoBehaviour
 
     private static float _calculateAccuracyCoefficient(float D)
     {
-
         float distBetweenHexCenters = HexCoordinates.xOffset;
 
         float H = Mathf.RoundToInt(distBetweenHexCenters * 10);
