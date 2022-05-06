@@ -396,7 +396,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 52931522699038041, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 52931522699038041, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
       propertyPath: m_LocalScale.x
@@ -775,7 +775,7 @@ RectTransform:
   m_GameObject: {fileID: 608125999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4.9039, y: 4.9039, z: 4.9039}
   m_Children: []
   m_Father: {fileID: 1611023555}
   m_RootOrder: 2
@@ -952,9 +952,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 47fe7b58c9f556b4ca292ca983e3ef45, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.22
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1251,7 +1251,7 @@ RectTransform:
   m_GameObject: {fileID: 998349988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4.6944, y: 4.6944, z: 4.6944}
   m_Children: []
   m_Father: {fileID: 1611023555}
   m_RootOrder: 3
@@ -2691,7 +2691,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2087006726
 PrefabInstance:
@@ -2810,6 +2810,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 31.90001
       objectReference: {fileID: 0}
+    - target: {fileID: 5326358309581350044, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (1)
@@ -2882,6 +2886,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
       objectReference: {fileID: 0}
+    - target: {fileID: 9184587503288671966, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
 --- !u!4 &6458208549737467653 stripped
@@ -2906,7 +2914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: _health
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4312377356993976628, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
