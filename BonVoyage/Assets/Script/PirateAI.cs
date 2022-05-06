@@ -423,6 +423,28 @@ public class PirateAI : MonoBehaviour
         return _GetDistanceToClosestPlayerShip(this.gameObject.transform.position);
     }
 
+    private Ship _GetClosestPlayerShip(Vector3 from)
+    {
+        Vector3Int closestShipPos = PirateAI.AIFailedInt;
+        var closestDistance = float.MaxValue;
+        var playerShips = gameManager.GetPlayerShipWorldPositions();
+        foreach (var shipPos in playerShips)
+        {
+            var distToShip = (shipPos - from).magnitude;
+            if (distToShip < closestDistance)
+            {
+                closestDistance = distToShip;
+                closestShipPos = hexGrid.GetClosestHex(shipPos); // please work
+            }
+        }
+
+        var tile = hexGrid.GetTileAt(closestShipPos);
+        if (tile == null) return null;
+        if (tile.Ship == null) return null;
+
+        return tile.Ship;
+    }
+
     private List<Ship> _GetShipsThatCanFireOnMe()
     {
         var result = new List<Ship>();
@@ -732,7 +754,7 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
-            // Check which node has the least player ships attacking it position
+            // Check which node has the least player ships attacking its position
             var nodeNumAttackDict = new Dictionary<DFSPathNode, int>();
             var minAttackingShips = int.MaxValue;
             foreach (var node in nodesWithShortestPath)
@@ -747,7 +769,7 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
-            // Check if there are other nodes with the same path length
+            // Check if there are other nodes with the same nr of ships attacking it
             var nodesWithLowNumAttackingShips = new List<DFSPathNode>();
             foreach (var node in nodesWithShortestPath)
             {
@@ -759,7 +781,7 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
-            // For those who beets both above conditions, check which node is closest to the
+            // For those who meets both above conditions, check which node is closest to the
             // closest player ship (sometimes the pirate ship will move away otherwise, which looks weird)
             // This will also result in better accuracy for the AI
             var shortestDistToPlayerShip = float.MaxValue;
@@ -778,23 +800,32 @@ public class PirateAI : MonoBehaviour
                 }
             }
 
-            // Check what directional damage modifier the ship will get
-            // Weight this vs distance
-            // TODO: Need to associate the starting modifier with the node
-            var bestDirectionalModifier = AttackType.Bow;
+            // Checking for directional modifiers are a little bit unstable. Might remove.
             var bestModifierNode = bestNode;
+
+            var bestModNodeWorldPos = _pirateAI.hexGrid.GetTileAt(bestModifierNode.OffsetCoordinate).transform.position;
+            bestModNodeWorldPos.y = HexCoordinates.yOffset; //ship y offset
+            var shipToCompareWith = _pirateAI._GetClosestPlayerShip(bestModNodeWorldPos);
+            var shipToCompareWithPos = shipToCompareWith.transform.position;
+
+            var bestDirectionalModifier = DamageModel.GetDirectionalAttackType((bestModNodeWorldPos - shipToCompareWithPos).normalized, shipToCompareWith.transform.forward);
+            var currentMod = DamageModel.GetAttackTypeString(bestDirectionalModifier);
+
             foreach (var node in nodesWithLowNumAttackingShips)
             {
+                
                 var tile = _pirateAI.hexGrid.GetTileAt(node.OffsetCoordinate);
                 if (tile == null) continue;
-                if (tile.Ship == null) continue;
+                var worldPos = tile.transform.position;
+                worldPos.y = HexCoordinates.yOffset;
 
-                var shipToAttack = tile.Ship;
+                // Get the closest ship from the considered nodes world position
+                var closestShip = _pirateAI._GetClosestPlayerShip(worldPos);
+                var closestShipPos = closestShip.transform.position;
 
-                // TODO
-                // This obviously doesn't work since I calculate the attack type from where the ship is standing 
-                // Need a function for just passing in the forward and attack dir
-                var directionalMod = DamageModel.GetDirectionalAttackType(_pirateAI.ship, shipToAttack);
+                var attackDir = (worldPos - closestShipPos).normalized;
+                var forwardDir = closestShip.gameObject.transform.forward;
+                var directionalMod = DamageModel.GetDirectionalAttackType(attackDir, forwardDir);
                 
                 if (directionalMod > bestDirectionalModifier)
                 {
@@ -806,10 +837,10 @@ public class PirateAI : MonoBehaviour
 
             // Weigh modifier vs distance
             // If ship is already close in terms of accuracy, then choose the best directional node
-            var badDistanceThreshold = HexCoordinates.xOffset * 3;
+            var badDistanceThreshold = HexCoordinates.xOffset * 2.5;
             if (shortestDistToPlayerShip < badDistanceThreshold)
             {
-                _pirateAI.AIDebug("Chose best modifier node");
+                _pirateAI.AIDebug("Moved to best modifier " + DamageModel.GetAttackTypeString(bestDirectionalModifier) + " from " + currentMod);
                 bestNode = bestModifierNode;
             }
 

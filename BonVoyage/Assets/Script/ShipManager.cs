@@ -103,10 +103,11 @@ public class ShipManager : MonoBehaviour
         if (bestShipToFireOn != null)
         {
             // 
-            didAttack = PerformAttackOn(bestShipToFireOn);
+            didAttack = AIPerformAttackOn(ship, bestShipToFireOn);
 
             // This should never happen, but it does, problem in PerformAttackOn()?
             // Edit: haven't encountered it in a while now, but it's bound to happen
+            // Edit: made another function that only the AI uses when attacking
             if (!didAttack)
             {
                 ai.AIDebug("PerformAttackOn() not agreeing with pirateAI");
@@ -121,23 +122,6 @@ public class ShipManager : MonoBehaviour
         {
             gameManager.NextTurn();
         }
-
-        //var playerShips = gameManager.GetPlayerShips();
-        //var foundAttackable = false;
-
-        //foreach (var playerShip in playerShips)
-        //{
-        //    if(PerformAttackOn(playerShip))
-        //    {
-        //        foundAttackable = true;
-        //        break;
-        //    }
-        //}
-
-        //activeShip.MovementFinished -= PirateAIAttack;
-
-        //if (!foundAttackable) gameManager.NextTurn();
-
     }
 
     public void HandleShipSelected(GameObject shipGO)
@@ -167,6 +151,49 @@ public class ShipManager : MonoBehaviour
             //     break;
         }
 
+    }
+
+    private bool AIPerformAttackOn(Ship aiShip, Ship targetedShip)
+    {
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = aiShip.GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = aiShip.GetAttackableTilesFor(1);
+
+        var didAttack = false;
+
+        foreach (var tilePos in attackableLeftSide)
+        {
+            Hex hex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
+
+            if (hex != null && hex.Ship != null && hex.Ship.GetInstanceID() == targetedShip.GetInstanceID())
+            {
+                aiShip.HasFiredLeft = true;
+                activeShip.HasFiredLeft = true;
+
+                didAttack = true;
+            }
+        }
+
+        foreach (var tilePos in attackableRightSide)
+        {
+            Hex hex = hexgrid.GetTileAt(tilePos);
+
+            if (hex != null && hex.Ship != null && hex.Ship.GetInstanceID() == targetedShip.GetInstanceID())
+            {
+                aiShip.HasFiredRight = true;
+                activeShip.HasFiredRight = true; // just to be safe...
+
+                didAttack = true;
+            }
+        }
+
+        if (didAttack)
+        {
+            targetedShip.TakeDamage(DamageModel.CalculateDamageFor(aiShip, targetedShip));
+            TriggerFiring();
+        }
+
+        return didAttack;
     }
 
     private bool PerformAttackOn(Ship ship)
