@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false;
     public static event Action<GameState> OnGameStateChanged;
 
+    public Ship TreasureShip;
+
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> pirateShips = new List<Ship>();
 
@@ -138,12 +140,17 @@ public class GameManager : MonoBehaviour
             UpdateGameState(GameState.Defeat);
             isGameOver = true;
         }
+        else if (this.TreasureShip == null || this.TreasureShip.IsDead)
+        {
+            UpdateGameState(GameState.Defeat);
+            isGameOver = true;
+        }
+
         return isGameOver;
     }
 
     public void NextTurn()
     {
-        if (CheckForWinCondition()) return;
 
         Ship nextShip = GetNextShipForTurn();
 
@@ -179,6 +186,8 @@ public class GameManager : MonoBehaviour
 
     public void CleanupDeadShip(Ship ship)
     {
+        CheckForWinCondition();
+
         if (ship.gameObject.CompareTag("Pirate"))
         {
             pirateShips.Remove(ship);

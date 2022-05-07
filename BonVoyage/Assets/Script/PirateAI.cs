@@ -36,6 +36,8 @@ public class PirateAI : MonoBehaviour
             AIDebug("New AI chose path");
             return new List<Vector3> { nextPos };
         }
+        
+        
         AIDebug("Old AI chose path");
 
         //default for debugging : chooses the first available hex
@@ -46,13 +48,21 @@ public class PirateAI : MonoBehaviour
         {
             neighbourCoord = neighbours[0];
         }
-        else
+        else if (hexGrid.GetTileAt(neighbours[1]).IsObstacle())
         {
             neighbourCoord = neighbours[1]; //just to minize the possibility to choose an occupied tile, the AI will have to check it properly
         }
+        else if (hexGrid.GetTileAt(neighbours[2]).IsObstacle())
+        {
+            neighbourCoord = neighbours[2];
+        }
+        else
+        {
+            neighbourCoord = this.ship.hexCoord;
+        }
         Vector3 positionGoal = hexGrid.GetTileAt(neighbourCoord).transform.position;
         //StartCoroutine(EndPirateTurn());
-        return new List<Vector3>() { positionGoal};    
+        return new List<Vector3>() { positionGoal };    
     }
 
     public Ship GetMostFavorableShipToAttack()
