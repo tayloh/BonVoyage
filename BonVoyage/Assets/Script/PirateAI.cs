@@ -42,25 +42,27 @@ public class PirateAI : MonoBehaviour
 
         //default for debugging : chooses the first available hex
         Vector3Int offsetPosOfShip = HexCoordinates.ConvertPositionToOffset(transform.position - new Vector3(0,1,0));
-        List<Vector3Int> neighbours = hexGrid.GetAccessibleNeighboursFor(offsetPosOfShip, transform.forward);
-        Vector3Int neighbourCoord = new Vector3Int();
-        if (!hexGrid.GetTileAt(neighbours[0]).IsObstacle())
+        List<Vector3Int> neighbours = _GetNonObstacleNeighbours(offsetPosOfShip, transform.forward);
+
+        // All AI move towards same goal position when game is over (DFS move will fail when there are no player ships)
+        var destination = new Vector3(100000, 0, 0);
+        var closestTileToDestination = neighbours[0];
+        var closestDist = float.MaxValue;
+        foreach (var tilePos in neighbours)
         {
-            neighbourCoord = neighbours[0];
+            var currTile = hexGrid.GetTileAt(tilePos);
+            if (currTile == null) continue;
+
+            var dist = (destination - currTile.transform.position).magnitude;
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closestTileToDestination = tilePos;
+            }
         }
-        else if (hexGrid.GetTileAt(neighbours[1]).IsObstacle())
-        {
-            neighbourCoord = neighbours[1]; //just to minize the possibility to choose an occupied tile, the AI will have to check it properly
-        }
-        else if (hexGrid.GetTileAt(neighbours[2]).IsObstacle())
-        {
-            neighbourCoord = neighbours[2];
-        }
-        else
-        {
-            neighbourCoord = this.ship.hexCoord;
-        }
-        Vector3 positionGoal = hexGrid.GetTileAt(neighbourCoord).transform.position;
+
+        Vector3 positionGoal = hexGrid.GetTileAt(closestTileToDestination).transform.position;
         //StartCoroutine(EndPirateTurn());
         return new List<Vector3>() { positionGoal };    
     }

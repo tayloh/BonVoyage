@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/HexGrid.unity
     guid: cfcda49ecc8dc8b4c812fb38bf076720
+  - enabled: 1
+    path: Assets/Scenes/LargeBattle.unity
+    guid: ee38a949954c20a41ab936e601df9fe1
   m_configObjects: {}

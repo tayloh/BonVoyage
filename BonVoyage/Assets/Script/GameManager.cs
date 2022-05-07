@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public GameState state; 
     private bool isGameOver = false;
+    private bool aiWon = false;
     public static event Action<GameState> OnGameStateChanged;
 
     public Ship TreasureShip;
@@ -139,11 +140,13 @@ public class GameManager : MonoBehaviour
         {
             UpdateGameState(GameState.Defeat);
             isGameOver = true;
+            aiWon = true;
         }
         else if (this.TreasureShip == null || this.TreasureShip.IsDead)
         {
             UpdateGameState(GameState.Defeat);
             isGameOver = true;
+            aiWon = true;
         }
 
         return isGameOver;
@@ -151,8 +154,16 @@ public class GameManager : MonoBehaviour
 
     public void NextTurn()
     {
-
         Ship nextShip = GetNextShipForTurn();
+
+        // If the AI won, let it play until all player ships are dead :)
+        if (aiWon)
+        {
+            while (!nextShip.CompareTag("Pirate") && !nextShip.IsDead)
+            {
+                nextShip = GetNextShipForTurn();
+            }
+        }
 
         if (nextShip.IsDead) nextShip = GetNextShipForTurn();
 

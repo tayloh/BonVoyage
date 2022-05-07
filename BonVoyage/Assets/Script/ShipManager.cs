@@ -352,7 +352,11 @@ public class ShipManager : MonoBehaviour
         
         PrepareShipForFiring(activeShip);
 
-        if (!activeShip.HasAttackableInRange("Pirate")) { SkipPhase(); }
+        // Spamming skip button without this code commented out does weird things...
+        if (!activeShip.HasAttackableInRange("Pirate")) 
+        {
+            SkipPhase(); 
+        }
     }
 
     public void SkipPhase()
@@ -364,15 +368,15 @@ public class ShipManager : MonoBehaviour
                 movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
                 activeShip.HighLightAttackableTiles(0); //highlight attackable hex
                 activeShip.HighLightAttackableTiles(1); //                
-                ResetTurn(selectedShip);
-                gameManager.UpdateGameState(GameState.PlayerFire);
+                ResetTurn(selectedShip); // reset turn already updates to playerfire
+                //gameManager.UpdateGameState(GameState.PlayerFire); 
                 break;
             case GameState.PlayerFire:
                 hexgrid.DisableHighlightOfAllHexes();
                 //update cursor
                 activeShip.ResetAttackableShips();
                 activeShip.IsPlaying = false;
-                gameManager.NextTurn();
+                gameManager.NextTurn(); 
                 break;
         }
     }
