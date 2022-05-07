@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
             shipManager.StartPirateTurn(nextShip);
             //shipManager.MovePirateShip(nextShip);
         }
-        OnTurnChanged.Invoke(shipsTurn, actualShipIndex);
+        OnTurnChanged.Invoke(shipsTurn, actualShipIndex);        
     }
 
     private Ship GetNextShipForTurn()

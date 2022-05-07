@@ -27,6 +27,7 @@ public class TurnQueue : MonoBehaviour
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
             ShipCard shipCard = go.GetComponent<ShipCard>();
+            cardsDict.Add(list[i], shipCard);
             shipCard.SetInitialAspect(offsetBetweenCards, cardSize, i);
             //go.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (cardSize + offsetBetweenCards) * i, cardSize);
         }
@@ -34,6 +35,17 @@ public class TurnQueue : MonoBehaviour
 
     public void UpdatePanel(List<Ship> list, int index)
     {
-
+        foreach(ShipCard card in cardsDict.Values)
+        {
+            card.Translate(panelLength, list.Count - 1);
+        }
     }
+}
+
+public enum ShipType
+{
+    TreasureShip,
+    Brig,
+    Frigate,
+    ShipOfTheLine
 }
