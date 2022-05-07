@@ -448,6 +448,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 52931522699038043, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 52931522699038044, guid: a59b3a93a80597d4c978819ba7fb0293, type: 3}
       propertyPath: m_Name
       value: Water
@@ -1270,6 +1274,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (8)
@@ -1358,6 +1382,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -1366,6 +1398,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
 --- !u!4 &1016059074 stripped
@@ -1380,6 +1416,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (6)
@@ -1468,6 +1524,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -1476,6 +1540,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
 --- !u!4 &1071604887 stripped
@@ -1490,10 +1558,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 654553027256943654, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1060484200593801829, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1944772712}
+    - target: {fileID: 2073430466658353538, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -7.600006
@@ -1501,6 +1577,18 @@ PrefabInstance:
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 29.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 2696485049446386758, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282130282905318486, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417398477321531798, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4364905703410101671, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1598,13 +1686,25 @@ PrefabInstance:
       propertyPath: movementSystem
       value: 
       objectReference: {fileID: 1660746589}
+    - target: {fileID: 6823491360974821084, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7706661380037805750, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
       objectReference: {fileID: 0}
+    - target: {fileID: 8172125770430026998, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9184587503288671966, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222477347515758238, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
@@ -1620,6 +1720,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (5)
@@ -1704,6 +1824,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -1712,6 +1840,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
 --- !u!4 &1143380093 stripped
@@ -2108,6 +2240,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (7)
@@ -2196,6 +2348,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -2204,6 +2364,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
 --- !u!4 &1637727877 stripped
@@ -2312,6 +2476,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (4)
@@ -2396,6 +2580,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -2404,6 +2596,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
 --- !u!4 &1738380256 stripped
@@ -2418,10 +2614,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 654553027256943654, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1060484200593801829, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1944772712}
+    - target: {fileID: 2073430466658353538, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -7.600006
@@ -2429,6 +2633,18 @@ PrefabInstance:
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 29.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 2696485049446386758, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282130282905318486, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417398477321531798, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4364905703410101671, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2526,13 +2742,25 @@ PrefabInstance:
       propertyPath: movementSystem
       value: 
       objectReference: {fileID: 1660746589}
+    - target: {fileID: 6823491360974821084, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7706661380037805750, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
       objectReference: {fileID: 0}
+    - target: {fileID: 8172125770430026998, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9184587503288671966, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222477347515758238, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
@@ -2548,6 +2776,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 654553027256943654, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073430466658353538, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2696485049446386758, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282130282905318486, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417398477321531798, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (2)
@@ -2628,6 +2876,18 @@ PrefabInstance:
       propertyPath: movementSystem
       value: 
       objectReference: {fileID: 1660746589}
+    - target: {fileID: 6823491360974821084, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8172125770430026998, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222477347515758238, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
 --- !u!1 &1910919478
@@ -3034,6 +3294,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 654553027256943654, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073430466658353538, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2696485049446386758, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282130282905318486, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417398477321531798, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (3)
@@ -3114,6 +3394,18 @@ PrefabInstance:
       propertyPath: movementSystem
       value: 
       objectReference: {fileID: 1660746589}
+    - target: {fileID: 6823491360974821084, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8172125770430026998, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222477347515758238, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
 --- !u!4 &2087006727 stripped
@@ -3128,10 +3420,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: 654553027256943654, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1060484200593801829, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1944772712}
+    - target: {fileID: 2073430466658353538, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -7.600006
@@ -3139,6 +3439,18 @@ PrefabInstance:
     - target: {fileID: 2311242904951642214, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 29.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 2696485049446386758, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282130282905318486, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417398477321531798, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4364905703410101671, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3232,13 +3544,25 @@ PrefabInstance:
       propertyPath: movementSystem
       value: 
       objectReference: {fileID: 1660746589}
+    - target: {fileID: 6823491360974821084, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7706661380037805750, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 16.257568
       objectReference: {fileID: 0}
+    - target: {fileID: 8172125770430026998, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9184587503288671966, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222477347515758238, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: _damage
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
@@ -3254,6 +3578,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1951956768}
     m_Modifications:
+    - target: {fileID: 328810204111447443, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051296057620994115, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209430969518522753, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515351027682463779, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450689558446699605, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3970430539600143060, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_Name
       value: PirateShip (3)
@@ -3342,6 +3686,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526872526032716019, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692031258028611295, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -3350,5 +3702,9 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
+    - target: {fileID: 9048828466941769373, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: _damage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}

@@ -160,8 +160,8 @@ public class PirateAI : MonoBehaviour
 
         if (attackableShips.Count == 0) return null;
 
-        var lowHealthShips = _FilterShipsOnLowestHealth(attackableShips);
-        var bestDirectionalShips = _FilterShipsOnBestDirectional(lowHealthShips);
+        var lowPercentageHealthShips = _FilterShipsOnLowestPercentageHealth(attackableShips);
+        var bestDirectionalShips = _FilterShipsOnBestDirectional(lowPercentageHealthShips);
         var closestShips = _FilterShipsOnShortestDistance(bestDirectionalShips);
         var lowestMaxHealthShips = _FilterShipsOnLowestMaxHealth(closestShips);
 
@@ -190,7 +190,7 @@ public class PirateAI : MonoBehaviour
         var result = new List<Ship>();
         foreach (var ship in ships)
         {
-            if (ship.MaxHealth == lowestMaxHealth)
+            if (Mathf.Approximately(ship.MaxHealth, lowestMaxHealth))
             {
                 result.Add(ship);
             }
@@ -248,13 +248,11 @@ public class PirateAI : MonoBehaviour
 
         // Filter on shortest distance
         var shortestDist = float.MaxValue;
-        var shortestDistShip = ships[0];
         foreach (var ship in ships)
         {
             var distanceToShip = (this.transform.position - ship.transform.position).magnitude;
             if (distanceToShip < shortestDist)
             {
-                shortestDistShip = ship;
                 shortestDist = distanceToShip;
             }
         }
@@ -263,7 +261,7 @@ public class PirateAI : MonoBehaviour
         foreach (var ship in ships)
         {
             var distanceToShip = (this.transform.position - ship.transform.position).magnitude;
-            if (distanceToShip == shortestDist)
+            if (Mathf.Approximately(distanceToShip, shortestDist))
             {
                 result.Add(ship);
             }
@@ -297,6 +295,35 @@ public class PirateAI : MonoBehaviour
         {
             var health = ship.Health;
             if (health == lowestHealth)
+            {
+                result.Add(ship);
+            }
+        }
+        return result;
+    }
+
+    private List<Ship> _FilterShipsOnLowestPercentageHealth(List<Ship> ships)
+    {
+        if (ships.Count == 1)
+        {
+            return ships;
+        }
+
+        var lowestHealthPercentage = float.MaxValue;
+        foreach (var ship in ships)
+        {
+            var shipHealthPercentage = ship.Health / ship.MaxHealth;
+            if (shipHealthPercentage < lowestHealthPercentage)
+            {
+                lowestHealthPercentage = shipHealthPercentage;
+            }
+        }
+
+        var result = new List<Ship>();
+        foreach (var ship in ships)
+        {
+            var healthPercentage = ship.Health / ship.MaxHealth;
+            if (Mathf.Approximately(healthPercentage, lowestHealthPercentage))
             {
                 result.Add(ship);
             }

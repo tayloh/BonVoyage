@@ -67,10 +67,12 @@ public class DamageModel : MonoBehaviour
         Debug.Log("DMG - " + attackingShip + "->" + targetedShip);
         Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
 
+        var hits = currentBroadSideDmgList.Count;
         float attackingShipTotalDmg = 0;
         foreach (var dmg in currentBroadSideDmgList)
         {
             var resultingDmg = dmg;
+            Debug.Log("DMG - " + dmg);
 
             // Apply effects of attack type on dmg amp. per cannon (cannons can have different dmg)
             switch (attackType)
@@ -87,17 +89,19 @@ public class DamageModel : MonoBehaviour
 
             var accuracyThreshold = Random.value;
 
-            Debug.Log("Coeff:" + accuracyCoefficient + " Thresh:" + accuracyThreshold);
+            Debug.Log("DMG - " + "Threshold:" + accuracyThreshold);
 
             if (accuracyCoefficient < accuracyThreshold)
             {
                 resultingDmg = 0;
+                hits--;
             }
 
             attackingShipTotalDmg += resultingDmg;
         }
 
-        attackingShipTotalDmg = Mathf.RoundToInt(attackingShipTotalDmg);
+        attackingShipTotalDmg = Mathf.CeilToInt(attackingShipTotalDmg);
+        Debug.Log("DMG - " + hits + " hits for " + attackingShipTotalDmg + " damage on " + DamageModel.GetAttackTypeString(attackType));
 
         return attackingShipTotalDmg;
     }
@@ -116,7 +120,7 @@ public class DamageModel : MonoBehaviour
     {   
         // Directional damage modifiers
         var dotForwAttack = Vector3.Dot(forwardDir, attackDir);
-        Debug.Log("DMG - " + "cos theta:" + dotForwAttack);
+        //Debug.Log("DMG - " + "cos theta:" + dotForwAttack);
         var angleOfAttackThreshold = Mathf.Cos(decidingAngle * Mathf.PI/180);
 
         if (dotForwAttack > angleOfAttackThreshold)

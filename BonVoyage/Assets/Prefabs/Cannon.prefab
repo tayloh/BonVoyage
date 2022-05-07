@@ -4930,8 +4930,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89ea7355c4481442a2cf83cf6e0a78e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 1
+  _damage: 2
   _range: 3
-  fireAnimation: {fileID: 6968198083556562013}
   model: {fileID: 3501923129533770814}
-  audioSource: {fileID: 0}

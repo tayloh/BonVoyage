@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FireAnimation : MonoBehaviour
@@ -16,11 +17,14 @@ public class FireAnimation : MonoBehaviour
     private ParticleSystem[] _rightSideParticleSystem;
     private AudioSource audioSource;
 
+    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
+
     private int _numCannons = 4; //default value
 
     public float GetFireAnimationTime()
     {
         return _numCannons * ShootingInterval;
+        
     }
 
     void Start()
@@ -35,7 +39,7 @@ public class FireAnimation : MonoBehaviour
         _numCannons = GetComponent<Ship>().GetNumberOfCannons() / 2;
 
         //AnimationDuration = _numCannons * ShootingInterval;
-        audioSource = GetComponent<AudioSource>();     
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -51,6 +55,8 @@ public class FireAnimation : MonoBehaviour
 
     private IEnumerator _playRollingBroadSide(float interval, int side)
     {
+        _cannonWaitFireDurations.Shuffle();
+
         //PlayFireSound();
         if (side == 1)
         {
@@ -59,10 +65,13 @@ public class FireAnimation : MonoBehaviour
                 item.Play();
                 yield return new WaitForSeconds(interval);
             }*/
+            var i = 0;
             foreach(Cannon cannon in _leftCannons)
             {
+                interval = _cannonWaitFireDurations[i];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
+                i++;
                 yield return new WaitForSeconds(interval);
             }
         }
@@ -73,10 +82,13 @@ public class FireAnimation : MonoBehaviour
                 item.Play();
                 yield return new WaitForSeconds(interval);
             }*/
+            var i = 0;
             foreach (Cannon cannon in _rightCannons)
             {
+                interval = _cannonWaitFireDurations[i];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
+                i++;
                 yield return new WaitForSeconds(interval);
             }
         }
