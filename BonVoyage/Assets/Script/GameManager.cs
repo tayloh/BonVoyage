@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameState state; 
     private bool isGameOver = false;
     public static event Action<GameState> OnGameStateChanged;
+    public UnityEvent<List<Ship>, int> OnTurnChanged;
 
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> pirateShips = new List<Ship>();
@@ -32,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private ShipManager shipManager;
+    [SerializeField]
+    private TurnQueue turnQueue;
 
     [SerializeField]
     private CameraMovement cameraMovement;
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
 
         //Generating the random order of ships for both player and pirates
         PrepareTurn();
+        turnQueue.CreateCards(shipsTurn);
     }
 
     private void PrepareTurn()
@@ -162,6 +168,7 @@ public class GameManager : MonoBehaviour
             shipManager.StartPirateTurn(nextShip);
             //shipManager.MovePirateShip(nextShip);
         }
+        OnTurnChanged.Invoke(shipsTurn, actualShipIndex);
     }
 
     private Ship GetNextShipForTurn()
@@ -262,4 +269,3 @@ public enum GameState
     Victory,
     Defeat
 }
-

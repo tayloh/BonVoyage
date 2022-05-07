@@ -21,9 +21,9 @@ public class Cannon : MonoBehaviour
 
     private void Awake()
     {
-        transformRelativeToShip.position = this.transform.localPosition;
+        /*transformRelativeToShip.position = this.transform.localPosition;
         transformRelativeToShip.rotation = this.transform.localRotation;
-        transformRelativeToShip.localScale = this.transform.localScale;
+        transformRelativeToShip.localScale = this.transform.localScale;*/
     }
 
     /*public Cannon(float damage, Transform cannonGO)
