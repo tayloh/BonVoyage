@@ -124,6 +124,29 @@ public class Ship : MonoBehaviour
         _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
     }
 
+    public float[] GetLeftSideCannonDamageList()
+    {
+        var leftCannons = transform.GetChild(0).GetComponentsInChildren<Cannon>();
+        float[] damagePerCannon = new float[leftCannons.Length];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = leftCannons[i].Damage;
+        }
+        return damagePerCannon;
+
+    }
+
+    public float[] GetRightSideCannonDamageList()
+    {
+        var rightCannons = transform.GetChild(1).GetComponentsInChildren<Cannon>();
+        float[] damagePerCannon = new float[rightCannons.Length];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = rightCannons[i].Damage;
+        }
+        return damagePerCannon;
+    }
+
     public float[] GetCannonDamageList()
     {
         float[] damagePerCannon = new float[_cannons.Count];
@@ -329,6 +352,19 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float[] damageList)
+    {
+        // If we want separate animations, damage numbers, etc
+        // per shot, start here!
+        // Currently it just wraps the other TakeDamage() function
+
+        var totalDmg = 0f;
+        foreach (var dmg in damageList)
+        {
+            totalDmg += dmg;
+        }
+        TakeDamage(totalDmg);
+    }
 
     public void TakeDamage(float damage)
     {

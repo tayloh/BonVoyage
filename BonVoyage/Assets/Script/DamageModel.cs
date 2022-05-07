@@ -14,7 +14,101 @@ public class DamageModel : MonoBehaviour
     public static float BowDamageAmplifier = 0.5f;
     public static float TileDistanceForWorstAccuracy = 10;
 
-    public static float CalculateDamageFor(Ship attackingShip, Ship targetedShip)
+    public static float[] GetCannonWiseDamageFor(Ship attackingShip, Ship targetedShip)
+    {
+        var attackDir = (attackingShip.gameObject.transform.position - targetedShip.gameObject.transform.position).normalized;
+        var forwardDir = targetedShip.gameObject.transform.forward;
+
+        var distance = (targetedShip.gameObject.transform.position - attackingShip.gameObject.transform.position).magnitude;
+        var accuracyCoefficient = _calculateAccuracyCoefficient(distance);
+
+        var attackType = _getDirectionalAttackType(attackDir, forwardDir, BowSternAngle);
+
+        var currentBroadSideDmgList = new List<float>();
+
+        //if (allCannonsDmgList.Length % 2 != 0)
+        //{
+        //    Debug.Log("CalculateDamageFor() inside DamageModel.cs is not updated for different number of cannons per side.");
+        //}
+
+        // This if and else if needs to change, need to be able to use smthing like ship.GetLeftSideCannons()
+        if (attackingShip.HasFiredLeft)
+        {
+            var leftSideDmgList = attackingShip.GetLeftSideCannonDamageList();
+            for (int i = 0; i < leftSideDmgList.Length; i++)
+            {
+                currentBroadSideDmgList.Add(leftSideDmgList[i]);
+            }
+        }
+        else if (attackingShip.HasFiredRight)
+        {
+            var rightSideDmgList = attackingShip.GetRightSideCannonDamageList();
+            for (int i = 0; i < rightSideDmgList.Length; i++)
+            {
+                currentBroadSideDmgList.Add(rightSideDmgList[i]);
+            }
+        }
+
+        // Apply effects of attack type on accuracy once
+        switch (attackType)
+        {
+            case AttackType.Bow:
+                accuracyCoefficient *= BowSternAccuracyReduction;
+                Debug.Log("DMG - Attack on Bow");
+                break;
+            case AttackType.Stern:
+                accuracyCoefficient *= BowSternAccuracyReduction;
+                Debug.Log("DMG - Attack on Stern");
+                break;
+            case AttackType.Side:
+                Debug.Log("DMG - Attack on Side");
+                break;
+        }
+
+        Debug.Log("DMG - " + attackingShip + "->" + targetedShip);
+        Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
+
+        var hits = currentBroadSideDmgList.Count;
+        var cannonWiseDmgList = new float[currentBroadSideDmgList.Count];
+        var cannonIndex = 0;
+        foreach (var dmg in currentBroadSideDmgList)
+        {
+            var resultingDmg = dmg;
+
+            // Apply effects of attack type on dmg amp. per cannon (cannons can have different dmg)
+            switch (attackType)
+            {
+                case AttackType.Bow:
+                    resultingDmg *= BowDamageAmplifier;
+                    break;
+                case AttackType.Stern:
+                    resultingDmg *= SternDamageAmplifier;
+                    break;
+                case AttackType.Side:
+                    break;
+            }
+
+            var accuracyThreshold = Random.value;
+
+            Debug.Log("DMG - " + "Threshold:" + accuracyThreshold);
+
+            if (accuracyCoefficient < accuracyThreshold)
+            {
+                resultingDmg = 0;
+                hits--;
+            }
+
+            cannonWiseDmgList[cannonIndex] = Mathf.CeilToInt(resultingDmg);
+            cannonIndex++;
+        }
+
+        //cannonWiseDmgList = Mathf.CeilToInt(cannonWiseDmgList);
+        Debug.Log("DMG - " + hits + " hits on " + DamageModel.GetAttackTypeString(attackType));
+
+        return cannonWiseDmgList;
+    }
+
+    public static float CalculateTotalDamageFor(Ship attackingShip, Ship targetedShip)
     {
         var attackDir = (attackingShip.gameObject.transform.position - targetedShip.gameObject.transform.position).normalized;
         var forwardDir = targetedShip.gameObject.transform.forward;

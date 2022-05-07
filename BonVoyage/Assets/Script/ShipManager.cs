@@ -189,7 +189,7 @@ public class ShipManager : MonoBehaviour
 
         if (didAttack)
         {
-            targetedShip.TakeDamage(DamageModel.CalculateDamageFor(aiShip, targetedShip));
+            targetedShip.TakeDamage(DamageModel.GetCannonWiseDamageFor(aiShip, targetedShip));
             TriggerFiring();
         }
 
@@ -242,7 +242,7 @@ public class ShipManager : MonoBehaviour
                 activeShip.HasFiredRight = true;
             }
 
-            ship.TakeDamage(DamageModel.CalculateDamageFor(activeShip, ship));
+            ship.TakeDamage(DamageModel.GetCannonWiseDamageFor(activeShip, ship));
             //after an attack it will incerease the last player ship selected.
             //if (_oldSelection != null) _oldSelection.Repair();
             TriggerFiring();
