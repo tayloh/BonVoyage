@@ -358,12 +358,77 @@ public class Ship : MonoBehaviour
         // per shot, start here!
         // Currently it just wraps the other TakeDamage() function
 
+        //var totalDmg = 0f;
+        //foreach (var dmg in damageList)
+        //{
+        //    totalDmg += dmg;
+        //}
+        //TakeDamage(totalDmg);
+        StartCoroutine(TakeDamagePerShot(damageList));
+
+    }
+
+    private IEnumerator TakeDamagePerShot(float[] damageList)
+    {
+        var color = Color.yellow;
+        
         var totalDmg = 0f;
+
+        var inParenthesisText = "";
+
+        var hasSternBonus = false;
+
         foreach (var dmg in damageList)
         {
+            var totalDmgText = "";
+            
+
             totalDmg += dmg;
+            if (dmg == 0)
+            {
+                inParenthesisText += "- ";
+            }
+            else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
+            {
+                inParenthesisText += dmg.ToString() + "! ";
+                hasSternBonus = true;
+                StartCoroutine(TakeDamageAnimation());
+            }
+            else
+            {
+                inParenthesisText += dmg.ToString() + " ";
+                StartCoroutine(TakeDamageAnimation());
+            }
+            totalDmgText = totalDmg.ToString();
+
+            if (hasSternBonus)
+            {
+                totalDmgText += "!";
+            }
+
+            var fullText = totalDmgText + "  (" + inParenthesisText + ")";
+
+            _health -= dmg;
+            _health = Mathf.Clamp(_health, 0, _health);
+
+            if (_healtSlider != null)
+            {
+                _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+            }
+            _currentHealthText.text = _health.ToString();
+
+            if (_health <= 0 && !_dead)
+            {
+                Die();
+            }
+
+            _damageText.text = fullText;
+            _damageText.color = color;
+            _damageText.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.25f);
         }
-        TakeDamage(totalDmg);
+        yield return new WaitForSeconds(1.5f);
+        _damageText.gameObject.SetActive(false);
     }
 
     public void TakeDamage(float damage)
@@ -391,7 +456,7 @@ public class Ship : MonoBehaviour
             StartCoroutine(ShowText("Miss!", 0));
         }
         
-        if (_health <= 0)
+        if (_health <= 0 && !_dead)
         {
             Die();
         }

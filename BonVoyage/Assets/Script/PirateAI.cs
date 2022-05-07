@@ -389,6 +389,7 @@ public class PirateAI : MonoBehaviour
             if (tile == null) continue;
             if (tile.Ship == null) continue;
             if (tile.Ship.CompareTag(this.gameObject.tag)) continue;
+            if (tile.Ship.IsDead) continue;
 
             attackableShips.Add(tile.Ship);
         }
