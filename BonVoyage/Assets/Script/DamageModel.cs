@@ -72,7 +72,6 @@ public class DamageModel : MonoBehaviour
         foreach (var dmg in currentBroadSideDmgList)
         {
             var resultingDmg = dmg;
-            Debug.Log("DMG - " + dmg);
 
             // Apply effects of attack type on dmg amp. per cannon (cannons can have different dmg)
             switch (attackType)
