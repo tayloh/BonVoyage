@@ -32,22 +32,24 @@ public class ShipCard : MonoBehaviour
         offset = offsetBetweenCards;
         rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, offset/2f +(length + offset) * rank, length);
         
-        //TODO : Define a ship type in the ship class and use it according to the 3d model of the ship
-        /*switch (shipType)
+        switch (ship._shipType)
         {
             case ShipType.Brig:
-                image = Resources.Load<Image>("Brig.png");
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/Brig");
                 break;
             case ShipType.Frigate:
-                image = Resources.Load<Image>("Frigate.png");
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/Frigate");
                 break;
             case ShipType.ShipOfTheLine:
-                image = Resources.Load<Image>("ShipOfTheLine.png");
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/ShipOfTheLine");
                 break;
             case ShipType.TreasureShip:
-                image = Resources.Load<Image>("TreasureShip.png");
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/TreasureShip");
                 break;
-        }*/
+            default:
+                throw new Exception("Type of ship not supported");
+                break;
+        }
     }
 
     public void Translate(float panelLength, int maxRank)

@@ -27,6 +27,7 @@ public class TurnQueue : MonoBehaviour
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
             ShipCard shipCard = go.GetComponent<ShipCard>();
+            shipCard.Ship = list[i];
             cardsDict.Add(list[i], shipCard);
             shipCard.SetInitialAspect(offsetBetweenCards, cardSize, i);
             //go.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (cardSize + offsetBetweenCards) * i, cardSize);

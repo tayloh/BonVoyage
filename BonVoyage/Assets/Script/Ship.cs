@@ -6,19 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
-    private float _maxhealth;
-
-    [SerializeField]
-    private float _health = 5;
-
-    [SerializeField]
-    private int _repairPoint = 1; // this how many  ok.
-    public float Health { get => _health; }
-
-    [SerializeField]
-    private float _attack = 3;
-    public float AttackDamage { get => _attack; } // Not used anymore, see list of Cannons
-
+    public ShipType _shipType;
     private bool _dead = false;
     public bool IsDead { get => _dead; }
 
@@ -56,9 +44,18 @@ public class Ship : MonoBehaviour
     [SerializeField] private float _canvaSizeOnScreen = 1f;
 
     [Header("Ship stats")]
+    private float _maxhealth;
+    [SerializeField]
+    private float _health = 5;
     [SerializeField]
     private int movementPoints = 1;
     public int MovementPoints { get => movementPoints; }
+    [SerializeField]
+    private int _repairPoint = 1; // this how many  ok.
+    public float Health { get => _health; }
+    [SerializeField]
+    private float _attack = 3;
+    public float AttackDamage { get => _attack; } // Not used anymore, see list of Cannons
 
     [SerializeField]
     private int fireRange = 3;
