@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ShipCard : MonoBehaviour
 {
     private Image image;
+    private Image background;
     private Ship ship;
     public Ship Ship { set => ship = value; get => ship; }
     [SerializeField]
@@ -18,7 +19,8 @@ public class ShipCard : MonoBehaviour
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        image = transform.GetChild(0).GetComponent<Image>();
+        background = GetComponent<Image>();
         //TODO set rank
         //
         //
@@ -71,8 +73,10 @@ public class ShipCard : MonoBehaviour
     {
         float endPos = panellength - length - offset/2f;
         image.enabled = false;
+        background.enabled = false;
         yield return new WaitForSeconds(translationDuration);
         rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, endPos, length);
+        background.enabled = true;
         image.enabled = true;
     }
 

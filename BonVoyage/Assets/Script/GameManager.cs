@@ -189,10 +189,12 @@ public class GameManager : MonoBehaviour
         if (ship.gameObject.CompareTag("Pirate"))
         {
             pirateShips.Remove(ship);
+            turnQueue.Remove(ship);
         }
         else
         {
             playerShips.Remove(ship);
+            turnQueue.Remove(ship);
         }
 
         shipsTurn.Remove(ship);

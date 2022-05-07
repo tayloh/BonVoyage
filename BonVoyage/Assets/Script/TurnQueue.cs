@@ -41,6 +41,16 @@ public class TurnQueue : MonoBehaviour
             card.Translate(panelLength, list.Count - 1);
         }
     }
+
+    internal void Remove(Ship ship)
+    {
+        throw new NotImplementedException();
+        //When a ship is sunk, remove the card in the queue and fill the gap in the queue
+        //TODO
+        //
+        //
+        //
+    }
 }
 
 public enum ShipType
