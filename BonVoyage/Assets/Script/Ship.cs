@@ -332,15 +332,29 @@ public class Ship : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        StartCoroutine(TakeDamageAnimation());
+        if (damage > 0)
+        {
+            StartCoroutine(TakeDamageAnimation());
+        }
+        
 
         _health -= damage;
+        _health = Mathf.Clamp(_health, 0, _health);
         if (_healtSlider != null)
         {
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
         }
         _currentHealthText.text = _health.ToString();
-        StartCoroutine(ShowText("-" + damage.ToString(), -1));
+
+        if (damage > 0)
+        {
+            StartCoroutine(ShowText("-" + damage.ToString(), -1));
+        }
+        else
+        {
+            StartCoroutine(ShowText("Miss!", 0));
+        }
+        
         if (_health <= 0)
         {
             Die();
@@ -390,16 +404,24 @@ public class Ship : MonoBehaviour
     IEnumerator ShowText(string damage, int sign = 1)
     {
         if (sign < 0)
+        {
             _damageText.color = Color.red;
-        else
+        }   
+        else if (sign > 0)
+        {
             _damageText.color = Color.green;
+        }
+        else if (sign == 0)
+        {
+            _damageText.color = Color.white;
+        }   
 
         if (_damageText == null) yield break;
         _damageText.text = damage.ToString();
         _damageText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2.5f);
         _damageText.gameObject.SetActive(false);
-
+        
     }
 
     private IEnumerator TakeDamageAnimation()
