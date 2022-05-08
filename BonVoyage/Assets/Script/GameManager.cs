@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
     // This function will help delay the  next ship in the turn  so the camera can fully repositioned
     IEnumerator DelayNextTurn(Ship nextShip)
     {
-        yield return new WaitForSeconds(cameraMovement.TransitionTime + 0.05f);
+        yield return new WaitForSeconds(cameraMovement.TransitionTime - 0.2f);
         if (!nextShip.CompareTag("Pirate"))
         {
             UpdateGameState(GameState.PlayerMove);

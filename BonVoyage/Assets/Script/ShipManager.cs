@@ -48,6 +48,8 @@ public class ShipManager : MonoBehaviour
 
     public void StartPlayerTurn(Ship ship)
     {
+        hexgrid.DisableHighlightOfAllHexes(); // work around for ship arcs being highlighted sometimes on start of turn
+
         activeShip = ship;
         activeShip.IsPlaying = true;
 
@@ -58,6 +60,8 @@ public class ShipManager : MonoBehaviour
 
     public void StartPirateTurn(Ship ship)
     {
+        hexgrid.DisableHighlightOfAllHexes(); // work around for ship arcs being highlighted sometimes on start of turn
+
         Debug.Log("START OF PIRATE TURN:" + ship.gameObject.name);
         activeShip = ship;
         activeShip.MovementFinished += PirateAIAttack;
