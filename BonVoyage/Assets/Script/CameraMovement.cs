@@ -39,6 +39,14 @@ public class CameraMovement : MonoBehaviour
     static public bool _isTransitioning = false;
     static public bool isMoving = false;
 
+    Ship _shipToFollow;
+
+    public void SaveCameraOffsetFrom(Vector3 position)
+    {
+        ShipCameraOffset = this.transform.position - position;
+    }
+
+
     public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)
     {
         _startPos = transform.position;
@@ -48,6 +56,20 @@ public class CameraMovement : MonoBehaviour
 
         _tLerp = 0;
         _isTransitioning = true;
+    }
+
+    public void SetAnchorShip(Ship ship)
+    {
+        _shipToFollow = ship;
+    }
+
+    private void _FollowShip()
+    {
+        if (_shipToFollow == null)
+        {
+            return;
+        }
+        this.transform.position = _shipToFollow.transform.position + ShipCameraOffset;
     }
 
     private void _smoothTransition()
@@ -110,7 +132,9 @@ public class CameraMovement : MonoBehaviour
             _smoothTransition();
         }
 
-        ShipCameraOffset.y = transform.position.y;
+        _FollowShip();
+
+        //ShipCameraOffset.y = transform.position.y;
 
         //stores current coordinate as a variable
         Vector3 CamPos = transform.position;

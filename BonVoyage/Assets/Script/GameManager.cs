@@ -122,11 +122,11 @@ public class GameManager : MonoBehaviour
 
     private void CameraTransition(Ship ship)
     {
-        var offset = cameraMovement.ShipCameraOffset;
-
         cameraMovement.SmoothlyTransitionTo(
-            ship.transform.position + offset,
+            ship.transform.position + cameraMovement.ShipCameraOffset,
             ship.transform.position);
+
+        cameraMovement.SetAnchorShip(ship);
     }
     
     public bool CheckForWinCondition()
@@ -159,6 +159,10 @@ public class GameManager : MonoBehaviour
         // Check for win condition right before getting next ship (in case ai won)
         // but there are player ships left (treasure ship sunk).
         CheckForWinCondition();
+
+        // Save the offset to the current ship before getting the next ship, and before calling
+        // to transition
+        cameraMovement.SaveCameraOffsetFrom(shipsTurn[actualShipIndex].transform.position);
 
         Ship nextShip = GetNextShipForTurn();
 
