@@ -18,6 +18,7 @@ public class FireAnimation : MonoBehaviour
     private AudioSource audioSource;
 
     private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
+    private Ship _ship;
 
     private int _numCannons = 4; //default value
 
@@ -40,6 +41,8 @@ public class FireAnimation : MonoBehaviour
 
         //AnimationDuration = _numCannons * ShootingInterval;
         audioSource = GetComponent<AudioSource>();
+
+        _ship = GetComponent<Ship>();
     }
 
 
@@ -55,7 +58,7 @@ public class FireAnimation : MonoBehaviour
 
     private IEnumerator _playRollingBroadSide(float interval, int side)
     {
-        _cannonWaitFireDurations.Shuffle();
+        var intervalDurations = _ship.GetCannonWaitFireDurations();
 
         //PlayFireSound();
         if (side == 1)
@@ -68,7 +71,7 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach(Cannon cannon in _leftCannons)
             {
-                interval = _cannonWaitFireDurations[i];
+                interval = intervalDurations[i];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;
@@ -82,10 +85,11 @@ public class FireAnimation : MonoBehaviour
                 item.Play();
                 yield return new WaitForSeconds(interval);
             }*/
+
             var i = 0;
             foreach (Cannon cannon in _rightCannons)
             {
-                interval = _cannonWaitFireDurations[i];
+                interval = intervalDurations[i];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;

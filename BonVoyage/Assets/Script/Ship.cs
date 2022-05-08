@@ -76,10 +76,11 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
-    // Might need one list per broadside
     private List<Cannon> _cannons = new List<Cannon>();
 
     private AudioSource _audioSource;
+
+    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
 
     public int NumCannons
     {
@@ -122,6 +123,11 @@ public class Ship : MonoBehaviour
         Camera camera = Camera.main;
         _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
         _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
+    }
+
+    public List<float> GetCannonWaitFireDurations()
+    {
+        return _cannonWaitFireDurations;
     }
 
     public float[] GetLeftSideCannonDamageList()
@@ -364,13 +370,17 @@ public class Ship : MonoBehaviour
         //    totalDmg += dmg;
         //}
         //TakeDamage(totalDmg);
+
+        // Shuffle the cannon wait duration list
+        _cannonWaitFireDurations.Shuffle();
+
         StartCoroutine(TakeDamagePerShot(damageList));
 
     }
 
     private IEnumerator TakeDamagePerShot(float[] damageList)
     {
-        var color = Color.yellow;
+        var color = Color.red;
         
         var totalDmg = 0f;
 
@@ -378,6 +388,7 @@ public class Ship : MonoBehaviour
 
         var hasSternBonus = false;
 
+        var index = 0;
         foreach (var dmg in damageList)
         {
             var totalDmgText = "";
@@ -425,7 +436,8 @@ public class Ship : MonoBehaviour
             _damageText.text = fullText;
             _damageText.color = color;
             _damageText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index]);
+            index++;
         }
         yield return new WaitForSeconds(1.5f);
         _damageText.gameObject.SetActive(false);
