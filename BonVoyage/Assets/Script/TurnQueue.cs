@@ -41,11 +41,11 @@ public class TurnQueue : MonoBehaviour
         ShipCard.Length = cardSize;
         //TODO : compute the sizeof the cards and the max number of cards given the number of ships and panel length/screen resolution
         
-        if(numberOfVisibleCards<numberOfShips)
+        if(numberOfVisibleCards<=numberOfShips)
         {
             CreateQueue();
         }
-        for(int i =0; i<numberOfVisibleCards; i++)
+        for(int i =0; i<numberOfVisibleCards-1; i++)
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
             ShipCard shipCard = go.GetComponent<ShipCard>();
@@ -53,7 +53,7 @@ public class TurnQueue : MonoBehaviour
             shipCard.Ship = list[i];
             shipCard.SetInitialAspect(i);
         }
-        for(int j = numberOfVisibleCards; j<numberOfShips; j++)
+        for(int j = numberOfVisibleCards-1; j<numberOfShips; j++)
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
             ShipCard shipCard = go.GetComponent<ShipCard>();
@@ -92,32 +92,35 @@ public class TurnQueue : MonoBehaviour
         for (int i = index; i<index + numberOfVisibleCards-1; i++)
         {
             ShipCard card = cardsDict[list[i % list.Count]];
-            card.rank = i - index;
+            card.rank = i - index+1;
             Debug.Log("rank " + card.rank + "moveleft");
             StartCoroutine(cardsDict[list[i % list.Count]].MoveLeft());
         }
-        UpdateQueue(cardsDict[list[(index-1)%list.Count]]);
+        if(queue != null)
+        {
+            UpdateQueue(cardsDict[list[(index - 1) % list.Count]]);
+        }        
     }
 
     private void UpdateQueue(ShipCard cardToEnqueue)
     {
-        //updtae the ranks 
-        foreach(ShipCard card in queue)
-        {
-            card.rank -= 1;
-        }
         //bring the first card into the queue
         queue.Enqueue(cardToEnqueue);
         cardToEnqueue.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
         cardToEnqueue.Image.enabled = false;
         cardToEnqueue.Background.enabled = false;
-        cardToEnqueue.rank = cardsDict.Count-1;
+        cardToEnqueue.rank = cardsDict.Count;
         
         //reveal the first card in the queue
         ShipCard newCard = queue.Dequeue();
         newCard.Image.enabled = true;
         newCard.Background.enabled = true;
         StartCoroutine(newCard.MoveLeft());
+        //updtae the ranks 
+        foreach(ShipCard card in queue)
+        {
+            card.rank -= 1;
+        }
     }
 
     /*public void Translate(ShipCard card)
