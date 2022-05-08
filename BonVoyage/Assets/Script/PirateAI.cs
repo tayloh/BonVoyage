@@ -7,8 +7,8 @@ using UnityEngine;
 public class PirateAI : MonoBehaviour
 {
     
-    public static int SearchDepth = 9; // AI maximum planned path is 12 hexes long
-    public static float DFSOutOfRangeDistance = 15; // Euclidian distance. Set this value slightly less than double SearchDepth.
+    public static int SearchDepth = 6; // AI maximum planned path is 12 hexes long
+    public static float DFSOutOfRangeDistance = 9; // Euclidian distance. Set this value slightly less than double SearchDepth. NOT USED ATM.
     public static float AIConsideredLowHpThreshold = 4; // Assume ships will deal 4 damage
 
     public static Vector3 AIFailed = new Vector3(-9999, -9999, -9999); // use instead of Vector3.zero (not nullable)
@@ -18,6 +18,8 @@ public class PirateAI : MonoBehaviour
     public HexGrid hexGrid;
     [SerializeField]
     private GameManager gameManager;
+
+    private Vector3 _NextPos;
 
     private void Awake()
     {
@@ -786,8 +788,7 @@ public class PirateAI : MonoBehaviour
 
     private Vector3 _HandleDFS()
     {
-        var dfs = new AttackPosDFS(this, ship.hexCoord, ship.gameObject.transform.forward, ship.FireRange);
-        return dfs.FindNextPos();
+        return _NextPos;
     }
 
     private Vector3 _HandleOOR()
@@ -839,10 +840,12 @@ public class PirateAI : MonoBehaviour
         }
 
         // NOT ON LOW HEALTH
-        // OutOfRangeMove if further away from closest enemy than DFS estimated euclid distance of search
-        // Otherwise DFS move
-        var distToClosestPlayerShip = _GetDistanceToClosestPlayerShip();
-        if (distToClosestPlayerShip > PirateAI.DFSOutOfRangeDistance)
+        // If dfs doesn't find an attackable pos, then use out of range move
+        // Store dfs position so we don't have to recalculate it
+        var dfs = new AttackPosDFS(this, ship.hexCoord, ship.gameObject.transform.forward, ship.FireRange);
+        _NextPos = dfs.FindNextPos();
+
+        if (_NextPos == PirateAI.AIFailed)
         {
             return AIMoveAction.OutOfRangeMove;
         }
