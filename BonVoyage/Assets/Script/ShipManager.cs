@@ -134,7 +134,7 @@ public class ShipManager : MonoBehaviour
         Ship ship = shipGO.GetComponent<Ship>();
 
         // Be able to skip phase by clicking the active ship
-        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID())
+        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID() && !gameManager.IsCameraTransitioning())
         {
             // SkipPhase function handles the logic for checking that it's the players turn.
             // So you can't spam click the active ship to skip everything.
@@ -356,7 +356,6 @@ public class ShipManager : MonoBehaviour
         
         PrepareShipForFiring(activeShip);
 
-        // Spamming skip button without this code commented out does weird things...
         if (!activeShip.HasAttackableInRange("Pirate")) 
         {
             SkipPhase(); 
@@ -365,6 +364,8 @@ public class ShipManager : MonoBehaviour
 
     public void SkipPhase()
     {
+        //if (gameManager.IsCameraTransitioning()) return;
+
         switch (gameManager.state)
         {
             case GameState.PlayerMove:

@@ -126,6 +126,11 @@ public class GameManager : MonoBehaviour
             ship.transform.position + cameraMovement.ShipCameraOffset,
             ship.transform.position);
     }
+
+    public bool IsCameraTransitioning()
+    {
+        return cameraMovement.IsTransitioning();
+    }
     
     public bool CheckForWinCondition()
     {
@@ -178,6 +183,7 @@ public class GameManager : MonoBehaviour
     // This function will help delay the  next ship in the turn  so the camera can fully repositioned
     IEnumerator DelayNextTurn(Ship nextShip)
     {
+        skipButton.SetActive(false);
         yield return new WaitForSeconds(cameraMovement.TransitionTime - 0.2f);
         if (!nextShip.CompareTag("Pirate"))
         {

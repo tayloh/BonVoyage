@@ -53,6 +53,11 @@ public class CameraMovement : MonoBehaviour
         _isTransitioning = true;
     }
 
+    public bool IsTransitioning()
+    {
+        return _isTransitioning;
+    }
+
     private void _smoothTransition()
     {
         var distanceLeft = (transform.position - _currentLerpGoal).magnitude;
