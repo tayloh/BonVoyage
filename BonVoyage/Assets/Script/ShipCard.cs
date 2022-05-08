@@ -3,19 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
+[SelectionBase]
 public class ShipCard : MonoBehaviour
 {
     private Image image;
+    public Image Image { get => image; set => image = value; }
     private Image background;
+    public Image Background { get => background; set => background = value; }
     private Ship ship;
     public Ship Ship { set => ship = value; get => ship; }
     [SerializeField]
-    private int rank;
+    public int rank;
     private RectTransform rectTransform;
-    private float length = 20f;
-    private float offset = 10f;
+    public RectTransform RectTransform { get => rectTransform; }
+    static private float length = 20f;
+    static public float Length { set => length = value; get => length; }
+    static private float offset = 10f;
+    static public float Offset { get => offset; set => offset = value; }
+
     public float translationDuration = 2;
+    static private int cardNumberMax;
+    static public int CardNumberMax { get => cardNumberMax; set => cardNumberMax = value; }
+
+    static private Queue<ShipCard> queue = new Queue<ShipCard>();
 
     private void Awake()
     {
@@ -27,13 +38,18 @@ public class ShipCard : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void SetInitialAspect(float offsetBetweenCards, float cardSize, int rankImg)
+    public void SetInitialAspect(int rankImg)
     {
         rank = rankImg;
-        length = cardSize;
-        offset = offsetBetweenCards;
-        rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, offset/2f +(length + offset) * rank, length);
-        
+        if(rankImg <cardNumberMax)
+        {
+            rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, offset / 2f + (length + offset) * rank, length);
+        }
+        else //put in queue
+        {
+            Queue();
+        }
+
         switch (ship._shipType)
         {
             case ShipType.Brig:
@@ -54,7 +70,13 @@ public class ShipCard : MonoBehaviour
         }
     }
 
-    public void Translate(float panelLength, int maxRank)
+    private void Queue()
+    {
+        queue.Enqueue(this);
+
+    }
+
+    /*public void Translate(float panelLength, int maxRank)
     {
         if(rank == 0)
         {
@@ -67,9 +89,9 @@ public class ShipCard : MonoBehaviour
             StartCoroutine(MoveLeft());
             rank -= 1;
         }
-    }
+    }*/
 
-    private IEnumerator BackToQueue(float panellength)
+    public IEnumerator BackToQueue(float panellength)
     {
         float endPos = panellength - length - offset/2f;
         image.enabled = false;
@@ -80,7 +102,7 @@ public class ShipCard : MonoBehaviour
         image.enabled = true;
     }
 
-    private IEnumerator MoveLeft()
+    public IEnumerator MoveLeft()
     {
         float startPos = offset / 2f + (length + offset) * rank;
         float endPos = startPos - (length + offset);
