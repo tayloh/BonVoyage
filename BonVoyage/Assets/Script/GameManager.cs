@@ -125,8 +125,6 @@ public class GameManager : MonoBehaviour
         cameraMovement.SmoothlyTransitionTo(
             ship.transform.position + cameraMovement.ShipCameraOffset,
             ship.transform.position);
-
-        cameraMovement.SetAnchorShip(ship);
     }
     
     public bool CheckForWinCondition()
@@ -160,10 +158,6 @@ public class GameManager : MonoBehaviour
         // but there are player ships left (treasure ship sunk).
         CheckForWinCondition();
 
-        // Save the offset to the current ship before getting the next ship, and before calling
-        // to transition
-        cameraMovement.SaveCameraOffsetFrom(shipsTurn[actualShipIndex].transform.position);
-
         Ship nextShip = GetNextShipForTurn();
 
         // If the AI won, let it play until all player ships are dead :)
@@ -184,7 +178,7 @@ public class GameManager : MonoBehaviour
     // This function will help delay the  next ship in the turn  so the camera can fully repositioned
     IEnumerator DelayNextTurn(Ship nextShip)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(cameraMovement.TransitionTime + 0.05f);
         if (!nextShip.CompareTag("Pirate"))
         {
             UpdateGameState(GameState.PlayerMove);

@@ -39,12 +39,7 @@ public class CameraMovement : MonoBehaviour
     static public bool _isTransitioning = false;
     static public bool isMoving = false;
 
-    Ship _shipToFollow;
-
-    public void SaveCameraOffsetFrom(Vector3 position)
-    {
-        ShipCameraOffset = this.transform.position - position;
-    }
+    public Ship TreasureShip;
 
 
     public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)
@@ -56,20 +51,6 @@ public class CameraMovement : MonoBehaviour
 
         _tLerp = 0;
         _isTransitioning = true;
-    }
-
-    public void SetAnchorShip(Ship ship)
-    {
-        _shipToFollow = ship;
-    }
-
-    private void _FollowShip()
-    {
-        if (_shipToFollow == null)
-        {
-            return;
-        }
-        this.transform.position = _shipToFollow.transform.position + ShipCameraOffset;
     }
 
     private void _smoothTransition()
@@ -132,9 +113,7 @@ public class CameraMovement : MonoBehaviour
             _smoothTransition();
         }
 
-        _FollowShip();
-
-        //ShipCameraOffset.y = transform.position.y;
+        ShipCameraOffset.y = transform.position.y;
 
         //stores current coordinate as a variable
         Vector3 CamPos = transform.position;
@@ -185,8 +164,12 @@ public class CameraMovement : MonoBehaviour
         //zoom limiter
         CamPos.y = Mathf.Clamp(CamPos.y, minLimiter_y, maxLimiter_y);
         //makes sure that the values cant go beyond the limiters
-        CamPos.x = Mathf.Clamp(CamPos.x, -limiter_x, limiter_x);
-        CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
+        //CamPos.x = Mathf.Clamp(CamPos.x, -limiter_x, limiter_x);
+        //CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
+
+        // Clamp to treasureship
+        CamPos.x = Mathf.Clamp(CamPos.x, TreasureShip.transform.position.x - limiter_x, TreasureShip.transform.position.x + limiter_x);
+        CamPos.z = Mathf.Clamp(CamPos.z, TreasureShip.transform.position.z - limiter_z, TreasureShip.transform.position.z + limiter_z);
 
         //applies all changes
 

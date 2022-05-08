@@ -873,7 +873,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732777262}
   m_LocalRotation: {x: 0.36063236, y: -0, z: -0, w: 0.932708}
-  m_LocalPosition: {x: 24.26, y: 16.61, z: -12.87}
+  m_LocalPosition: {x: 24.34, y: 16.61, z: -6.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1944772715}
@@ -895,17 +895,18 @@ MonoBehaviour:
   playerInput: {fileID: 966116045}
   MovementSpeed: 30
   EnableTransitions: 1
-  EnableTransitionRotation: 0
-  limiter_x: 100
-  limiter_z: 100
+  EnableTransitionRotation: 1
+  limiter_x: 35
+  limiter_z: 35
   scrollSpeed: 2000
   minLimiter_y: 5
-  maxLimiter_y: 120
+  maxLimiter_y: 25
   RotSpeed: 350
   RotMaxX: 88
   RotMinX: 2
   TransitionTime: 1
   ShipCameraOffset: {x: 0, y: 15, z: -15}
+  TreasureShip: {fileID: 2001251921}
 --- !u!114 &732777267
 MonoBehaviour:
   m_ObjectHideFlags: 0
