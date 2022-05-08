@@ -109,9 +109,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Victory:
                 victoryText.SetActive(true);
+                skipButton.SetActive(false);
                 break;
             case GameState.Defeat:
                 gameOverText.SetActive(true);
+                skipButton.SetActive(false);
                 break;
         }
         OnGameStateChanged?.Invoke(newState);
@@ -154,6 +156,10 @@ public class GameManager : MonoBehaviour
 
     public void NextTurn()
     {
+        // Check for win condition right before getting next ship (in case ai won)
+        // but there are player ships left (treasure ship sunk).
+        CheckForWinCondition();
+
         Ship nextShip = GetNextShipForTurn();
 
         // If the AI won, let it play until all player ships are dead :)
@@ -197,8 +203,6 @@ public class GameManager : MonoBehaviour
 
     public void CleanupDeadShip(Ship ship)
     {
-        CheckForWinCondition();
-
         if (ship.gameObject.CompareTag("Pirate"))
         {
             pirateShips.Remove(ship);
@@ -211,6 +215,9 @@ public class GameManager : MonoBehaviour
         shipsTurn.Remove(ship);
 
         Destroy(ship.gameObject);
+
+        // Check for win condition after removing a ship
+        CheckForWinCondition();
     }
 
     public List<Ship> GetPlayerShips()
