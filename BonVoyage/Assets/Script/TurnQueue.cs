@@ -41,10 +41,7 @@ public class TurnQueue : MonoBehaviour
         ShipCard.Length = cardSize;
         //TODO : compute the sizeof the cards and the max number of cards given the number of ships and panel length/screen resolution
         
-        if(numberOfVisibleCards<=numberOfShips)
-        {
-            CreateQueue();
-        }
+        
         for(int i =0; i<numberOfVisibleCards-1; i++)
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
@@ -53,15 +50,27 @@ public class TurnQueue : MonoBehaviour
             shipCard.Ship = list[i];
             shipCard.SetInitialAspect(i);
         }
-        for(int j = numberOfVisibleCards-1; j<numberOfShips; j++)
+        if (numberOfVisibleCards < numberOfShips)
+        {
+            CreateQueue();
+            for (int j = numberOfVisibleCards - 1; j < numberOfShips; j++)
+            {
+                GameObject go = Instantiate(shipCardPrefab, this.transform);
+                ShipCard shipCard = go.GetComponent<ShipCard>();
+                cardsDict.Add(list[j], shipCard);
+                shipCard.Ship = list[j];
+                shipCard.SetInitialAspect(j);
+                shipCard.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
+                AddToQueue(shipCard);
+            }
+        }
+        else if (numberOfVisibleCards == numberOfShips)//display the last card instead of the queue card
         {
             GameObject go = Instantiate(shipCardPrefab, this.transform);
             ShipCard shipCard = go.GetComponent<ShipCard>();
-            cardsDict.Add(list[j], shipCard);
-            shipCard.Ship = list[j];
-            shipCard.SetInitialAspect(j);
-            shipCard.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
-            AddToQueue(shipCard);
+            cardsDict.Add(list[numberOfVisibleCards - 1], shipCard);
+            shipCard.Ship = list[numberOfVisibleCards - 1];
+            shipCard.SetInitialAspect(numberOfVisibleCards - 1);
         }
     }
 
@@ -83,24 +92,26 @@ public class TurnQueue : MonoBehaviour
     }
 
     public void UpdatePanel(List<Ship> list, int index)
-    {
-        /*foreach(ShipCard card in cardsDict.Values)
-        {
-            Translate(card);
-        }*/
-        
+    {        
         for (int i = index; i<index + numberOfVisibleCards-1; i++)
         {
             ShipCard card = cardsDict[list[i % list.Count]];
             card.rank = i - index+1;
-            Debug.Log("rank " + card.rank + "moveleft");
             StartCoroutine(cardsDict[list[i % list.Count]].MoveLeft());
         }
         if(queue != null)
         {
-            UpdateQueue(cardsDict[list[(index - 1) % list.Count]]);
-        }        
+            UpdateQueue(cardsDict[list[(index == 0) ? list.Count - 1 : index - 1]]);
+        }
+        else
+        {
+            ShipCard card = cardsDict[list[(index == 0)? list.Count - 1 : index - 1]];
+            StartCoroutine(card.MoveBackToRight(panelLength - cardSize - offsetBetweenCards / 2f, numberOfVisibleCards, cardSize));
+            //card.rank = numberOfVisibleCards-1;
+            //card.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
+        }
     }
+
 
     private void UpdateQueue(ShipCard cardToEnqueue)
     {
@@ -122,21 +133,6 @@ public class TurnQueue : MonoBehaviour
             card.rank -= 1;
         }
     }
-
-    /*public void Translate(ShipCard card)
-    {
-        if (rank == 0)
-        {
-            //goes back to the end of the queue
-            StartCoroutine(BackToQueue(panelLength));
-            rank = numberOfVisibleCards;
-        }
-        else
-        {
-            StartCoroutine(MoveLeft());
-            rank -= 1;
-        }
-    }*/
 
     internal void Remove(Ship ship)
     {

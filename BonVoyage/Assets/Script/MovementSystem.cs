@@ -11,7 +11,7 @@ public class MovementSystem : MonoBehaviour
     
     public void HideRange(HexGrid hexGrid)
     {
-        Debug.Log(movementRange + "called by Hiderange");
+        //Debug.Log(movementRange + "called by Hiderange");
         // TODO: Needs to get neighbors of wherever the ship is at (in hex coords)
         foreach (Vector3Int hexPos in movementRange.GetRangePositions())
         {

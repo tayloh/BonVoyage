@@ -91,6 +91,18 @@ public class ShipCard : MonoBehaviour
         }
     }*/
 
+    public IEnumerator MoveBackToRight(float finalPos, int numberOfVisibleCards, float cardSize)
+    {
+        yield return new WaitForFixedUpdate();
+        rank = numberOfVisibleCards - 1;
+        image.enabled = false;
+        Background.enabled = false;
+        yield return new WaitForSeconds(translationDuration);
+        rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, finalPos, cardSize);
+        image.enabled = true;
+        Background.enabled = true;
+    }
+
     public IEnumerator BackToQueue(float panellength)
     {
         float endPos = panellength - length - offset/2f;
