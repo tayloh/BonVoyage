@@ -173,12 +173,16 @@ public class CameraMovement : MonoBehaviour
         //CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
 
         // Clamp to treasureship
-        CamPos.x = Mathf.Clamp(CamPos.x, TreasureShip.transform.position.x - limiter_x, TreasureShip.transform.position.x + limiter_x);
-        CamPos.z = Mathf.Clamp(CamPos.z, TreasureShip.transform.position.z - limiter_z, TreasureShip.transform.position.z + limiter_z);
+        if (TreasureShip != null)
+        {
+            CamPos.x = Mathf.Clamp(CamPos.x, TreasureShip.transform.position.x - limiter_x, TreasureShip.transform.position.x + limiter_x);
+            CamPos.z = Mathf.Clamp(CamPos.z, TreasureShip.transform.position.z - limiter_z, TreasureShip.transform.position.z + limiter_z);
+        }
 
         //applies all changes
-
-        if (!_isTransitioning)
+        // Don't let the player control the camera if there isn't a treasure ship
+        // Otherwise they might move the grid off of the ships, which causes problems
+        if (!_isTransitioning && TreasureShip != null)
         {
             transform.position = CamPos;
         }

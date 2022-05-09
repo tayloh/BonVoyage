@@ -900,6 +900,7 @@ MonoBehaviour:
   RotMinX: 2
   TransitionTime: 1
   ShipCameraOffset: {x: 0, y: 15, z: -15}
+  TreasureShip: {fileID: 2087006728}
 --- !u!114 &732777267
 MonoBehaviour:
   m_ObjectHideFlags: 0
