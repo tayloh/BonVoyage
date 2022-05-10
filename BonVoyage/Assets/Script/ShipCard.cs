@@ -11,6 +11,7 @@ public class ShipCard : MonoBehaviour
     public Image Image { get => image; set => image = value; }
     private Image background;
     public Image Background { get => background; set => background = value; }
+    [SerializeField]
     private Ship ship;
     public Ship Ship { set => ship = value; get => ship; }
     [SerializeField]
@@ -75,21 +76,6 @@ public class ShipCard : MonoBehaviour
         queue.Enqueue(this);
 
     }
-
-    /*public void Translate(float panelLength, int maxRank)
-    {
-        if(rank == 0)
-        {
-            //goes back to the end of the queue
-            StartCoroutine(BackToQueue(panelLength));
-            rank = maxRank;
-        }
-        else
-        {
-            StartCoroutine(MoveLeft());
-            rank -= 1;
-        }
-    }*/
 
     public IEnumerator MoveBackToRight(float finalPos, int numberOfVisibleCards, float cardSize)
     {

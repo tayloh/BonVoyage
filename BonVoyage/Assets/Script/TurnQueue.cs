@@ -92,9 +92,12 @@ public class TurnQueue : MonoBehaviour
     }
 
     public void UpdatePanel(List<Ship> list, int index)
-    {        
+    {
+        //StartCoroutine(WaitForEndOfFrameCoroutine());
         for (int i = index; i<index + numberOfVisibleCards-1; i++)
         {
+            Debug.Log("index in dict = " + i +" out of "+list.Count);
+            Debug.Log("key is " + list[i % list.Count]);
             ShipCard card = cardsDict[list[i % list.Count]];
             card.rank = i - index+1;
             StartCoroutine(cardsDict[list[i % list.Count]].MoveLeft());
@@ -134,14 +137,43 @@ public class TurnQueue : MonoBehaviour
         }
     }
 
-    internal void Remove(Ship ship)
+    private IEnumerator WaitForEndOfFrameCoroutine()
     {
-        throw new NotImplementedException();
+        yield return new WaitForEndOfFrame(); 
+    }
+
+    internal void Remove(Ship sunkShip)
+    {
         //When a ship is sunk, remove the card in the queue and fill the gap in the queue
         //TODO
-        //
-        //
-        //
+        ShipCard sunkCard = cardsDict[sunkShip];
+        //get the rank of the sunk ships
+        //translate all cards behind this rank to fill the gap (/!\ DO NOT translate cards in queue)
+        if(cardsDict.Count <= numberOfVisibleCards)//when there is no stack
+        {
+            foreach(ShipCard card in cardsDict.Values)
+            {
+                if(card.rank > sunkCard.rank) 
+                {
+                    card.rank -= 1;
+                    StartCoroutine(card.MoveLeft());
+                }
+            }
+        }
+        else
+        {
+            //if there is a stack
+        } 
+        //remove from dict, destroy the card
+        cardsDict.Remove(sunkShip);
+        Destroy(sunkCard.gameObject);
+        numberOfVisibleCards -= 1; //does not do anything here alone
+        Debug.Log("crad destroyed, dict.count = "+cardsDict.Count);
+        Debug.Log("number of visible cards = " + numberOfVisibleCards);
+        //If no more cards in queue, delete the queue card and replace it with the last one
+        //Update the ranks
+        //if necessary, update numberOfVisibleCards (should also change the position of the last card)
+
     }
 }
 

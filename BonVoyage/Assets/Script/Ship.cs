@@ -16,6 +16,7 @@ public class Ship : MonoBehaviour
 
 
     public event Action<Ship> DeathAnimationFinished;
+    public event Action<Ship> ShipIsOutOfGame;
 
     public event Action<Ship> MovementFinished;
 
@@ -250,7 +251,7 @@ public class Ship : MonoBehaviour
         }
 
         //Vector3Int hexPos = hexGrid.GetClosestHex(..);
-        Debug.Log("Attempting highlight: " + hexCoord);
+        //Debug.Log("Attempting highlight: " + hexCoord);
         List<Vector3Int> res = hexGrid.GetAttackableTilesFor(hexCoord, broadside, fireRange);
 
         foreach (var tile in res)
@@ -407,7 +408,7 @@ public class Ship : MonoBehaviour
 
         // Make the hexagon it stood on a non obstacle.
         hexGrid.GetTileAt(this.hexCoord).HexType = HexType.Water;
-
+        ShipIsOutOfGame?.Invoke(this);
         _dead = true;
         StartCoroutine(ShipSinksAnimation());
     }

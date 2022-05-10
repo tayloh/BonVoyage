@@ -53,12 +53,14 @@ public class GameManager : MonoBehaviour
             playerShips.Add(ship);
 
             ship.DeathAnimationFinished += CleanupDeadShip;
+            ship.ShipIsOutOfGame += RemoveDeadShipFromQueue;
         }
         foreach (Ship pship in pirateShipsParent.GetComponentsInChildren<Ship>())
         {
             pirateShips.Add(pship);
 
             pship.DeathAnimationFinished += CleanupDeadShip;
+            pship.ShipIsOutOfGame += RemoveDeadShipFromQueue;
         }
 
         //Generating the random order of ships for both player and pirates
@@ -184,20 +186,25 @@ public class GameManager : MonoBehaviour
         return shipsTurn[actualShipIndex];
     }
 
+    private void RemoveDeadShipFromQueue(Ship deadShip)
+    {
+        turnQueue.Remove(deadShip);
+        shipsTurn.Remove(deadShip);
+    }
+
     public void CleanupDeadShip(Ship ship)
     {
         if (ship.gameObject.CompareTag("Pirate"))
         {
             pirateShips.Remove(ship);
-            turnQueue.Remove(ship);
         }
         else
         {
             playerShips.Remove(ship);
-            turnQueue.Remove(ship);
         }
+        //shipsTurn.Remove(ship);
 
-        shipsTurn.Remove(ship);
+        //turnQueue.Remove(ship);
 
         Destroy(ship.gameObject);
     }
