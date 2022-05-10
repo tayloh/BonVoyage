@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3364915743284753839}
   m_Layer: 7
-  m_Name: Right frigate
+  m_Name: Right brig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
