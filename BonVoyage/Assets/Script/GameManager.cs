@@ -68,6 +68,14 @@ public class GameManager : MonoBehaviour
         turnQueue.CreateCards(shipsTurn);
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     private void PrepareTurn()
     {
         shipsTurn.AddRange(playerShips);
