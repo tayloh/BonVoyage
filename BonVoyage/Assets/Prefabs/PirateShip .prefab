@@ -482,7 +482,7 @@ GameObject:
   - component: {fileID: 5576611990726243350}
   - component: {fileID: 7345994774789040781}
   - component: {fileID: 4517247852434856981}
-  - component: {fileID: 4314193763186427619}
+  - component: {fileID: 4773236166664640686}
   m_Layer: 7
   m_Name: 'PirateShip '
   m_TagString: Pirate
@@ -576,6 +576,8 @@ MonoBehaviour:
   HasFiredRight: 0
   hexCoord: {x: 0, y: 0, z: 0}
   hexGrid: {fileID: 0}
+  gameManager: {fileID: 0}
+  movementSystem: {fileID: 0}
   _canvas: {fileID: 6148926950678635924}
   _healtSlider: {fileID: 4654135876425271201}
   _damageText: {fileID: 5993496344594194057}
@@ -599,6 +601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowMaterial: {fileID: 2100000, guid: 917f12a479b86064298c84affe7f479b, type: 2}
   glowMaterialWhenInvalid: {fileID: 0}
+  greenGlowMaterial: {fileID: 0}
+  redGlowMaterial: {fileID: 0}
 --- !u!136 &5576611990726243350
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -642,7 +646,7 @@ MonoBehaviour:
   ShootingInterval: 0.5
   _leftBroadSide: {fileID: 6211434847983448586}
   _rightBroadSide: {fileID: 7505187451818985832}
---- !u!82 &4314193763186427619
+--- !u!82 &4773236166664640686
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -652,7 +656,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d3b639cb72b682242bf4b762d8723f8c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6c1c3a2a175f57d48884a1698dec8665, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -663,7 +667,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -989,6 +993,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4346568641635612782}
     m_Modifications:
+    - target: {fileID: 1504571453400453925, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3508102872786619506, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3892942777239489324, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1033,6 +1045,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5166188398744449633, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343349814279701928, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7029871377074811201, guid: 9abb30d0978361143b1a36b6a162b4f7, type: 3}
       propertyPath: m_Name
       value: Right Variant
@@ -1056,6 +1076,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4346568641635612782}
     m_Modifications:
+    - target: {fileID: 946998577809628254, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: _damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2722440536690930056, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5855729115790822218, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7224542679630602456, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438861090565620312, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8790827783291993719, guid: 766edf60019b23247b20bed3ffbcaeca, type: 3}
       propertyPath: m_Name
       value: Left Variant

@@ -40,8 +40,6 @@ public class TurnQueue : MonoBehaviour
         ShipCard.CardNumberMax = numberOfVisibleCards;
         ShipCard.Offset = offsetBetweenCards;
         ShipCard.Length = cardSize;
-        //TODO : compute the sizeof the cards and the max number of cards given the number of ships and panel length/screen resolution
-
 
         for (int i = 0; i < numberOfVisibleCards - 1; i++)
         {
@@ -94,26 +92,7 @@ public class TurnQueue : MonoBehaviour
 
     public void UpdatePanel(List<Ship> list, int index)
     {
-        StartCoroutine(WaitForEndOfRemove(list, index));
-        /*for (int i = index; i < index + numberOfVisibleCards - 1; i++)
-        {
-            //Debug.Log("index in dict = " + i +" out of "+list.Count);
-            //Debug.Log("key is " + list[i % list.Count]);
-            ShipCard card = cardsDict[list[i % list.Count]];
-            card.rank = i - index + 1;
-            StartCoroutine(cardsDict[list[i % list.Count]].MoveLeft());
-        }
-        if (queue != null)
-        {
-            UpdateQueue(cardsDict[list[(index == 0) ? list.Count - 1 : index - 1]]);
-        }
-        else
-        {
-            ShipCard card = cardsDict[list[(index == 0) ? list.Count - 1 : index - 1]];
-            StartCoroutine(card.MoveBackToRight(panelLength - cardSize - offsetBetweenCards / 2f, numberOfVisibleCards, cardSize));
-            //card.rank = numberOfVisibleCards-1;
-            //card.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
-        }*/
+        StartCoroutine(WaitForEndOfRemove(list, index));        
     }
 
     private IEnumerator WaitForEndOfRemove(List<Ship> list, int index)
@@ -133,8 +112,6 @@ public class TurnQueue : MonoBehaviour
         {
             ShipCard card = cardsDict[list[(index == 0) ? list.Count - 1 : index - 1]];
             StartCoroutine(card.MoveBackToRight(panelLength - cardSize - offsetBetweenCards / 2f, numberOfVisibleCards, cardSize));
-            //card.rank = numberOfVisibleCards;
-            //card.RectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, panelLength - cardSize - offsetBetweenCards / 2f, cardSize);
         }
     }
 
@@ -163,7 +140,6 @@ public class TurnQueue : MonoBehaviour
     {
         removeInProgress = true;
         //When a ship is sunk, remove the card in the queue and fill the gap in the queue
-        //TODO
         ShipCard sunkCard = cardsDict[sunkShip];
         //get the rank of the sunk ships
         //translate all cards behind this rank to fill the gap (/!\ DO NOT translate cards in queue)
@@ -181,7 +157,7 @@ public class TurnQueue : MonoBehaviour
         }    
         else
         {
-            //TODO if there is a stack
+            //if there is a stack
             foreach (ShipCard card in cardsDict.Values)
             {
                 //Update the ranks
@@ -204,7 +180,7 @@ public class TurnQueue : MonoBehaviour
                 StartCoroutine(newCard.MoveLeft());
             }
             queueText.text = "+" + queue.Count.ToString();
-            //TODO If no more cards in queue, delete the queue card and replace it with the last one
+            //If no more cards in queue, delete the queue card and replace it with the last one
             if (queue.Count == 1)
             {
                 ShipCard lastCard = queue.Dequeue();

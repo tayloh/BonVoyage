@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
     public ShipType _shipType;
+
     private bool _dead = false;
     public bool IsDead { get => _dead; }
 
@@ -48,6 +49,7 @@ public class Ship : MonoBehaviour
 
     [Header("Ship stats")]
     private float _maxhealth;
+    public float MaxHealth { get => _maxhealth; }
     [SerializeField]
     private float _health = 5;
     [SerializeField]
@@ -75,8 +77,11 @@ public class Ship : MonoBehaviour
 
     private Queue<Vector3> _pathPositions = new Queue<Vector3>();
 
-    // Might need one list per broadside
     private List<Cannon> _cannons = new List<Cannon>();
+
+    private AudioSource _audioSource;
+
+    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
 
     public int NumCannons
     {
@@ -87,6 +92,7 @@ public class Ship : MonoBehaviour
     {
         _glowHighlight = GetComponent<GlowHighlight>();
         _collider = GetComponent<Collider>();
+        _audioSource = GetComponent<AudioSource>();
 
         //compute hex coord of the ship and assign the ship to corresponding hex tile
         hexCoord = HexCoordinates.ConvertPositionToOffset(gameObject.transform.position - new Vector3Int(0, 1, 0));
@@ -118,6 +124,34 @@ public class Ship : MonoBehaviour
         Camera camera = Camera.main;
         _canvas.transform.LookAt(_canvas.transform.position + camera.transform.rotation * Vector3.forward, camera.transform.rotation * Vector3.up);
         _canvas.transform.localScale = new Vector3(_canvaSizeOnScreen, _canvaSizeOnScreen, _canvaSizeOnScreen) * Vector3.Dot(camera.transform.position - _canvas.transform.position, -camera.transform.forward);
+    }
+
+    public List<float> GetCannonWaitFireDurations()
+    {
+        return _cannonWaitFireDurations;
+    }
+
+    public float[] GetLeftSideCannonDamageList()
+    {
+        var leftCannons = transform.GetChild(0).GetComponentsInChildren<Cannon>();
+        float[] damagePerCannon = new float[leftCannons.Length];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = leftCannons[i].Damage;
+        }
+        return damagePerCannon;
+
+    }
+
+    public float[] GetRightSideCannonDamageList()
+    {
+        var rightCannons = transform.GetChild(1).GetComponentsInChildren<Cannon>();
+        float[] damagePerCannon = new float[rightCannons.Length];
+        for (int i = 0; i < damagePerCannon.Length; i++)
+        {
+            damagePerCannon[i] = rightCannons[i].Damage;
+        }
+        return damagePerCannon;
     }
 
     public float[] GetCannonDamageList()
@@ -325,19 +359,119 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float[] damageList)
+    {
+        // If we want separate animations, damage numbers, etc
+        // per shot, start here!
+        // Currently it just wraps the other TakeDamage() function
+
+        //var totalDmg = 0f;
+        //foreach (var dmg in damageList)
+        //{
+        //    totalDmg += dmg;
+        //}
+        //TakeDamage(totalDmg);
+
+        // Shuffle the cannon wait duration list
+        _cannonWaitFireDurations.Shuffle();
+
+        StartCoroutine(TakeDamagePerShot(damageList));
+
+    }
+
+    private IEnumerator TakeDamagePerShot(float[] damageList)
+    {
+        var color = Color.red;
+        
+        var totalDmg = 0f;
+
+        var inParenthesisText = "";
+
+        var hasSternBonus = false;
+
+        var index = 0;
+        foreach (var dmg in damageList)
+        {
+            var totalDmgText = "";
+            
+
+            totalDmg += dmg;
+            if (dmg == 0)
+            {
+                inParenthesisText += "- ";
+            }
+            else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
+            {
+                inParenthesisText += dmg.ToString() + "! ";
+                hasSternBonus = true;
+                StartCoroutine(TakeDamageAnimation());
+            }
+            else
+            {
+                inParenthesisText += dmg.ToString() + " ";
+                StartCoroutine(TakeDamageAnimation());
+            }
+            totalDmgText = totalDmg.ToString();
+
+            if (hasSternBonus)
+            {
+                totalDmgText += "!";
+            }
+
+            var fullText = totalDmgText + "  (" + inParenthesisText + ")";
+
+            _health -= dmg;
+            _health = Mathf.Clamp(_health, 0, _health);
+
+            if (_healtSlider != null)
+            {
+                _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+            }
+            _currentHealthText.text = _health.ToString();
+
+            if (_health <= 0 && !_dead)
+            {
+                Die();
+            }
+
+            _damageText.text = fullText;
+            _damageText.color = color;
+            _damageText.gameObject.SetActive(true);
+
+            var offset = 0.05f;
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index]-offset);
+            index++;
+        }
+        yield return new WaitForSeconds(1.5f);
+        _damageText.gameObject.SetActive(false);
+    }
 
     public void TakeDamage(float damage)
     {
-        StartCoroutine(TakeDamageAnimation());
+        if (damage > 0)
+        {
+            StartCoroutine(TakeDamageAnimation());
+        }
+        
 
         _health -= damage;
+        _health = Mathf.Clamp(_health, 0, _health);
         if (_healtSlider != null)
         {
             _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
         }
         _currentHealthText.text = _health.ToString();
-        StartCoroutine(ShowText("-" + damage.ToString(), -1));
-        if (_health <= 0)
+
+        if (damage > 0)
+        {
+            StartCoroutine(ShowText("-" + damage.ToString(), -1));
+        }
+        else
+        {
+            StartCoroutine(ShowText("Miss!", 0));
+        }
+        
+        if (_health <= 0 && !_dead)
         {
             Die();
         }
@@ -386,16 +520,24 @@ public class Ship : MonoBehaviour
     IEnumerator ShowText(string damage, int sign = 1)
     {
         if (sign < 0)
+        {
             _damageText.color = Color.red;
-        else
+        }   
+        else if (sign > 0)
+        {
             _damageText.color = Color.green;
+        }
+        else if (sign == 0)
+        {
+            _damageText.color = Color.white;
+        }   
 
         if (_damageText == null) yield break;
         _damageText.text = damage.ToString();
         _damageText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2.5f);
         _damageText.gameObject.SetActive(false);
-
+        
     }
 
     private IEnumerator TakeDamageAnimation()
@@ -417,6 +559,7 @@ public class Ship : MonoBehaviour
 
     private IEnumerator ShipSinksAnimation()
     {
+        _audioSource.Play();
         yield return new WaitForSeconds(1.1f);
         while (transform.position.y > -1)
         {

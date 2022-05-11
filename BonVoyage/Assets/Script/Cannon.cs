@@ -5,14 +5,14 @@ using UnityEngine;
 public class Cannon : MonoBehaviour
 {
     [SerializeField]
-    private float _damage = 1f;
+    private float _damage = 2f;
     [SerializeField]
     private float _range = 3f; //for now the range is a general range associated to the ship
-    [SerializeField]
+    //[SerializeField]
     private ParticleSystem fireAnimation;
     [SerializeField]
     private MeshFilter model;
-    [SerializeField]
+    //[SerializeField]
     private AudioSource audioSource;
     Transform transformRelativeToShip;
 
@@ -21,9 +21,25 @@ public class Cannon : MonoBehaviour
 
     private void Awake()
     {
+        //WIP
+        audioSource = GetComponent<AudioSource>();
+        fireAnimation = GetComponentInChildren<ParticleSystem>();
+
+       
         /*transformRelativeToShip.position = this.transform.localPosition;
         transformRelativeToShip.rotation = this.transform.localRotation;
         transformRelativeToShip.localScale = this.transform.localScale;*/
+        //todo : set range and damages according to th ship
+
+    }
+
+    public void PlaySound()
+    {
+        audioSource.Play();
+    }
+    public void PlayFiringAnimation()
+    {
+        fireAnimation.Play();
     }
 
     /*public Cannon(float damage, Transform cannonGO)

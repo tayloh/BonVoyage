@@ -33,9 +33,6 @@ public class ShipCard : MonoBehaviour
     {
         image = transform.GetChild(0).GetComponent<Image>();
         background = GetComponent<Image>();
-        //TODO set rank
-        //
-        //
         rectTransform = GetComponent<RectTransform>();
     }
 
@@ -79,7 +76,6 @@ public class ShipCard : MonoBehaviour
 
     public IEnumerator MoveBackToRight(float finalPos, int numberOfVisibleCards, float cardSize)
     {
-        //yield return new WaitForFixedUpdate();
         rank = numberOfVisibleCards;
         image.enabled = false;
         Background.enabled = false;

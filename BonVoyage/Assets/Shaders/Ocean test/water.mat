@@ -46,16 +46,16 @@ Material:
     - _FadeOpacity: 0.523
     - _FarLimit: 900
     - _NearLimit: 100
-    - _NormalMapSpeedMain: 100
+    - _NormalMapSpeedMain: 50
     - _NormalMapSpeedSub: -499.64
-    - _NormalStrength: 0.36
-    - _Smoothness: 0.587
+    - _NormalStrength: 0.96
+    - _Smoothness: 0.49
     - _Strength: 1.22
-    - _WaveDisplacementScale: 20
-    - _WaveDisplacementSpeed: 101.53
+    - _WaveDisplacementScale: 30
+    - _WaveDisplacementSpeed: 100
     - _WaveSpeed: 10
     m_Colors:
     - _DeepWaterColor: {r: 0.20558919, g: 0.37470978, b: 0.7924528, a: 0.9372549}
     - _ShallowWaterColor: {r: 0.06274474, g: 0.6296099, b: 0.8867924, a: 0.8313726}
-    - _WaveNormalScale: {r: 20, g: 20, b: 0, a: 0}
+    - _WaveNormalScale: {r: 30, g: 30, b: 0, a: 0}
   m_BuildTextureStacks: []

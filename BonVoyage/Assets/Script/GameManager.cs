@@ -11,8 +11,11 @@ public class GameManager : MonoBehaviour
 
     public GameState state; 
     private bool isGameOver = false;
+    private bool aiWon = false;
     public static event Action<GameState> OnGameStateChanged;
     public UnityEvent<List<Ship>, int> OnTurnChanged;
+
+    public Ship TreasureShip;
 
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> pirateShips = new List<Ship>();
@@ -122,9 +125,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Victory:
                 victoryText.SetActive(true);
+                skipButton.SetActive(false);
                 break;
             case GameState.Defeat:
                 gameOverText.SetActive(true);
+                skipButton.SetActive(false);
                 break;
         }
         OnGameStateChanged?.Invoke(newState);
@@ -133,11 +138,14 @@ public class GameManager : MonoBehaviour
 
     private void CameraTransition(Ship ship)
     {
-        var offset = cameraMovement.ShipCameraOffset;
-
         cameraMovement.SmoothlyTransitionTo(
-            ship.transform.position + offset,
+            ship.transform.position + cameraMovement.ShipCameraOffset,
             ship.transform.position);
+    }
+
+    public bool IsCameraTransitioning()
+    {
+        return cameraMovement.IsTransitioning();
     }
     
     public bool CheckForWinCondition()
@@ -153,20 +161,46 @@ public class GameManager : MonoBehaviour
         {
             UpdateGameState(GameState.Defeat);
             isGameOver = true;
+            aiWon = true;
         }
+        else if (this.TreasureShip == null || this.TreasureShip.IsDead)
+        {
+            UpdateGameState(GameState.Defeat);
+            isGameOver = true;
+            aiWon = true;
+        }
+
         return isGameOver;
     }
 
     public void NextTurn()
     {
-        if (CheckForWinCondition()) return;
+        // Check for win condition right before getting next ship (in case ai won)
+        // but there are player ships left (treasure ship sunk).
+        CheckForWinCondition();
 
         Ship nextShip = GetNextShipForTurn();
+
+        // If the AI won, let it play until all player ships are dead :)
+        if (aiWon)
+        {
+            while (!nextShip.CompareTag("Pirate") && !nextShip.IsDead)
+            {
+                nextShip = GetNextShipForTurn();
+            }
+        }
 
         if (nextShip.IsDead) nextShip = GetNextShipForTurn();
 
         CameraTransition(nextShip);
 
+        StartCoroutine(DelayNextTurn(nextShip));// calling the delay function
+    }
+    // This function will help delay the  next ship in the turn  so the camera can fully repositioned
+    IEnumerator DelayNextTurn(Ship nextShip)
+    {
+        skipButton.SetActive(false);
+        yield return new WaitForSeconds(cameraMovement.TransitionTime - 0.2f);
         if (!nextShip.CompareTag("Pirate"))
         {
             UpdateGameState(GameState.PlayerMove);
@@ -215,11 +249,16 @@ public class GameManager : MonoBehaviour
         //turnQueue.Remove(ship);
 
         Destroy(ship.gameObject);
+
+        // Check for win condition after removing a ship
+        CheckForWinCondition();
     }
 
     public List<Ship> GetPlayerShips()
     {
         // Does this give a reference to the internal list???
+        // Editing the list returned by this method causes big trouble ._. 
+        // (will remove this method asap since it's only used in one place)
         return playerShips;
     }
 
@@ -233,6 +272,46 @@ public class GameManager : MonoBehaviour
         foreach (Ship ship in playerShips)
         {
             positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3> GetPlayerShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3> GetPirateShipWorldPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.transform.position);
+        }
+        return positions;
+    }
+
+    public List<Vector3Int> GetPirateShipOffsetPositions()
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        foreach (Ship ship in pirateShips)
+        {
+            positions.Add(ship.hexCoord);
+        }
+        return positions;
+    }
+
+    public List<Vector3Int> GetPlayerShipOffsetPositions()
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        foreach (Ship ship in playerShips)
+        {
+            positions.Add(ship.hexCoord);
         }
         return positions;
     }

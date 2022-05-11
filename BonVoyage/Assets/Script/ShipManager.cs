@@ -48,6 +48,8 @@ public class ShipManager : MonoBehaviour
 
     public void StartPlayerTurn(Ship ship)
     {
+        hexgrid.DisableHighlightOfAllHexes(); // work around for ship arcs being highlighted sometimes on start of turn
+
         activeShip = ship;
         activeShip.IsPlaying = true;
 
@@ -58,6 +60,8 @@ public class ShipManager : MonoBehaviour
 
     public void StartPirateTurn(Ship ship)
     {
+        hexgrid.DisableHighlightOfAllHexes(); // work around for ship arcs being highlighted sometimes on start of turn
+
         Debug.Log("START OF PIRATE TURN:" + ship.gameObject.name);
         activeShip = ship;
         activeShip.MovementFinished += PirateAIAttack;
@@ -65,12 +69,17 @@ public class ShipManager : MonoBehaviour
         // Moved repair to start of players turn
         ship.Repair();
 
+        var ai = ship.GetComponent<PirateAI>();
+
         if (PirateMovement)
         {
-            // Only move if there isn't a ship to attack from the current position
-            if (!ship.GetComponent<PirateAI>().HasAttackableInRange())
+            List<Vector3> path = ai.ChoosePath(); // Only one element (don't support multi tile movement yet)
+            Vector3 nextPos = path[0];
+
+            // Don't move if the AI determined the next pos is the same pos as before
+            if (!ai.IsNewPosSamePos(nextPos))
             {
-                MovePirateShip(ship);
+                MovePirateShip(ship, path);
             }
             else
             {
@@ -87,57 +96,36 @@ public class ShipManager : MonoBehaviour
 
     private void PirateAIAttack(Ship ship)
     {
-        // Either we loop through all attackble tiles and attack the first
-        // available player ship (this effectivley requires a rewrite of the 
-        // PerformAttackOn function
-        // Or
-        // We can loop through all player ships, and do PerformAttackOn
-        // on each of them, which checks internally if the ship is attackable or not
-        // So, add to gamemanager a function (or field) that gets all player ships.
-
-        //var attackableLeftBroadSide = ship.GetAttackableTilesFor(1);
-        //var attackableRightBroadSide = ship.GetAttackableTilesFor(0);
-
-        //var allAttackable = attackableLeftBroadSide;
-        //allAttackable.AddRange(attackableRightBroadSide);
-
-        //Ship attackableShip = null;
-
-        //for (int i = 0; i < allAttackable.Count; i++)
-        //{
-        //    var currentHex = hexgrid.GetTileAt(allAttackable[i]);
-        //    if (currentHex != null)
-        //    {
-        //        if (currentHex.Ship != null)
-        //        {
-        //            attackableShip = currentHex.Ship;
-        //        }
-        //    }
-        //}
-
-        //if (attackableShip != null)
-        //{
-        //    attackableShip.TakeDamage(ship.AttackDamage);
-        //}
-
-        Debug.Log("PIRATE SHOOTS");
-
-        var playerShips = gameManager.GetPlayerShips();
-        var foundAttackable = false;
-
-        foreach (var playerShip in playerShips)
-        {
-            if(PerformAttackOn(playerShip))
-            {
-                foundAttackable = true;
-                break;
-            }
-        }
 
         activeShip.MovementFinished -= PirateAIAttack;
 
-        if (!foundAttackable) gameManager.NextTurn();
+        var ai = ship.GetComponent<PirateAI>();
+        var bestShipToFireOn = ai.GetMostFavorableShipToAttackVariant();
 
+        var didAttack = false;
+
+        if (bestShipToFireOn != null)
+        {
+            // 
+            didAttack = AIPerformAttackOn(ship, bestShipToFireOn);
+
+            // This should never happen, but it does, problem in PerformAttackOn()?
+            // Edit: haven't encountered it in a while now, but it's bound to happen
+            // Edit: made another function that only the AI uses when attacking
+            if (!didAttack)
+            {
+                ai.AIDebug("PerformAttackOn() not agreeing with pirateAI");
+            }
+        }
+        else
+        {
+            //gameManager.NextTurn();
+        }
+
+        if (!didAttack)
+        {
+            gameManager.NextTurn();
+        }
     }
 
     public void HandleShipSelected(GameObject shipGO)
@@ -146,7 +134,7 @@ public class ShipManager : MonoBehaviour
         Ship ship = shipGO.GetComponent<Ship>();
 
         // Be able to skip phase by clicking the active ship
-        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID())
+        if (ship.gameObject.GetInstanceID() == activeShip.gameObject.GetInstanceID() && !gameManager.IsCameraTransitioning())
         {
             // SkipPhase function handles the logic for checking that it's the players turn.
             // So you can't spam click the active ship to skip everything.
@@ -167,6 +155,49 @@ public class ShipManager : MonoBehaviour
             //     break;
         }
 
+    }
+
+    private bool AIPerformAttackOn(Ship aiShip, Ship targetedShip)
+    {
+        // Get attackable tiles
+        List<Vector3Int> attackableRightSide = aiShip.GetAttackableTilesFor(0);
+        List<Vector3Int> attackableLeftSide = aiShip.GetAttackableTilesFor(1);
+
+        var didAttack = false;
+
+        foreach (var tilePos in attackableLeftSide)
+        {
+            Hex hex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
+
+            if (hex != null && hex.Ship != null && hex.Ship.GetInstanceID() == targetedShip.GetInstanceID())
+            {
+                aiShip.HasFiredLeft = true;
+                activeShip.HasFiredLeft = true;
+
+                didAttack = true;
+            }
+        }
+
+        foreach (var tilePos in attackableRightSide)
+        {
+            Hex hex = hexgrid.GetTileAt(tilePos);
+
+            if (hex != null && hex.Ship != null && hex.Ship.GetInstanceID() == targetedShip.GetInstanceID())
+            {
+                aiShip.HasFiredRight = true;
+                activeShip.HasFiredRight = true; // just to be safe...
+
+                didAttack = true;
+            }
+        }
+
+        if (didAttack)
+        {
+            targetedShip.TakeDamage(DamageModel.GetCannonWiseDamageFor(aiShip, targetedShip));
+            TriggerFiring();
+        }
+
+        return didAttack;
     }
 
     private bool PerformAttackOn(Ship ship)
@@ -191,7 +222,7 @@ public class ShipManager : MonoBehaviour
 
         // Find out if ship is in an attackable tile
         bool isAttackable = false;
-        Vector3Int attackedPosition = Vector3Int.zero;
+        Vector3Int attackedPosition = new Vector3Int(-9999, -9999, -9999);
         foreach (var tilePos in attackableTiles)
         {
             Hex currentHex = hexgrid.GetTileAt(tilePos); // currentHex can be null since tilePos might be outside of the grid!
@@ -215,7 +246,7 @@ public class ShipManager : MonoBehaviour
                 activeShip.HasFiredRight = true;
             }
 
-            ship.TakeDamage(DamageModel.CalculateDamageFor(activeShip, ship));
+            ship.TakeDamage(DamageModel.GetCannonWiseDamageFor(activeShip, ship));
             //after an attack it will incerease the last player ship selected.
             //if (_oldSelection != null) _oldSelection.Repair();
             TriggerFiring();
@@ -312,6 +343,11 @@ public class ShipManager : MonoBehaviour
         movementSystem.MoveShip(ship, hexgrid, pirateAI.ChoosePath());
     }
 
+    internal void MovePirateShip(Ship ship, List<Vector3> path)
+    {
+        movementSystem.MoveShip(ship, hexgrid, path);
+    }
+
     private void ResetTurn(Ship selectedShip)
     {
         selectedShip.MovementFinished -= ResetTurn;
@@ -320,11 +356,16 @@ public class ShipManager : MonoBehaviour
         
         PrepareShipForFiring(activeShip);
 
-        if (!activeShip.HasAttackableInRange("Pirate")) { SkipPhase(); }
+        if (!activeShip.HasAttackableInRange("Pirate")) 
+        {
+            SkipPhase(); 
+        }
     }
 
     public void SkipPhase()
     {
+        //if (gameManager.IsCameraTransitioning()) return;
+
         switch (gameManager.state)
         {
             case GameState.PlayerMove:
@@ -332,15 +373,15 @@ public class ShipManager : MonoBehaviour
                 movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
                 activeShip.HighLightAttackableTiles(0); //highlight attackable hex
                 activeShip.HighLightAttackableTiles(1); //                
-                ResetTurn(selectedShip);
-                gameManager.UpdateGameState(GameState.PlayerFire);
+                ResetTurn(selectedShip); // reset turn already updates to playerfire
+                //gameManager.UpdateGameState(GameState.PlayerFire); 
                 break;
             case GameState.PlayerFire:
                 hexgrid.DisableHighlightOfAllHexes();
                 //update cursor
                 activeShip.ResetAttackableShips();
                 activeShip.IsPlaying = false;
-                gameManager.NextTurn();
+                gameManager.NextTurn(); 
                 break;
         }
     }
