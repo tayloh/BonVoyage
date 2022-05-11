@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb4609d5c729af4d9f7a9509ff46fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ship: {fileID: 0}
   rank: 0
   translationDuration: 1
 --- !u!1 &6427937176190007815

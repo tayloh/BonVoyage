@@ -41,7 +41,7 @@ public class ShipCard : MonoBehaviour
 
     public void SetInitialAspect(int rankImg)
     {
-        rank = rankImg;
+        rank = rankImg+1;
         if(rankImg <cardNumberMax)
         {
             rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, offset / 2f + (length + offset) * rank, length);
@@ -79,8 +79,8 @@ public class ShipCard : MonoBehaviour
 
     public IEnumerator MoveBackToRight(float finalPos, int numberOfVisibleCards, float cardSize)
     {
-        yield return new WaitForFixedUpdate();
-        rank = numberOfVisibleCards - 1;
+        //yield return new WaitForFixedUpdate();
+        rank = numberOfVisibleCards;
         image.enabled = false;
         Background.enabled = false;
         yield return new WaitForSeconds(translationDuration);
