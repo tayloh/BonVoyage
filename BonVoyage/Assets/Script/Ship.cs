@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+[SelectionBase]
 public class Ship : MonoBehaviour
 {
     public ShipType _shipType;

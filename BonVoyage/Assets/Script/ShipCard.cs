@@ -84,7 +84,7 @@ public class ShipCard : MonoBehaviour
         image.enabled = false;
         Background.enabled = false;
         yield return new WaitForSeconds(translationDuration);
-        rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, finalPos, cardSize);
+        rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, offset / 2f + (length + offset) * (numberOfVisibleCards-1), cardSize);
         image.enabled = true;
         Background.enabled = true;
     }
