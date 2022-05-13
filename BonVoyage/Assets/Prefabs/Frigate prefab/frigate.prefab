@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: -7135963264970220139}
   - component: {fileID: 3024363586458044171}
   m_Layer: 7
-  m_Name: frigate
+  m_Name: Frigate
   m_TagString: PlayerShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
