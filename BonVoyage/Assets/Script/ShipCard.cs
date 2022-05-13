@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
+
 [SelectionBase]
 public class ShipCard : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class ShipCard : MonoBehaviour
     public Image Background { get => background; set => background = value; }
     [SerializeField]
     private Ship ship;
+    private GlowHighlight shipHighlight;
     public Ship Ship { set => ship = value; get => ship; }
     [SerializeField]
     public int rank;
@@ -34,6 +37,21 @@ public class ShipCard : MonoBehaviour
         image = transform.GetChild(0).GetComponent<Image>();
         background = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
+    }
+
+    private void Start()
+    {
+        //adding callback when mouse pointer enters the image, OnPointerEnter()
+        var pEnter = new EventTrigger.Entry();
+        pEnter.eventID = EventTriggerType.PointerEnter;
+        pEnter.callback.AddListener((eventData) => { OnPointerEnter(); });
+        this.GetComponent<EventTrigger>().triggers.Add(pEnter);
+
+        //adding callback when mouse pointer enters the image, OnPointerExit()
+        var pExit = new EventTrigger.Entry();
+        pExit.eventID = EventTriggerType.PointerExit;
+        pExit.callback.AddListener((eventData) => { OnPointerExit(); });
+        this.GetComponent<EventTrigger>().triggers.Add(pExit);
     }
 
     public void SetInitialAspect(int rankImg)
@@ -66,6 +84,7 @@ public class ShipCard : MonoBehaviour
                 throw new Exception("Type of ship not supported");
                 break;
         }
+        shipHighlight = ship.GetComponent<GlowHighlight>();
     }
 
     private void Queue()
@@ -110,5 +129,20 @@ public class ShipCard : MonoBehaviour
             yield return null;
         }
         rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, endPos, length);
+    }
+
+    private void OnMouseEnter()
+    {
+        ship.GetComponent<GlowHighlight>().ToggleGlow();
+    }
+
+    private void OnPointerEnter()
+    {
+        shipHighlight.ToggleGlow();
+    }
+
+    private void OnPointerExit()
+    {
+        shipHighlight.ToggleGlow();
     }
 }
