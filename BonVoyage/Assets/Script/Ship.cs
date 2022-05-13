@@ -387,6 +387,11 @@ public class Ship : MonoBehaviour
 
         var inParenthesisText = "";
 
+        var hitsAndMissCountText = "";
+
+        var misses = 0;
+        var hits = 0;
+
         var hasSternBonus = false;
 
         var index = 0;
@@ -399,16 +404,19 @@ public class Ship : MonoBehaviour
             if (dmg == 0)
             {
                 inParenthesisText += "- ";
+                misses++;
             }
             else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
             {
-                inParenthesisText += dmg.ToString() + "! ";
+                inParenthesisText += dmg.ToString(); //+ "! ";
                 hasSternBonus = true;
+                hits++;
                 StartCoroutine(TakeDamageAnimation());
             }
             else
             {
                 inParenthesisText += dmg.ToString() + " ";
+                hits++;
                 StartCoroutine(TakeDamageAnimation());
             }
             totalDmgText = totalDmg.ToString();
@@ -418,7 +426,9 @@ public class Ship : MonoBehaviour
                 totalDmgText += "!";
             }
 
-            var fullText = totalDmgText + "  (" + inParenthesisText + ")";
+            hitsAndMissCountText = "Hit x" + hits + "  " + "Miss x" + misses;
+
+            var fullText = totalDmgText + " - " + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
 
             _health -= dmg;
             _health = Mathf.Clamp(_health, 0, _health);
@@ -438,8 +448,7 @@ public class Ship : MonoBehaviour
             _damageText.color = color;
             _damageText.gameObject.SetActive(true);
 
-            var offset = 0.05f;
-            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]-offset);
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]);
             index++;
         }
         yield return new WaitForSeconds(1.5f);

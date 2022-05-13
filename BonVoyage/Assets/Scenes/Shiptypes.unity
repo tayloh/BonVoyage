@@ -952,6 +952,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1679244513}
     - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: fireRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785397451433885353, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
@@ -1511,6 +1515,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1679244513}
     - target: {fileID: 6785397451433885353, guid: 6ab55511f83617741ba2af38aaced882, type: 3}
+      propertyPath: fireRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785397451433885353, guid: 6ab55511f83617741ba2af38aaced882, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 442071959}
@@ -1669,6 +1677,10 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 1679244513}
+    - target: {fileID: 6785397451433885353, guid: dac42ce826700404bb1bc0e5d364d4c2, type: 3}
+      propertyPath: fireRange
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6785397451433885353, guid: dac42ce826700404bb1bc0e5d364d4c2, type: 3}
       propertyPath: gameManager
       value: 
