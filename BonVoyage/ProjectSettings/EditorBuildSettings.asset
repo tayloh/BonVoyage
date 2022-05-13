@@ -9,12 +9,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: a5a6ea60bda429f4ca3511d95a1a9c6b
   - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 4572012cba370074494cf6a81c4fb48a
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: 993bc9bc0177d5147b3421524693726b
+  - enabled: 1
+    path: Assets/Scenes/Level10.unity
+    guid: 8cf29d6fced0ced44a7c103317cc0e4d
+  - enabled: 0
     path: Assets/Scenes/HexGrid.unity
     guid: cfcda49ecc8dc8b4c812fb38bf076720
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LargeBattle.unity
     guid: ee38a949954c20a41ab936e601df9fe1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Shiptypes.unity
     guid: 334a3f8c822dec9478f31a9d6f67f21c
   m_configObjects: {}
