@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: b022b945aed845f4e81e7b3137374bdf
+guid: 26affdacc8b48f049aaad3d8466f4a6d
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: CannonOnDeck
+    second: {fileID: 2800000, guid: b43f1183d56505d408f27bac1459bb78, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
