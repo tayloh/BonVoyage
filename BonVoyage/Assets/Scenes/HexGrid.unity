@@ -1465,6 +1465,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -1558,6 +1562,10 @@ PrefabInstance:
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
@@ -1668,6 +1676,10 @@ PrefabInstance:
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
@@ -2150,6 +2162,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -2338,6 +2354,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
@@ -2360,6 +2380,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: -7135963264970220139, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (2)
@@ -2830,6 +2854,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: -7135963264970220139, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 5975145143700047177, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Name
       value: TreasureShip (3)
@@ -2939,6 +2967,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 289156636}
     m_Modifications:
+    - target: {fileID: -7135963264970220139, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 1060484200593801829, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_Camera
       value: 
@@ -3116,6 +3148,10 @@ PrefabInstance:
     - target: {fileID: 4346568641635612782, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid

@@ -1797,6 +1797,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4517247852434856981, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
+      propertyPath: ShootingInterval
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 7345994774789040781, guid: 0889550f7861e714bbeac60aae78db2e, type: 3}
       propertyPath: hexGrid
       value: 
