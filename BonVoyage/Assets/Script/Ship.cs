@@ -16,7 +16,7 @@ public class Ship : MonoBehaviour
     // ...
     public bool HasFiredLeft = false;
     public bool HasFiredRight = false;
-
+    
 
     public event Action<Ship> DeathAnimationFinished;
     public event Action<Ship> ShipIsOutOfGame;

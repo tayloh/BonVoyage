@@ -193,8 +193,13 @@ public class ShipManager : MonoBehaviour
 
         if (didAttack)
         {
-            targetedShip.TakeDamage(DamageModel.GetCannonWiseDamageFor(aiShip, targetedShip));
-            TriggerFiring();
+            //targetedShip.TakeDamage(DamageModel.GetCannonWiseDamageFor(aiShip, targetedShip));
+
+            var damageArray = DamageModel.GetCannonWiseDamageFor(aiShip, targetedShip);
+            var cannonsFired = damageArray.Length;
+            targetedShip.TakeDamage(damageArray);
+
+            TriggerFiring(cannonsFired);
         }
 
         return didAttack;
@@ -246,10 +251,13 @@ public class ShipManager : MonoBehaviour
                 activeShip.HasFiredRight = true;
             }
 
-            ship.TakeDamage(DamageModel.GetCannonWiseDamageFor(activeShip, ship));
+            var damageArray = DamageModel.GetCannonWiseDamageFor(activeShip, ship);
+            var cannonsFired = damageArray.Length;
+            ship.TakeDamage(damageArray);
             //after an attack it will incerease the last player ship selected.
             //if (_oldSelection != null) _oldSelection.Repair();
-            TriggerFiring();
+
+            TriggerFiring(cannonsFired);
 
             return true;
         }
@@ -371,8 +379,8 @@ public class ShipManager : MonoBehaviour
             case GameState.PlayerMove:
                 //Prepare terrain for attack phase by highlighting the attackable hexagons only
                 movementSystem.HideRange(this.hexgrid); //clean accessible hexagons 
-                activeShip.HighLightAttackableTiles(0); //highlight attackable hex
-                activeShip.HighLightAttackableTiles(1); //                
+                //activeShip.HighLightAttackableTiles(0); //highlight attackable hex
+                //activeShip.HighLightAttackableTiles(1); // reset turn already highlights               
                 ResetTurn(selectedShip); // reset turn already updates to playerfire
                 //gameManager.UpdateGameState(GameState.PlayerFire); 
                 break;
@@ -425,28 +433,27 @@ public class ShipManager : MonoBehaviour
         this.selectedShip = null;
     }
 
-    public void TriggerFiring()
+    public void TriggerFiring(int numCannonsFired)
     {
-        StartCoroutine("FireActiveShip");
+        StartCoroutine(FireActiveShip(numCannonsFired));
     }
 
-    private IEnumerator FireActiveShip()
+    private IEnumerator FireActiveShip(int numCannonsFired)
     {
         hexgrid.DisableHighlightOfAllHexes();
         activeShip.RemoveHighLightAttackableTiles(0);
         activeShip.RemoveHighLightAttackableTiles(1);
 
         var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
-        
+
         if (activeShip.HasFiredRight)
         {
-            fireAnimation.PlayFireAnimation(0);
-            Debug.Log("FIREANIME " + fireAnimation.GetFireAnimationTime());
+            fireAnimation.PlayFireAnimation(0, numCannonsFired);
             yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
         else
         {
-            fireAnimation.PlayFireAnimation(1);
+            fireAnimation.PlayFireAnimation(1, numCannonsFired);
             yield return new WaitForSeconds(fireAnimation.GetFireAnimationTime());
         }
 

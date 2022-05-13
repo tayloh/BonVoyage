@@ -69,7 +69,8 @@ public class DamageModel : MonoBehaviour
         Debug.Log("DMG - " + "Coeff:" + accuracyCoefficient);
 
         var hits = currentBroadSideDmgList.Count;
-        var cannonWiseDmgList = new float[currentBroadSideDmgList.Count];
+        var totalDmg = 0.0f;
+        var cannonWiseDmgList = new List<float>();
         var cannonIndex = 0;
         foreach (var dmg in currentBroadSideDmgList)
         {
@@ -98,14 +99,28 @@ public class DamageModel : MonoBehaviour
                 hits--;
             }
 
-            cannonWiseDmgList[cannonIndex] = Mathf.CeilToInt(resultingDmg);
+            cannonWiseDmgList.Add(Mathf.CeilToInt(resultingDmg));
+            totalDmg += cannonWiseDmgList[cannonIndex];
+
+            if (totalDmg > targetedShip.Health)
+            {
+                break;
+            } 
+
             cannonIndex++;
         }
 
         //cannonWiseDmgList = Mathf.CeilToInt(cannonWiseDmgList);
         Debug.Log("DMG - " + hits + " hits on " + DamageModel.GetAttackTypeString(attackType));
 
-        return cannonWiseDmgList;
+        // Convert to float[]
+        float[] result = new float[cannonWiseDmgList.Count];
+        for (int i = 0; i < result.Length; i++)
+        {
+            result[i] = cannonWiseDmgList[i];
+        }
+
+        return result;
     }
 
     public static float CalculateTotalDamageFor(Ship attackingShip, Ship targetedShip)
