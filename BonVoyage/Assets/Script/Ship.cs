@@ -439,7 +439,7 @@ public class Ship : MonoBehaviour
             _damageText.gameObject.SetActive(true);
 
             var offset = 0.05f;
-            yield return new WaitForSeconds(_cannonWaitFireDurations[index]-offset);
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]-offset);
             index++;
         }
         yield return new WaitForSeconds(1.5f);

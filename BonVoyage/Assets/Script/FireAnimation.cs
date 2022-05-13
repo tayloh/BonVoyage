@@ -71,7 +71,7 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach(Cannon cannon in _leftCannons)
             {
-                interval = intervalDurations[i];
+                interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;
@@ -89,7 +89,7 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach (Cannon cannon in _rightCannons)
             {
-                interval = intervalDurations[i];
+                interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;
