@@ -17,7 +17,6 @@ public class FireAnimation : MonoBehaviour
     private ParticleSystem[] _rightSideParticleSystem;
     private AudioSource audioSource;
 
-    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
     private Ship _ship;
 
     private Ship _target;
@@ -26,7 +25,20 @@ public class FireAnimation : MonoBehaviour
 
     public float GetFireAnimationTime()
     {
-        return _numCannonsFired * ShootingInterval;
+        var timeInSeconds = 0.0f;
+        var timings = _ship.GetCannonWaitFireDurations();
+
+        for (int i = 0; i < _numCannonsFired; i++)
+        {
+            // Timings can be less than cannons fired
+            // It's just a pre set list.
+            timeInSeconds += timings[i % timings.Count];
+        }
+
+        // Add a little time after the animation is finished to not instantly skip to next ship
+        timeInSeconds += 0.75f;
+
+        return timeInSeconds;
         
     }
 

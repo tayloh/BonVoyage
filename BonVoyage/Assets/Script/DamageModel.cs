@@ -12,7 +12,7 @@ public class DamageModel : MonoBehaviour
     public static float BowSternAccuracyReduction = 0.65f;
     public static float SternDamageAmplifier = 1.5f;
     public static float BowDamageAmplifier = 0.5f;
-    public static float TileDistanceForWorstAccuracy = 20;
+    public static float TileDistanceForWorstAccuracy = 14;
 
     public static float[] GetCannonWiseDamageFor(Ship attackingShip, Ship targetedShip)
     {

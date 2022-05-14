@@ -81,7 +81,11 @@ public class Ship : MonoBehaviour
 
     private AudioSource _audioSource;
 
-    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
+    private List<float> _cannonWaitFireDurations = new List<float> { 
+        0.14f, 0.15f, 0.16f, 0.17f, 0.18f, 0.19f,
+        0.2f, 0.21f, 0.22f, 0.23f, 0.24f, 0.25f,
+        0.26f, 0.27f, 0.28f, 0.29f, 0.30f, 0.31f,
+        0.32f, 0.33f, 0.34f, 0.35f, 0.36f, 0.37f};
 
     public int NumCannons
     {
@@ -598,7 +602,7 @@ public class Ship : MonoBehaviour
     {
         if (!CameraMovement.isMoving && !CameraMovement._isTransitioning)
         {
-            if (isPlaying)
+            if (isPlaying && !IsFiring)
             {
                 playerInput.UpdateCursor(CursorState.SkipTurn);
             }
@@ -607,9 +611,13 @@ public class Ship : MonoBehaviour
             }
             else if (gameManager.state == GameState.PlayerMove || gameManager.state == GameState.PlayerFire)
             {
-                HighLightAttackableTiles(0);
-                HighLightAttackableTiles(1);
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    HighLightAttackableTiles(0);
+                    HighLightAttackableTiles(1);
+                }
             }
+            
             if (isAttackable)
             {
                 playerInput.UpdateCursor(CursorState.AttackTarget);
