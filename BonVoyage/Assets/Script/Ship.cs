@@ -83,6 +83,9 @@ public class Ship : MonoBehaviour
 
     private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
 
+    private Hex tile;
+    public Hex Tile { get => tile; }
+
     public int NumCannons
     {
         get => _cannons.Count;
@@ -114,6 +117,7 @@ public class Ship : MonoBehaviour
     {
         Debug.Log("Ship script: hex coord of the ship " + hexCoord);
         hexGrid.PlaceShip(hexCoord, this);
+        tile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(transform.position - Vector3.up));
     }
 
     private void LateUpdate()
@@ -243,6 +247,7 @@ public class Ship : MonoBehaviour
             MovementFinished?.Invoke(this);
 
         }
+        tile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(transform.position - Vector3.up));
         new WaitForEndOfFrame();
         _collider.enabled = true;
     }

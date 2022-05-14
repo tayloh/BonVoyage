@@ -138,11 +138,13 @@ public class ShipCard : MonoBehaviour
 
     private void OnPointerEnter()
     {
-        shipHighlight.ToggleGlow();
+        //shipHighlight.ToggleGlow();
+        ship.Tile.GetComponent<GlowHighlight>().DisplayAsQueueCard();
     }
 
     private void OnPointerExit()
     {
-        shipHighlight.ToggleGlow();
+        //shipHighlight.ToggleGlow();
+        ship.Tile.GetComponent<GlowHighlight>().ResetHighlight();
     }
 }

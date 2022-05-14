@@ -13,6 +13,7 @@ public class GlowHighlight : MonoBehaviour
     public Material glowMaterialWhenInvalid;
     public Material greenGlowMaterial;
     public Material redGlowMaterial;
+    public Material orangeGlowMaterial;
 
     private bool isGlowing = false;
 
@@ -159,6 +160,14 @@ public class GlowHighlight : MonoBehaviour
         foreach (Renderer renderer in originalMaterialDictionary.Keys)
         {
             renderer.materials = new Material[1] { greenGlowMaterial };
+        }
+    }
+
+    public void DisplayAsQueueCard()
+    {
+        foreach (Renderer renderer in originalMaterialDictionary.Keys)
+        {
+            renderer.materials = new Material[1] { orangeGlowMaterial };
         }
     }
 }
