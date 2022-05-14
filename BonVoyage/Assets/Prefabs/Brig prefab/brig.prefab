@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: -7135963264970220139}
   - component: {fileID: 3024363586458044171}
   m_Layer: 7
-  m_Name: Brig
+  m_Name: brig
   m_TagString: PlayerShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,7 +373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
+  - {fileID: -3846018093981099296, guid: e74c31c8f3eff5f41a0431328f1602d0, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -410,6 +410,7 @@ MonoBehaviour:
   _shipType: 1
   HasFiredLeft: 0
   HasFiredRight: 0
+  IsFiring: 0
   hexCoord: {x: 0, y: 0, z: 0}
   hexGrid: {fileID: 0}
   gameManager: {fileID: 0}
@@ -442,6 +443,7 @@ MonoBehaviour:
   glowMaterialWhenInvalid: {fileID: 0}
   greenGlowMaterial: {fileID: 0}
   redGlowMaterial: {fileID: 0}
+  orangeGlowMaterial: {fileID: 0}
 --- !u!136 &2924573784104309643
 CapsuleCollider:
   m_ObjectHideFlags: 0

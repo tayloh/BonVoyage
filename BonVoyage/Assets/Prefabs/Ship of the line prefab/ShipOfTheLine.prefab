@@ -373,7 +373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 17041d68c853a3e4faf26839c1a11590, type: 3}
+  - {fileID: -6922793697723135513, guid: 2d7b59434447359478b97f33d61637dd, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -443,6 +443,7 @@ MonoBehaviour:
   glowMaterialWhenInvalid: {fileID: 0}
   greenGlowMaterial: {fileID: 0}
   redGlowMaterial: {fileID: 0}
+  orangeGlowMaterial: {fileID: 0}
 --- !u!136 &2924573784104309643
 CapsuleCollider:
   m_ObjectHideFlags: 0
