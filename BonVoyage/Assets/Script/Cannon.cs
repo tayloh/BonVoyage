@@ -22,8 +22,8 @@ public class Cannon : MonoBehaviour
     private void Awake()
     {
         //WIP
-        audioSource = GetComponent<AudioSource>();
-        fireAnimation = GetComponentInChildren<ParticleSystem>();
+        //audioSource = GetComponent<AudioSource>();
+        //fireAnimation = GetComponentInChildren<ParticleSystem>();
 
        
         /*transformRelativeToShip.position = this.transform.localPosition;
@@ -33,8 +33,15 @@ public class Cannon : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        fireAnimation = GetComponentInChildren<ParticleSystem>();
+    }
+
     public void PlaySound()
     {
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
         audioSource.Play();
     }
     public void PlayFiringAnimation()

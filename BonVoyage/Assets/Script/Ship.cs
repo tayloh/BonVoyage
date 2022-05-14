@@ -16,7 +16,7 @@ public class Ship : MonoBehaviour
     // ...
     public bool HasFiredLeft = false;
     public bool HasFiredRight = false;
-
+    public bool IsFiring = false;
 
     public event Action<Ship> DeathAnimationFinished;
     public event Action<Ship> ShipIsOutOfGame;
@@ -81,7 +81,11 @@ public class Ship : MonoBehaviour
 
     private AudioSource _audioSource;
 
-    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
+    private List<float> _cannonWaitFireDurations = new List<float> { 
+        0.14f, 0.15f, 0.16f, 0.17f, 0.18f, 0.19f,
+        0.2f, 0.21f, 0.22f, 0.23f, 0.24f, 0.25f,
+        0.26f, 0.27f, 0.28f, 0.29f, 0.30f, 0.31f,
+        0.32f, 0.33f, 0.34f, 0.35f, 0.36f, 0.37f};
 
     private Hex tile;
     public Hex Tile { get => tile; }
@@ -392,6 +396,11 @@ public class Ship : MonoBehaviour
 
         var inParenthesisText = "";
 
+        var hitsAndMissCountText = "";
+
+        var misses = 0;
+        var hits = 0;
+
         var hasSternBonus = false;
 
         var index = 0;
@@ -404,16 +413,19 @@ public class Ship : MonoBehaviour
             if (dmg == 0)
             {
                 inParenthesisText += "- ";
+                misses++;
             }
             else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
             {
-                inParenthesisText += dmg.ToString() + "! ";
+                inParenthesisText += dmg.ToString(); //+ "! ";
                 hasSternBonus = true;
+                hits++;
                 StartCoroutine(TakeDamageAnimation());
             }
             else
             {
                 inParenthesisText += dmg.ToString() + " ";
+                hits++;
                 StartCoroutine(TakeDamageAnimation());
             }
             totalDmgText = totalDmg.ToString();
@@ -423,7 +435,9 @@ public class Ship : MonoBehaviour
                 totalDmgText += "!";
             }
 
-            var fullText = totalDmgText + "  (" + inParenthesisText + ")";
+            hitsAndMissCountText = "Hit x" + hits + "  " + "Miss x" + misses;
+
+            var fullText = totalDmgText + " - " + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
 
             _health -= dmg;
             _health = Mathf.Clamp(_health, 0, _health);
@@ -443,8 +457,7 @@ public class Ship : MonoBehaviour
             _damageText.color = color;
             _damageText.gameObject.SetActive(true);
 
-            var offset = 0.05f;
-            yield return new WaitForSeconds(_cannonWaitFireDurations[index]-offset);
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]);
             index++;
         }
         yield return new WaitForSeconds(1.5f);
@@ -594,7 +607,7 @@ public class Ship : MonoBehaviour
     {
         if (!CameraMovement.isMoving && !CameraMovement._isTransitioning)
         {
-            if (isPlaying)
+            if (isPlaying && !IsFiring)
             {
                 playerInput.UpdateCursor(CursorState.SkipTurn);
             }
@@ -603,9 +616,13 @@ public class Ship : MonoBehaviour
             }
             else if (gameManager.state == GameState.PlayerMove || gameManager.state == GameState.PlayerFire)
             {
-                HighLightAttackableTiles(0);
-                HighLightAttackableTiles(1);
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    HighLightAttackableTiles(0);
+                    HighLightAttackableTiles(1);
+                }
             }
+            
             if (isAttackable)
             {
                 playerInput.UpdateCursor(CursorState.AttackTarget);

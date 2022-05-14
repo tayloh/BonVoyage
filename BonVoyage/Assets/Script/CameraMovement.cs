@@ -172,8 +172,8 @@ public class CameraMovement : MonoBehaviour
         //CamPos.x = Mathf.Clamp(CamPos.x, -limiter_x, limiter_x);
         //CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
 
-        // Clamp to treasureship
-        if (TreasureShip != null)
+        // Clamp to treasureship when not in transition
+        if (TreasureShip != null && !_isTransitioning)
         {
             CamPos.x = Mathf.Clamp(CamPos.x, TreasureShip.transform.position.x - limiter_x, TreasureShip.transform.position.x + limiter_x);
             CamPos.z = Mathf.Clamp(CamPos.z, TreasureShip.transform.position.z - limiter_z, TreasureShip.transform.position.z + limiter_z);

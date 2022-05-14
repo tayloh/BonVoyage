@@ -17,14 +17,28 @@ public class FireAnimation : MonoBehaviour
     private ParticleSystem[] _rightSideParticleSystem;
     private AudioSource audioSource;
 
-    private List<float> _cannonWaitFireDurations = new List<float> { 0.15f, 0.2f, 0.2f, 0.25f, 0.25f, 0.3f, 0.3f, 0.35f, 0.4f, 0.45f };
     private Ship _ship;
 
-    private int _numCannons = 4; //default value
+    private Ship _target;
+
+    private int _numCannonsFired = 4; //default value
 
     public float GetFireAnimationTime()
     {
-        return _numCannons * ShootingInterval;
+        var timeInSeconds = 0.0f;
+        var timings = _ship.GetCannonWaitFireDurations();
+
+        for (int i = 0; i < _numCannonsFired; i++)
+        {
+            // Timings can be less than cannons fired
+            // It's just a pre set list.
+            timeInSeconds += timings[i % timings.Count];
+        }
+
+        // Add a little time after the animation is finished to not instantly skip to next ship
+        timeInSeconds += 0.75f;
+
+        return timeInSeconds;
         
     }
 
@@ -37,7 +51,7 @@ public class FireAnimation : MonoBehaviour
         _leftCannons = transform.GetChild(0).GetComponentsInChildren<Cannon>();
         _rightCannons = transform.GetChild(1).GetComponentsInChildren<Cannon>();
 
-        _numCannons = GetComponent<Ship>().GetNumberOfCannons() / 2;
+        _numCannonsFired = GetComponent<Ship>().GetNumberOfCannons() / 2;
 
         //AnimationDuration = _numCannons * ShootingInterval;
         audioSource = GetComponent<AudioSource>();
@@ -46,14 +60,20 @@ public class FireAnimation : MonoBehaviour
     }
 
 
-    public void PlayFireAnimation(int broadside)
+    public void PlayFireAnimation(int broadside, int numCannons)
     {
+        _numCannonsFired = numCannons;
         StartCoroutine(_playRollingBroadSide(ShootingInterval, broadside));
     }
 
     public void PlayFireSound()
     {
         audioSource.Play();
+    }
+
+    public void SetTargetShip(Ship ship)
+    {
+        _target = ship;
     }
 
     private IEnumerator _playRollingBroadSide(float interval, int side)
@@ -71,10 +91,16 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach(Cannon cannon in _leftCannons)
             {
-                interval = intervalDurations[i];
+                interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;
+
+                if (i >= _numCannonsFired)
+                {
+                    yield break;
+                }
+
                 yield return new WaitForSeconds(interval);
             }
         }
@@ -89,10 +115,16 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach (Cannon cannon in _rightCannons)
             {
-                interval = intervalDurations[i];
+                interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
                 i++;
+
+                if (i >= _numCannonsFired)
+                {
+                    yield break;
+                }
+
                 yield return new WaitForSeconds(interval);
             }
         }
