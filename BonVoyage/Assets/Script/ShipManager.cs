@@ -372,7 +372,9 @@ public class ShipManager : MonoBehaviour
 
     public void SkipPhase()
     {
-        //if (gameManager.IsCameraTransitioning()) return;
+        // Possible to click on ship while its firing to skip
+        // Should not be able to
+        if (activeShip.IsFiring) return;
 
         switch (gameManager.state)
         {
@@ -440,9 +442,13 @@ public class ShipManager : MonoBehaviour
 
     private IEnumerator FireActiveShip(int numCannonsFired)
     {
+        activeShip.IsFiring = true;
         hexgrid.DisableHighlightOfAllHexes();
         activeShip.RemoveHighLightAttackableTiles(0);
         activeShip.RemoveHighLightAttackableTiles(1);
+
+        // Skip button should not be available when the ship is firing.
+        gameManager.DisableSkipButton();
 
         var fireAnimation = activeShip.gameObject.GetComponent<FireAnimation>();
 
@@ -472,6 +478,7 @@ public class ShipManager : MonoBehaviour
         activeShip.HasFiredRight = false;
         activeShip.ResetAttackableShips();
         activeShip.IsPlaying = false;
+        activeShip.IsFiring = false;
         gameManager.NextTurn();
 
     }

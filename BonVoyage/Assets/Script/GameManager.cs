@@ -262,6 +262,11 @@ public class GameManager : MonoBehaviour
         return playerShips;
     }
 
+    public void DisableSkipButton()
+    {
+        skipButton.SetActive(false);
+    }
+
     public List<Vector3> GetShipWorldPositions()
     {
         List<Vector3> positions = new List<Vector3>();
