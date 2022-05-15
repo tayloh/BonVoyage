@@ -8,6 +8,10 @@ using UnityEngine.UI;
 [SelectionBase]
 public class Ship : MonoBehaviour
 {
+    public bool DisableSway = false;
+    public float RockingSpeedMultiplier = 0.45f;
+    public float RockingAngle = 11.0f;
+
     public ShipType _shipType;
 
     private bool _dead = false;
@@ -122,6 +126,11 @@ public class Ship : MonoBehaviour
         Debug.Log("Ship script: hex coord of the ship " + hexCoord);
         hexGrid.PlaceShip(hexCoord, this);
         tile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(transform.position - Vector3.up));
+
+        if (!DisableSway)
+        {
+            StartCoroutine(SwayAnimation());
+        }
     }
 
     private void LateUpdate()
@@ -655,6 +664,24 @@ public class Ship : MonoBehaviour
             }
                         
         }
+    }
+
+    private IEnumerator SwayAnimation()
+    {
+        Quaternion startRotation = transform.rotation;
+        while (!_dead)
+        {
+
+            float f = Mathf.Sin(Time.time * RockingSpeedMultiplier) * RockingAngle;
+
+            Quaternion rotationToApply = startRotation * Quaternion.AngleAxis(f, Vector3.forward);
+
+            transform.rotation = Quaternion.Euler(rotationToApply.eulerAngles.x, transform.rotation.eulerAngles.y, rotationToApply.eulerAngles.z);
+            
+
+            yield return null;
+        }
+        yield break;
     }
 
     public int GetNumberOfCannons()
