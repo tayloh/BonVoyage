@@ -3,7 +3,12 @@ guid: 584d71f5dfda4bb44b1a492b365b50e8
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: frigate_Material.001_Albedo
+    second: {fileID: 2800000, guid: 730c41fd64398bb41b277ded0c33da89, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

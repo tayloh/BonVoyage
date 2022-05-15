@@ -374,7 +374,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 25c2ca4db54a826429a4dc0fbb4f8dd2, type: 2}
+  - {fileID: 2100000, guid: 8ab442a5a30f0f24288880aad4aa804b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -411,6 +411,7 @@ MonoBehaviour:
   _shipType: 1
   HasFiredLeft: 0
   HasFiredRight: 0
+  IsFiring: 0
   hexCoord: {x: 0, y: 0, z: 0}
   hexGrid: {fileID: 0}
   gameManager: {fileID: 0}
@@ -443,6 +444,7 @@ MonoBehaviour:
   glowMaterialWhenInvalid: {fileID: 0}
   greenGlowMaterial: {fileID: 0}
   redGlowMaterial: {fileID: 0}
+  orangeGlowMaterial: {fileID: 0}
 --- !u!136 &2924573784104309643
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1745,6 +1747,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1686553221680277956}
     m_Modifications:
+    - target: {fileID: 142550332174506534, guid: 5318ce9906864614eae13b9f64e29f53, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8ab442a5a30f0f24288880aad4aa804b, type: 2}
     - target: {fileID: 1551424218831491332, guid: 5318ce9906864614eae13b9f64e29f53, type: 3}
       propertyPath: _damage
       value: 2

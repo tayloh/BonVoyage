@@ -3,7 +3,12 @@ guid: 2d7b59434447359478b97f33d61637dd
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ship_of_the_line_Material.001_Albedo
+    second: {fileID: 2800000, guid: b33dfee80d3e4ca4fb65410200a779c0, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

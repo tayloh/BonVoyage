@@ -3,7 +3,12 @@ guid: e74c31c8f3eff5f41a0431328f1602d0
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: brig_Material.002_Albedo
+    second: {fileID: 2800000, guid: 1eb687d8fb44fc7489f46e8ee5f83955, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

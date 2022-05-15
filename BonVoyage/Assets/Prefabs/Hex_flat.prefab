@@ -209,6 +209,7 @@ MonoBehaviour:
   glowMaterialWhenInvalid: {fileID: 2100000, guid: 8a4a672c410be7f479f79efc701d0a82, type: 2}
   greenGlowMaterial: {fileID: 2100000, guid: 089283819a1a3b144b5c47c91f34f1a2, type: 2}
   redGlowMaterial: {fileID: 2100000, guid: 2f9179b83e22c9341a0125f4729e3672, type: 2}
+  orangeGlowMaterial: {fileID: 2100000, guid: af9efd5a2238d704a985deab0a99fe67, type: 2}
 --- !u!1 &969951994100378675
 GameObject:
   m_ObjectHideFlags: 0
