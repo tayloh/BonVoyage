@@ -1048,14 +1048,15 @@ MonoBehaviour:
   limiter_x: 100
   limiter_z: 100
   scrollSpeed: 2000
-  minLimiter_y: 5
-  maxLimiter_y: 120
+  minLimiter_y: 2
+  maxLimiter_y: 200
   RotSpeed: 350
   RotMaxX: 88
   RotMinX: 2
   TransitionTime: 1
   ShipCameraOffset: {x: 0, y: 15, z: -15}
   TreasureShip: {fileID: 2087006728}
+  _activeShipTransform: {fileID: 0}
 --- !u!114 &732777267
 MonoBehaviour:
   m_ObjectHideFlags: 0

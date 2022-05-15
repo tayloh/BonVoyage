@@ -13,8 +13,8 @@ public class CameraMovement : MonoBehaviour
 
     //limiters to how far the camera can go in each direction
     //these values can be accessed via the inspector in unity
-    public float limiter_x = 100f;
-    public float limiter_z = 100f;
+    //public float limiter_x = 100f;
+    //public float limiter_z = 100f;
 
     //variable to handle scroll speed for zoom
     public float scrollSpeed = 2000f;
@@ -40,10 +40,12 @@ public class CameraMovement : MonoBehaviour
     static public bool isMoving = false;
 
     public Ship TreasureShip;
+    [SerializeField]
+    private Transform _activeShipTransform; // Chace the active ship transform
 
-
-    public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt)
+    public void SmoothlyTransitionTo(Vector3 position, Vector3 lookAt , Transform target )
     {
+        _activeShipTransform = target;
         _startPos = transform.position;
         _currentLerpGoal = position;
         _startRotation = transform.rotation;
@@ -155,8 +157,13 @@ public class CameraMovement : MonoBehaviour
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
+
         if (CamPos.y > minLimiter_y && CamPos.y < maxLimiter_y)
         {
+            if(scroll != 0 && _activeShipTransform != null)
+            {
+                transform.forward = (_activeShipTransform.position - transform.position).normalized;
+            }
             CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
         }
         // If the camera is at the ceiling or the floor, move it only in y direction when scrolling
@@ -172,13 +179,14 @@ public class CameraMovement : MonoBehaviour
         //CamPos.x = Mathf.Clamp(CamPos.x, -limiter_x, limiter_x);
         //CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
 
+        /*
         // Clamp to treasureship when not in transition
         if (TreasureShip != null && !_isTransitioning)
         {
             CamPos.x = Mathf.Clamp(CamPos.x, TreasureShip.transform.position.x - limiter_x, TreasureShip.transform.position.x + limiter_x);
             CamPos.z = Mathf.Clamp(CamPos.z, TreasureShip.transform.position.z - limiter_z, TreasureShip.transform.position.z + limiter_z);
         }
-
+        */
         //applies all changes
         // Don't let the player control the camera if there isn't a treasure ship
         // Otherwise they might move the grid off of the ships, which causes problems
