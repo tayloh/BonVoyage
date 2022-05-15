@@ -446,7 +446,7 @@ public class Ship : MonoBehaviour
 
             hitsAndMissCountText = "Hit x" + hits + "  " + "Miss x" + misses;
 
-            var fullText = totalDmgText + " - " + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
+            var fullText = totalDmgText + " Dmg" + "\n" + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
 
             _health -= dmg;
             _health = Mathf.Clamp(_health, 0, _health);
@@ -462,6 +462,7 @@ public class Ship : MonoBehaviour
                 Die();
             }
 
+            _damageText.fontSize = 140;
             _damageText.text = fullText;
             _damageText.color = color;
             _damageText.gameObject.SetActive(true);
