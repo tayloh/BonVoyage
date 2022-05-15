@@ -425,7 +425,7 @@ MonoBehaviour:
   movementPoints: 1
   _repairPoint: 4
   _attack: 3
-  fireRange: 3
+  fireRange: 4
   _movementDuration: 1
   _rotationDuration: 0.3
 --- !u!114 &6785397451433885358
