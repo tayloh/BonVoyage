@@ -220,9 +220,11 @@ public class Ship : MonoBehaviour
             {
                 timeElapsed += Time.deltaTime;
                 float lerpStep = timeElapsed / rotationDuration;
-                transform.rotation = Quaternion.Lerp(startRotation, endRotation, lerpStep);
+                Quaternion rotationToApply = Quaternion.Lerp(startRotation, endRotation, lerpStep);
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotationToApply.eulerAngles.y, transform.rotation.eulerAngles.z);
                 yield return null;
             }
+            endRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, endRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
             transform.rotation = endRotation;
             // Start movement after rotation, though there's a bug so commented it out for now
             //StartCoroutine(MovementCoroutine(endPosition));
