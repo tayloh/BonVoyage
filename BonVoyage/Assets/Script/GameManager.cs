@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
     {
         cameraMovement.SmoothlyTransitionTo(
             ship.transform.position + cameraMovement.ShipCameraOffset,
-            ship.transform.position);
+            ship.transform.position,ship.transform);
     }
 
     public bool IsCameraTransitioning()
