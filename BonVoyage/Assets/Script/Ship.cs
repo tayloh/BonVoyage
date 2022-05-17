@@ -85,8 +85,12 @@ public class Ship : MonoBehaviour
 
     private AudioSource _audioSource;
 
-    private List<float> _cannonWaitFireDurations = new List<float> { 
+    private List<float> _cannonWaitFireDurations = new List<float> {
         0.14f, 0.15f, 0.16f, 0.17f, 0.18f, 0.19f,
+        0.1f, 0.12f, 0.14f, 0.16f, 0.18f, 0.2f,
+        0.1f, 0.12f, 0.14f, 0.16f, 0.18f, 0.2f,
+        0.1f, 0.12f, 0.14f, 0.16f, 0.18f, 0.2f,
+        0.1f, 0.12f, 0.14f, 0.16f, 0.18f, 0.2f,
         0.2f, 0.21f, 0.22f, 0.23f, 0.24f, 0.25f,
         0.26f, 0.27f, 0.28f, 0.29f, 0.30f, 0.31f,
         0.32f, 0.33f, 0.34f, 0.35f, 0.36f, 0.37f};
@@ -145,7 +149,13 @@ public class Ship : MonoBehaviour
 
     public List<float> GetCannonWaitFireDurations()
     {
-        return _cannonWaitFireDurations;
+        // Make a copy of the list, it doesn't return the updated one otherwise....
+        List<float> result = new List<float>();
+        foreach (var item in _cannonWaitFireDurations)
+        {
+            result.Add(item);
+        }
+        return result;
     }
 
     public float[] GetLeftSideCannonDamageList()
@@ -383,20 +393,11 @@ public class Ship : MonoBehaviour
     {
         // If we want separate animations, damage numbers, etc
         // per shot, start here!
-        // Currently it just wraps the other TakeDamage() function
-
-        //var totalDmg = 0f;
-        //foreach (var dmg in damageList)
-        //{
-        //    totalDmg += dmg;
-        //}
-        //TakeDamage(totalDmg);
 
         // Shuffle the cannon wait duration list
         _cannonWaitFireDurations.Shuffle();
 
         StartCoroutine(TakeDamagePerShot(damageList));
-
     }
 
     private IEnumerator TakeDamagePerShot(float[] damageList)
@@ -469,7 +470,8 @@ public class Ship : MonoBehaviour
             _damageText.color = color;
             _damageText.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]);
+            var waitDuration = _cannonWaitFireDurations[index % _cannonWaitFireDurations.Count];
+            yield return new WaitForSeconds(waitDuration);
             index++;
         }
         yield return new WaitForSeconds(1.5f);

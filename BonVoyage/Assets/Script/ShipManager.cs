@@ -54,7 +54,7 @@ public class ShipManager : MonoBehaviour
         activeShip.IsPlaying = true;
 
         // Moved repair to start of players turn
-        ship.Repair();
+        //ship.Repair();
         PrepareShipForMovement(ship);
     }
 
@@ -67,7 +67,7 @@ public class ShipManager : MonoBehaviour
         activeShip.MovementFinished += PirateAIAttack;
 
         // Moved repair to start of players turn
-        ship.Repair();
+        //ship.Repair();
 
         var ai = ship.GetComponent<PirateAI>();
 
@@ -199,6 +199,9 @@ public class ShipManager : MonoBehaviour
             var cannonsFired = damageArray.Length;
             targetedShip.TakeDamage(damageArray);
 
+            // Needed to synchronize the timings of the shots fired from the active ship, with
+            // the damage text on the target ship.
+            activeShip.GetComponent<FireAnimation>().SetTargetShip(targetedShip);
             TriggerFiring(cannonsFired);
         }
 
@@ -257,6 +260,9 @@ public class ShipManager : MonoBehaviour
             //after an attack it will incerease the last player ship selected.
             //if (_oldSelection != null) _oldSelection.Repair();
 
+            // Needed to synchronize the timings of the shots fired from the active ship, with
+            // the damage text on the target ship.
+            activeShip.GetComponent<FireAnimation>().SetTargetShip(ship);
             TriggerFiring(cannonsFired);
 
             return true;

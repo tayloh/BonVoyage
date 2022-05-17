@@ -26,7 +26,7 @@ public class FireAnimation : MonoBehaviour
     public float GetFireAnimationTime()
     {
         var timeInSeconds = 0.0f;
-        var timings = _ship.GetCannonWaitFireDurations();
+        var timings = _target.GetCannonWaitFireDurations();
 
         for (int i = 0; i < _numCannonsFired; i++)
         {
@@ -63,7 +63,7 @@ public class FireAnimation : MonoBehaviour
     public void PlayFireAnimation(int broadside, int numCannons)
     {
         _numCannonsFired = numCannons;
-        StartCoroutine(_playRollingBroadSide(ShootingInterval, broadside));
+        StartCoroutine(_playRollingBroadSide(broadside));
     }
 
     public void PlayFireSound()
@@ -76,9 +76,9 @@ public class FireAnimation : MonoBehaviour
         _target = ship;
     }
 
-    private IEnumerator _playRollingBroadSide(float interval, int side)
+    private IEnumerator _playRollingBroadSide(int side)
     {
-        var intervalDurations = _ship.GetCannonWaitFireDurations();
+        var intervalDurations = _target.GetCannonWaitFireDurations();
 
         //PlayFireSound();
         if (side == 1)
@@ -91,17 +91,17 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach(Cannon cannon in _leftCannons)
             {
-                interval = intervalDurations[i % intervalDurations.Count];
+                var interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
-                i++;
 
-                if (i >= _numCannonsFired)
+                if (i >= _numCannonsFired - 1)
                 {
                     yield break;
                 }
 
                 yield return new WaitForSeconds(interval);
+                i++;
             }
         }
         else if (side == 0)
@@ -115,17 +115,17 @@ public class FireAnimation : MonoBehaviour
             var i = 0;
             foreach (Cannon cannon in _rightCannons)
             {
-                interval = intervalDurations[i % intervalDurations.Count];
+                var interval = intervalDurations[i % intervalDurations.Count];
                 cannon.PlayFiringAnimation();
                 cannon.PlaySound();
-                i++;
 
-                if (i >= _numCannonsFired)
+                if (i >= _numCannonsFired - 1)
                 {
                     yield break;
                 }
 
                 yield return new WaitForSeconds(interval);
+                i++;
             }
         }
     }
