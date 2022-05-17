@@ -9,7 +9,7 @@ public class PirateAI : MonoBehaviour
     
     public static int SearchDepth = 6; // AI maximum planned path is 12 hexes long
     public static float DFSOutOfRangeDistance = 9; // Euclidian distance. Set this value slightly less than double SearchDepth. NOT USED ATM.
-    public static float AIConsideredLowHpThreshold = 4; // Assume ships will deal 4 damage
+    public static float AIConsideredLowHpThreshold = 16; // Assume ships will deal at least 16 damage
 
     public static Vector3 AIFailed = new Vector3(-9999, -9999, -9999); // use instead of Vector3.zero (not nullable)
     public static Vector3Int AIFailedInt = new Vector3Int(-9999, -9999, -9999);
