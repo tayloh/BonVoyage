@@ -36,6 +36,7 @@ public class ShipStatsPanel : MonoBehaviour
 
     public void UpdatePanel(Ship ship)
     {
+        if (ship == null) return;
 
         SetShipTypeText(ship._shipType);
         SetHealthText(ship.Health, ship.MaxHealth);
@@ -85,7 +86,6 @@ public class ShipStatsPanel : MonoBehaviour
                 }
             }
         }
-        Debug.Log("IN ARC:" + inArc);
 
         if (!inArc)
         {
