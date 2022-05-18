@@ -636,6 +636,20 @@ public class Ship : MonoBehaviour
     {
         if (!CameraMovement.isMoving && !CameraMovement._isTransitioning)
         {
+            // For active ship
+            if (this.GetInstanceID() == gameManager.GetActualShip().GetInstanceID())
+            {
+                if (gameManager.state == GameState.PlayerMove)
+                {
+                    if (Input.GetKey(KeyCode.LeftShift))
+                    {
+                        hexGrid.DisableHighlightOfAllHexes();
+                        HighLightAttackableTiles(0);
+                        HighLightAttackableTiles(1);
+                    }
+                }
+            }
+
             if (isPlaying && !IsFiring)
             {
                 playerInput.UpdateCursor(CursorState.SkipTurn);
@@ -664,6 +678,17 @@ public class Ship : MonoBehaviour
 
     private void OnMouseExit()
     {
+        // For active ship
+        if (this.GetInstanceID() == gameManager.GetActualShip().GetInstanceID())
+        {
+            if (gameManager.state == GameState.PlayerMove)
+            {
+
+                hexGrid.DisableHighlightOfAllHexes();
+                movementSystem.ShowRange(gameManager.GetActualShip(), hexGrid);
+
+            }
+        }
 
         playerInput.UpdateCursor(CursorState.General);
         if(!isPlaying)
