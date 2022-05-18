@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private CameraMovement cameraMovement;
 
+    private int turnCount = 0;
+
     private void Awake()
     {
         Instance = this;
@@ -208,6 +210,10 @@ public class GameManager : MonoBehaviour
 
     public void NextTurn()
     {
+
+        // To be able to manually set the first offset
+        if (turnCount > 0) cameraMovement.SetOffset(GetActualShip());
+
         // Check for win condition right before getting next ship (in case ai won)
         // but there are player ships left (treasure ship sunk).
         CheckForWinCondition();
@@ -245,6 +251,7 @@ public class GameManager : MonoBehaviour
             shipManager.StartPirateTurn(nextShip);
             //shipManager.MovePirateShip(nextShip);
         }
+        turnCount++;
         OnTurnChanged.Invoke(shipsTurn, actualShipIndex);        
     }
 

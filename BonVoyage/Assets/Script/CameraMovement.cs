@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
+    private Vector3 previousPosition;
+
     [SerializeField] private PlayerInput playerInput;
     //controls camera speed
     public float MovementSpeed = 20f;
     public bool EnableTransitions = true;
     public bool EnableTransitionRotation = false;
+    public bool EnableFreeCamera = false;
 
     //limiters to how far the camera can go in each direction
     //these values can be accessed via the inspector in unity
@@ -65,7 +68,7 @@ public class CameraMovement : MonoBehaviour
         var distanceLeft = (transform.position - _currentLerpGoal).magnitude;
         var dynamicSpeedModifier = Mathf.Clamp(
             Mathf.Pow(distanceLeft, 1.5f), 
-            0.1f, 2);
+            1.0f, 3.0f);
 
         var lerpStep = (1 / TransitionTime) * Time.deltaTime * dynamicSpeedModifier;
 
@@ -109,6 +112,10 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
+    public void SetOffset(Ship ship)
+    {
+        ShipCameraOffset = transform.position - ship.transform.position;
+    }
 
     private void LateUpdate()
     {
@@ -119,8 +126,12 @@ public class CameraMovement : MonoBehaviour
         {
             _smoothTransition();
         }
+        else
+        {
+            transform.LookAt(_activeShipTransform);
+        }
 
-        ShipCameraOffset.y = transform.position.y;
+        //ShipCameraOffset.y = transform.position.y;
 
         //stores current coordinate as a variable
         Vector3 CamPos = transform.position;
@@ -151,30 +162,39 @@ public class CameraMovement : MonoBehaviour
         }
 
         // Calculate new position
-        resultingMoveDir = resultingMoveDir.normalized;
-        CamPos += resultingMoveDir * MovementSpeed * Time.deltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
+        if (EnableFreeCamera)
+        {
+            resultingMoveDir = resultingMoveDir.normalized;
+            CamPos += resultingMoveDir * MovementSpeed * Time.deltaTime * (CamPos.y + 2 - minLimiter_y) / 10; //modulate depending on zoom
+
+        }
 
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
+        if (scroll != 0 && _activeShipTransform != null)
+        {
+            transform.forward = (_activeShipTransform.position - transform.position).normalized;
+            
+            var resultingCamPos = CamPos + transform.forward * scroll * scrollSpeed * Time.deltaTime;
+            var distToAnchor = (resultingCamPos - _activeShipTransform.position).magnitude;
 
-        if (CamPos.y > minLimiter_y && CamPos.y < maxLimiter_y)
-        {
-            if(scroll != 0 && _activeShipTransform != null)
+            if (distToAnchor > minLimiter_y && distToAnchor < maxLimiter_y)
             {
-                transform.forward = (_activeShipTransform.position - transform.position).normalized;
+                var movementVector = transform.forward * scroll * scrollSpeed * Time.deltaTime;
+                movementVector.Normalize();
+
+                CamPos += movementVector;
             }
-            CamPos += transform.forward * scroll * scrollSpeed * Time.deltaTime;
         }
+
+
         // If the camera is at the ceiling or the floor, move it only in y direction when scrolling
-        else
-        {
-            CamPos.y += transform.forward.y * scroll * scrollSpeed * Time.deltaTime;
-        }
+        
 
 
         //zoom limiter
-        CamPos.y = Mathf.Clamp(CamPos.y, minLimiter_y, maxLimiter_y);
+        //CamPos.y = Mathf.Clamp(CamPos.y, minLimiter_y, maxLimiter_y);
         //makes sure that the values cant go beyond the limiters
         //CamPos.x = Mathf.Clamp(CamPos.x, -limiter_x, limiter_x);
         //CamPos.z = Mathf.Clamp(CamPos.z, -limiter_z, limiter_z);
@@ -190,7 +210,8 @@ public class CameraMovement : MonoBehaviour
         //applies all changes
         // Don't let the player control the camera if there isn't a treasure ship
         // Otherwise they might move the grid off of the ships, which causes problems
-        if (!_isTransitioning && TreasureShip != null)
+        // Edit: xz movement is not controlled by the player anymore
+        if (!_isTransitioning) //&& TreasureShip != null)
         {
             transform.position = CamPos;
         }
@@ -200,6 +221,7 @@ public class CameraMovement : MonoBehaviour
             isMoving = true;
         }
 
+        // Not doing anything currently but leaving the code here...
         if (Input.GetMouseButton(1) && !_isTransitioning)
         {
             //updating cursor 
@@ -208,12 +230,13 @@ public class CameraMovement : MonoBehaviour
             //transform.eulerAngles += RotSpeed * new Vector3(0, Input.GetAxis("Mouse X"), 0);
             Vector3 currentEulerAngles = transform.eulerAngles;
 
+
+            //Quaternion rot = Quaternion.AngleAxis(Time.deltaTime * RotSpeed * Input.GetAxis("Mouse X"), anchorShipYAxis);
+
             Vector3 eulerAnglesRotation = Time.deltaTime * RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
             Vector3 resultingEulerAngles = currentEulerAngles + eulerAnglesRotation;
 
-            resultingEulerAngles.x = Mathf.Clamp(resultingEulerAngles.x, RotMinX, RotMaxX);
-
-            transform.eulerAngles = resultingEulerAngles;
+            //transform.eulerAngles = resultingEulerAngles;
             //transform.eulerAngles += RotSpeed * new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
 
         }
@@ -222,5 +245,45 @@ public class CameraMovement : MonoBehaviour
             playerInput.UpdateCursor(CursorState.General);
             isMoving = false;
         }
+
+        // Rotation around anchor
+        var cam = Camera.main;
+        if (Input.GetMouseButtonDown(1) && !_isTransitioning)
+        {
+            previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+        }
+        else if (Input.GetMouseButton(1) && !_isTransitioning)
+        {
+            var currentOffset = (transform.position - _activeShipTransform.position).magnitude;
+
+            Vector3 newPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+            Vector3 direction = previousPosition - newPosition;
+
+            float rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
+            float rotationAroundXAxis = direction.y * 180; // camera moves vertically
+
+            // Set the camera transform to the object we want to rotate around
+            transform.position = _activeShipTransform.position;
+
+            // Rotate around our local x axis (keep in mind we are at "origin")
+            transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
+
+            // Rotate the world y axis (rotating around local y axis won't work since 
+            // it got rotated when we rotated locally around x
+            transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
+
+            // Clamp rotation around x (super easy since we are at origin)
+            var eulerAngles = transform.eulerAngles;
+            eulerAngles.x = Mathf.Clamp(eulerAngles.x, 15, 60);
+
+            transform.eulerAngles = eulerAngles;
+
+            // Translate out the distance we were at before the rotation along our z axis
+            transform.Translate(new Vector3(0, 0, -currentOffset));
+
+            previousPosition = newPosition;
+
+        }
     }
+
 }
