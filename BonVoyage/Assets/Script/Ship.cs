@@ -279,7 +279,7 @@ public class Ship : MonoBehaviour
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
     {
-        //set previoustile.Ship à null et set newtile.ship à ship
+        //set previoustile.Ship ï¿½ null et set newtile.ship ï¿½ ship
         //update the type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
         previousTile.Ship = null;
@@ -427,6 +427,7 @@ public class Ship : MonoBehaviour
             {
                 inParenthesisText += "- ";
                 misses++;
+                StartCoroutine(MissedAnimation());
             }
             else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
             {
@@ -591,6 +592,21 @@ public class Ship : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         transform.Find("ExplosionPS").GetComponentInChildren<ParticleSystem>().Play();
+    }
+
+    private IEnumerator MissedAnimation()
+    {
+        var location = transform.Find("watersplash").transform.position;
+        //spawn the effect a distance from the ship in a random direction, change the new vector 3 below to alter the distance from center of ship
+        float direction = UnityEngine.Random.Range(0, 360);
+        var distance = Quaternion.AngleAxis(direction, Vector3.up) * new Vector3 (1,0,0);
+        Debug.Log(transform.Find("watersplash").transform.position);
+        location = location + distance;
+        Debug.Log("new " + location);
+        yield return new WaitForSeconds(0.2f);
+        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().transform.localPosition = location;
+        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().Play();
+        Debug.Log("miss animation");
     }
 
     private void Die()
