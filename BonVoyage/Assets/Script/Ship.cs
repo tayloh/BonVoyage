@@ -414,6 +414,7 @@ public class Ship : MonoBehaviour
         var hits = 0;
 
         var hasSternBonus = false;
+        var hasBowBonus = false; // not really a bonus
 
         var index = 0;
         foreach (var dmg in damageList)
@@ -434,6 +435,13 @@ public class Ship : MonoBehaviour
                 hits++;
                 StartCoroutine(TakeDamageAnimation());
             }
+            else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.BowDamageAmplifier * _cannons[0].Damage)))
+            {
+                inParenthesisText += dmg.ToString(); //+ "! ";
+                hasBowBonus = true;
+                hits++;
+                StartCoroutine(TakeDamageAnimation());
+            }
             else
             {
                 inParenthesisText += dmg.ToString() + " ";
@@ -442,14 +450,21 @@ public class Ship : MonoBehaviour
             }
             totalDmgText = totalDmg.ToString();
 
-            if (hasSternBonus)
-            {
-                totalDmgText += "!";
-            }
-
             hitsAndMissCountText = "Hit x" + hits + "  " + "Miss x" + misses;
 
-            var fullText = totalDmgText + " Dmg" + "\n" + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
+            var fullText = "";
+            if (hasSternBonus)
+            {
+                fullText = totalDmgText + " Dmg (Stern)" + "\n" + hitsAndMissCountText;
+            }
+            else if (hasBowBonus)
+            {
+                fullText = totalDmgText + " Dmg (Bow)" + "\n" + hitsAndMissCountText;
+            }
+            else
+            {
+                fullText = totalDmgText + " Dmg (Side)" + "\n" + hitsAndMissCountText;
+            }
 
             _health -= dmg;
             _health = Mathf.Clamp(_health, 0, _health);
