@@ -803,7 +803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6785397451433885353, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: _health
-      value: 200
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 6785397451433885353, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: hexGrid

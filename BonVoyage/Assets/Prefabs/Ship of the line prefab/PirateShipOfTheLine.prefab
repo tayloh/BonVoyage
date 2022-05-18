@@ -424,7 +424,7 @@ MonoBehaviour:
   _damageText: {fileID: 7718378495954600008}
   _totalHealthText: {fileID: 3697642901576015684}
   _canvaSizeOnScreen: 0.00005
-  _health: 120
+  _health: 144
   movementPoints: 1
   _repairPoint: 16
   _attack: 3
