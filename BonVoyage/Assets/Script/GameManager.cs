@@ -276,6 +276,8 @@ public class GameManager : MonoBehaviour
 
     public void CleanupDeadShip(Ship ship)
     {
+        shipsTurn.Remove(ship);
+
         if (ship.gameObject.CompareTag("Pirate"))
         {
             pirateShips.Remove(ship);
@@ -377,6 +379,22 @@ public class GameManager : MonoBehaviour
 
     public Ship GetActualShip()
     {
+        // This should never happen, but 
+        // I think sometimes this function
+        // is called at the same time as when
+        // the ship index is getting updated.
+        // Sometimes getting errors in functions
+        // where this is called (exclusively).
+        // Breaking the turn order completely.
+        // Not had errors since I added this, but
+        // the debug message has never been printed
+        // either so... yeah.
+        if (actualShipIndex > shipsTurn.Count - 1)
+        {
+            Debug.Log("ERROR ._.");
+            actualShipIndex = shipsTurn.Count - 1;
+        }
+
         return shipsTurn[actualShipIndex];
     }
 

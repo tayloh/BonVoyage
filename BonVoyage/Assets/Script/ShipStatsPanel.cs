@@ -54,6 +54,12 @@ public class ShipStatsPanel : MonoBehaviour
 
     private void SetAttackStatsText(Ship ship)
     {
+        if (ship.IsDead)
+        {
+            AttackStatsText.text = "";
+            return;
+        }
+
         if (gameManager.state != GameState.PlayerFire)
         {
             AttackStatsText.text = "";
@@ -66,12 +72,13 @@ public class ShipStatsPanel : MonoBehaviour
             return;
         }
 
-        var actualShip = gameManager.GetActualShip();
+
+        var activeShip = gameManager.GetActualShip();
 
         var inArc = false;
         for (int i = 0; i < 2; i++)
         {
-            var broadsideTiles = actualShip.GetAttackableTilesFor(i);
+            var broadsideTiles = activeShip.GetAttackableTilesFor(i);
 
             foreach (var tilePos in broadsideTiles)
             {
@@ -93,8 +100,8 @@ public class ShipStatsPanel : MonoBehaviour
             return;
         }
         
-        var hitChance = DamageModel.CalculateHitChance(actualShip, ship);
-        var attackType = DamageModel.GetDirectionalAttackType(actualShip, ship);
+        var hitChance = DamageModel.CalculateHitChance(activeShip, ship);
+        var attackType = DamageModel.GetDirectionalAttackType(activeShip, ship);
         var attackTypeString = DamageModel.GetAttackTypeString(attackType);
 
         AttackStatsText.text = "Chance to\nhit: " + Mathf.RoundToInt(hitChance * 100) + "%" + "\n" + attackTypeString;
