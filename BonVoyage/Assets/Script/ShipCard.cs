@@ -69,17 +69,33 @@ public class ShipCard : MonoBehaviour
         switch (ship._shipType)
         {
             case ShipType.Brig:
-                image.sprite = Resources.Load<Sprite>("ShipTypesImages/Brig");
+                if (ship.CompareTag("Pirate")){
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirateBrigimg");
+                break;} else {
+                    image.sprite = Resources.Load<Sprite>("ShipTypesImages/Brigimg");
                 break;
+                }
             case ShipType.Frigate:
-                image.sprite = Resources.Load<Sprite>("ShipTypesImages/Frigate");
-                break;
+                if (ship.CompareTag("Pirate")){
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirateFrigateimg");
+                break;} else {
+                    image.sprite = Resources.Load<Sprite>("ShipTypesImages/Frigateimg");
+                    break;
+                }
             case ShipType.ShipOfTheLine:
-                image.sprite = Resources.Load<Sprite>("ShipTypesImages/ShipOfTheLine");
-                break;
+                if (ship.CompareTag("Pirate")){
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirateshipsfthelineimg");
+                break;} else {
+                    image.sprite = Resources.Load<Sprite>("ShipTypesImages/shipofthelineimg");
+                    break;
+                }
             case ShipType.TreasureShip:
-                image.sprite = Resources.Load<Sprite>("ShipTypesImages/TreasureShip");
+                if (ship.CompareTag("Pirate")){
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirategalleonimg");
                 break;
+                } else {
+                    image.sprite = Resources.Load<Sprite>("ShipTypesImages/TreasureShipimg");
+                    break;}
             default:
                 throw new Exception("Type of ship not supported");
                 break;
