@@ -106,7 +106,7 @@ public class Ship : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Ship script: hex coord of the ship " + hexCoord);
+        //Debug.Log("Ship script: hex coord of the ship " + hexCoord);
         hexGrid.PlaceShip(hexCoord, this);
     }
 
@@ -198,12 +198,12 @@ public class Ship : MonoBehaviour
         UpdateShipTile(startPosition, endPosition); // moved this here, need to update pos before invoking move finished
         if (_pathPositions.Count > 0)
         {
-            Debug.Log("Selecting next position...");
+            //Debug.Log("Selecting next position...");
             StartCoroutine(RotationCoroutine(_pathPositions.Dequeue(), _rotationDuration));
         }
         else
         {
-            Debug.Log("Movement finished.");
+            //Debug.Log("Movement finished.");
 
             // Invoke the event after the coordinates have been updated
             MovementFinished?.Invoke(this);
@@ -215,7 +215,7 @@ public class Ship : MonoBehaviour
 
     private void UpdateShipTile(Vector3 previousPosition, Vector3 newPosition)
     {
-        //set previoustile.Ship à null et set newtile.ship à ship
+        //set previoustile.Ship ï¿½ null et set newtile.ship ï¿½ ship
         //update the type of hex, obstacle if there is a ship, water if not
         Hex previousTile = hexGrid.GetTileAt(HexCoordinates.ConvertPositionToOffset(previousPosition - new Vector3(0, 1, 0)));
         previousTile.Ship = null;
@@ -233,7 +233,7 @@ public class Ship : MonoBehaviour
         //}
 
 
-        Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
+        //Debug.Log("Ship moved from " + HexCoordinates.ConvertPositionToOffset(previousPosition) + " to " + HexCoordinates.ConvertPositionToOffset(newPosition));
 
     }
 
@@ -282,7 +282,7 @@ public class Ship : MonoBehaviour
             }
             else
             {
-                Debug.Log("Could not find tile: " + tile);
+                //Debug.Log("Could not find tile: " + tile);
             }
             //Debug.Log(tile);
         }
@@ -325,6 +325,106 @@ public class Ship : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    public void TakeDamage(float[] damageList)
+    {
+        // If we want separate animations, damage numbers, etc
+        // per shot, start here!
+        // Currently it just wraps the other TakeDamage() function
+
+        //var totalDmg = 0f;
+        //foreach (var dmg in damageList)
+        //{
+        //    totalDmg += dmg;
+        //}
+        //TakeDamage(totalDmg);
+
+        // Shuffle the cannon wait duration list
+        _cannonWaitFireDurations.Shuffle();
+
+        StartCoroutine(TakeDamagePerShot(damageList));
+
+    }
+
+    private IEnumerator TakeDamagePerShot(float[] damageList)
+    {
+        var color = Color.red;
+        
+        var totalDmg = 0f;
+
+        var inParenthesisText = "";
+
+        var hitsAndMissCountText = "";
+
+        var misses = 0;
+        var hits = 0;
+
+        var hasSternBonus = false;
+
+        var index = 0;
+        foreach (var dmg in damageList)
+        {
+            var totalDmgText = "";
+            
+
+            totalDmg += dmg;
+            if (dmg == 0)
+            {
+                inParenthesisText += "- ";
+                misses++;
+                StartCoroutine(MissedAnimation());
+            }
+            else if (Mathf.Approximately(dmg, Mathf.CeilToInt(DamageModel.SternDamageAmplifier * _cannons[0].Damage)))
+            {
+                inParenthesisText += dmg.ToString(); //+ "! ";
+                hasSternBonus = true;
+                hits++;
+                StartCoroutine(TakeDamageAnimation());
+            }
+            else
+            {
+                inParenthesisText += dmg.ToString() + " ";
+                hits++;
+                StartCoroutine(TakeDamageAnimation());
+            }
+            totalDmgText = totalDmg.ToString();
+
+            if (hasSternBonus)
+            {
+                totalDmgText += "!";
+            }
+
+            hitsAndMissCountText = "Hit x" + hits + "  " + "Miss x" + misses;
+
+            var fullText = totalDmgText + " Dmg" + "\n" + hitsAndMissCountText; //"  (" + inParenthesisText + ")";
+
+            _health -= dmg;
+            _health = Mathf.Clamp(_health, 0, _health);
+
+            if (_healtSlider != null)
+            {
+                _healtSlider.fillAmount = (float)_health / (float)_maxhealth;
+            }
+            _currentHealthText.text = _health.ToString();
+
+            if (_health <= 0 && !_dead)
+            {
+                Die();
+            }
+
+            _damageText.fontSize = 140;
+            _damageText.text = fullText;
+            _damageText.color = color;
+            _damageText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(_cannonWaitFireDurations[index % _cannonWaitFireDurations.Count]);
+            index++;
+        }
+        yield return new WaitForSeconds(1.5f);
+        _damageText.gameObject.SetActive(false);
+    }
+>>>>>>> Stashed changes
 
     public void TakeDamage(float damage)
     {
@@ -404,9 +504,25 @@ public class Ship : MonoBehaviour
         transform.Find("ExplosionPS").GetComponentInChildren<ParticleSystem>().Play();
     }
 
+    private IEnumerator MissedAnimation()
+    {
+        yield return new WaitForSeconds(0.2f);
+        var location = transform.Find("watersplash").transform.position;
+        //spawn the effect a distance from the ship in a random direction, change the new vector 3 below to alter the distance from center of ship
+        float direction = UnityEngine.Random.Range(0, 360);
+        var distance = Quaternion.AngleAxis(direction, Vector3.up) * new Vector3 (1,0,0);
+        Debug.Log(transform.Find("watersplash").transform.position);
+        location = location + distance;
+        Debug.Log("new " + location);
+        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().transform.localPosition = location;
+        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().Play();
+        Debug.Log("miss animation");
+    }
+
+
     private void Die()
     {
-        Debug.Log(this.name + " died.");
+        //Debug.Log(this.name + " died.");
 
         // Make the hexagon it stood on a non obstacle.
         hexGrid.GetTileAt(this.hexCoord).HexType = HexType.Water;
