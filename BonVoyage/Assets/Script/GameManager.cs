@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject victoryText;
 
+    [SerializeField]
+    private GameObject gameStatePanel;
+
     private List<Ship> shipsTurn = new List<Ship>();
     private int actualShipIndex = 0;
 
@@ -98,9 +101,39 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
+    private void UpdateGameStatePanelText(GameState state)
+    {
+        var text = gameStatePanel.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        switch (state)
+        {
+            case GameState.PlayerMove:
+                text.text = "Player Move";
+                text.color = Color.yellow;
+                break;
+
+            case GameState.PlayerFire:
+                text.text = "Player Fire";
+                text.color= Color.red;
+                break;
+
+            case GameState.PirateTurn:
+                text.text = "Enemy Turn";
+                text.color = Color.black;
+                break;
+
+            default:
+                text.text = state.ToString();
+                text.color = Color.black;
+                break;
+
+        }
+    }
+
     public void UpdateGameState(GameState newState)
     {
         state = newState;
+
+        UpdateGameStatePanelText(newState);
 
         switch (newState)
         {
