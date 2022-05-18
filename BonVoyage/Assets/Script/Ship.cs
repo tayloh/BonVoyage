@@ -636,6 +636,20 @@ public class Ship : MonoBehaviour
     {
         if (!CameraMovement.isMoving && !CameraMovement._isTransitioning)
         {
+            //// For active ship
+            //if (this.GetInstanceID() == gameManager.GetActualShip().GetInstanceID())
+            //{
+            //    if (gameManager.state == GameState.PlayerMove)
+            //    {
+            //        if (Input.GetKey(KeyCode.LeftShift))
+            //        {
+            //            hexGrid.DisableHighlightOfAllHexes();
+            //            HighLightAttackableTiles(0);
+            //            HighLightAttackableTiles(1);
+            //        }
+            //    }
+            //}
+
             if (isPlaying && !IsFiring)
             {
                 playerInput.UpdateCursor(CursorState.SkipTurn);
@@ -657,10 +671,25 @@ public class Ship : MonoBehaviour
                 playerInput.UpdateCursor(CursorState.AttackTarget);
             }
         }
+
+        ShipStatsPanel.Instance.Show();
+        ShipStatsPanel.Instance.UpdatePanel(this);
     }
 
     private void OnMouseExit()
     {
+        // For active ship
+        //if (this.GetInstanceID() == gameManager.GetActualShip().GetInstanceID())
+        //{
+        //    if (gameManager.state == GameState.PlayerMove)
+        //    {
+
+        //        hexGrid.DisableHighlightOfAllHexes();
+        //        movementSystem.ShowRange(gameManager.GetActualShip(), hexGrid);
+
+        //    }
+        //}
+
         playerInput.UpdateCursor(CursorState.General);
         if(!isPlaying)
         {
@@ -684,6 +713,8 @@ public class Ship : MonoBehaviour
             }
                         
         }
+
+        ShipStatsPanel.Instance.Hide();
     }
 
     private IEnumerator SwayAnimation()
@@ -707,6 +738,11 @@ public class Ship : MonoBehaviour
     public int GetNumberOfCannons()
     {
         return _cannons.Count;
+    }
+
+    public int GetNumberOfCannonsPerSide()
+    {
+        return Mathf.RoundToInt(_cannons.Count / 2);
     }
 }
 
