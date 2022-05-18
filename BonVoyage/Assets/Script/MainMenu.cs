@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
             _LoadingBar.value = progress;
-            loadText.text = progress * 100 + "%";
+            loadText.text = Mathf.RoundToInt(progress * 100) + "%";
 
             yield return null;
         }

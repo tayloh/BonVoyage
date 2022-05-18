@@ -319,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2124031379736289538, guid: 7d1486e139f7a6b4aabbb49e55743198, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2124031379736289538, guid: 7d1486e139f7a6b4aabbb49e55743198, type: 3}
       propertyPath: m_AnchorMax.x
@@ -674,7 +674,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1611023555}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1041,7 +1041,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771660607063453630, guid: a8078fedc0a3600419d037a46c47fc5f, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 771660607063453630, guid: a8078fedc0a3600419d037a46c47fc5f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1524,6 +1524,7 @@ MonoBehaviour:
   MovementSpeed: 30
   EnableTransitions: 1
   EnableTransitionRotation: 1
+  EnableFreeCamera: 0
   limiter_x: 50
   limiter_z: 50
   scrollSpeed: 2000
@@ -2447,9 +2448,9 @@ RectTransform:
   - {fileID: 1910919479}
   - {fileID: 608126002}
   - {fileID: 998349991}
+  - {fileID: 206424083}
   - {fileID: 426232177}
   - {fileID: 586048519}
-  - {fileID: 206424083}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
