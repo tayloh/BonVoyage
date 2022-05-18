@@ -657,10 +657,14 @@ public class Ship : MonoBehaviour
                 playerInput.UpdateCursor(CursorState.AttackTarget);
             }
         }
+
+        ShipStatsPanel.Instance.Show();
+        ShipStatsPanel.Instance.UpdatePanel(this);
     }
 
     private void OnMouseExit()
     {
+
         playerInput.UpdateCursor(CursorState.General);
         if(!isPlaying)
         {
@@ -684,6 +688,8 @@ public class Ship : MonoBehaviour
             }
                         
         }
+
+        ShipStatsPanel.Instance.Hide();
     }
 
     private IEnumerator SwayAnimation()
@@ -707,6 +713,11 @@ public class Ship : MonoBehaviour
     public int GetNumberOfCannons()
     {
         return _cannons.Count;
+    }
+
+    public int GetNumberOfCannonsPerSide()
+    {
+        return Mathf.RoundToInt(_cannons.Count / 2);
     }
 }
 

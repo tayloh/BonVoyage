@@ -214,6 +214,23 @@ public class DamageModel : MonoBehaviour
         return attackingShipTotalDmg;
     }
 
+    public static float CalculateHitChance(Ship attackingShip, Ship targetedShip)
+    {
+        var distance = (attackingShip.transform.position - targetedShip.transform.position).magnitude;
+        var accuracyCoeff = _calculateAccuracyCoefficient(distance);
+
+        var attackType = DamageModel.GetDirectionalAttackType(attackingShip, targetedShip);
+
+        var hitChance = accuracyCoeff;
+
+        if (attackType == AttackType.Bow || attackType == AttackType.Stern)
+        {
+            hitChance *= DamageModel.BowSternAccuracyReduction;
+        }
+
+
+        return hitChance;
+    }
 
     private static float _calculateAccuracyCoefficient(float D)
     {
