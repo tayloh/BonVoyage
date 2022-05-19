@@ -49,9 +49,44 @@ public class MainMenu : MonoBehaviour
         LoadLevel(2);
     }
 
-    public void PlayLevel10()
+    public void PlayLevel3()
     {
         LoadLevel(3);
+    }
+
+    public void PlayLevel4()
+    {
+        LoadLevel(4);
+    }
+
+    public void PlayLevel5()
+    {
+        LoadLevel(5);
+    }
+
+    public void PlayLevel6()
+    {
+        LoadLevel(6);
+    }
+
+    public void PlayLevel7()
+    {
+        LoadLevel(7);
+    }
+
+    public void PlayLevel8()
+    {
+        LoadLevel(8);
+    }
+
+    public void PlayLevel9()
+    {
+        LoadLevel(9);
+    }
+
+    public void PlayLevel10()
+    {
+        LoadLevel(10);
     }
 
     public void QuitGame()
