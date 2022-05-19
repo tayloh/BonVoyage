@@ -89,7 +89,7 @@ public class ShipCard : MonoBehaviour
                 }
             case ShipType.ShipOfTheLine:
                 if (ship.CompareTag("Pirate")){
-                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirateshipsfthelineimg");
+                image.sprite = Resources.Load<Sprite>("ShipTypesImages/pirateshipofthelineimg");
                 break;} else {
                     image.sprite = Resources.Load<Sprite>("ShipTypesImages/shipofthelineimg");
                     break;
@@ -162,11 +162,16 @@ public class ShipCard : MonoBehaviour
     {
         //shipHighlight.ToggleGlow();
         ship.Tile.GetComponent<GlowHighlight>().DisplayAsQueueCard();
+
+        ShipStatsPanel.Instance.UpdatePanel(ship);
+        ShipStatsPanel.Instance.Show();
     }
 
     private void OnPointerExit()
     {
         //shipHighlight.ToggleGlow();
         ship.Tile.GetComponent<GlowHighlight>().ResetHighlight();
+
+        ShipStatsPanel.Instance.Hide();
     }
 }
