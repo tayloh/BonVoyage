@@ -11,6 +11,10 @@ public class ShipCard : MonoBehaviour
 {
     private Image image;
     public Image Image { get => image; set => image = value; }
+
+    private Image symbol;
+    public Image Symbol { get => symbol; set => symbol = value; }
+
     private Image background;
     public Image Background { get => background; set => background = value; }
     [SerializeField]
@@ -35,6 +39,7 @@ public class ShipCard : MonoBehaviour
     private void Awake()
     {
         image = transform.GetChild(0).GetComponent<Image>();
+        symbol = transform.GetChild(1).GetChild(0).GetComponent<Image>();
         background = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -65,7 +70,7 @@ public class ShipCard : MonoBehaviour
         {
             Queue();
         }
-
+        
         switch (ship._shipType)
         {
             case ShipType.Brig:
@@ -100,6 +105,7 @@ public class ShipCard : MonoBehaviour
                 throw new Exception("Type of ship not supported");
                 break;
         }
+
         shipHighlight = ship.GetComponent<GlowHighlight>();
     }
 
