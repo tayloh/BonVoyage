@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnGameStateChanged;
     public UnityEvent<List<Ship>, int> OnTurnChanged;
 
-    public bool DontHighlight = false;
+    public bool DontHighlight = true;
 
     public Ship TreasureShip;
 
