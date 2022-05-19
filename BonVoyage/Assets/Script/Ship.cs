@@ -622,6 +622,7 @@ public class Ship : MonoBehaviour
 
     private IEnumerator ShipSinksAnimation()
     {
+        _audioSource.volume = AudioManager.DefaultCannonShotVolume;
         _audioSource.Play();
         yield return new WaitForSeconds(1.1f);
         while (transform.position.y > -1)
