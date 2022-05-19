@@ -596,17 +596,17 @@ public class Ship : MonoBehaviour
 
     private IEnumerator MissedAnimation()
     {
-        var location = transform.Find("watersplash").transform.position;
-        //spawn the effect a distance from the ship in a random direction, change the new vector 3 below to alter the distance from center of ship
-        float direction = UnityEngine.Random.Range(0, 360);
-        var distance = Quaternion.AngleAxis(direction, Vector3.up) * new Vector3 (1,0,0);
-        Debug.Log(transform.Find("watersplash").transform.position);
-        location = location + distance;
-        Debug.Log("new " + location);
-        yield return new WaitForSeconds(0.2f);
-        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().transform.localPosition = location;
-        transform.Find("watersplash").GetComponentInChildren<ParticleSystem>().Play();
-        Debug.Log("miss animation");
+        var waterSplash = transform.Find("watersplash");
+        var startingPos = transform.position;
+
+        var randomAngle = UnityEngine.Random.Range(0, 360);
+        var translateOutBy = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(0.9f, 0, 0);
+
+        waterSplash.transform.position = startingPos + translateOutBy;
+
+        waterSplash.GetComponentInChildren<ParticleSystem>().Play();
+
+        yield return null;
     }
 
     private void Die()
