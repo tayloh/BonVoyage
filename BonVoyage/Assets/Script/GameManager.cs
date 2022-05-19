@@ -58,7 +58,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        foreach(Ship ship in playerShipsParent.GetComponentsInChildren<Ship>())
+        AudioManager.AdjustVolumeOfSoundtrack(0.08f);
+        StartCoroutine(AudioManager.FadeUpSoundtrackCoroutine(1000, AudioManager.DefaultSoundtrackVolume));
+
+        foreach (Ship ship in playerShipsParent.GetComponentsInChildren<Ship>())
         {
             playerShips.Add(ship);
 

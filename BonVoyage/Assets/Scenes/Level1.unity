@@ -602,6 +602,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  DontHighlight: 0
   TreasureShip: {fileID: 360532317}
   playerShipsParent: {fileID: 289156635}
   pirateShipsParent: {fileID: 1951956767}
@@ -1151,7 +1152,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 47fe7b58c9f556b4ca292ca983e3ef45, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 576701f583d80ba41a720d3322e87815, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.6
   m_Pitch: 1

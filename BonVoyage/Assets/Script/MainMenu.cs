@@ -17,6 +17,13 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator LoadLevelAsync(int sceneIndex)
     {
+        var audioClip = GetComponent<AudioSource>();
+        audioClip.Play();
+
+        StartCoroutine(AudioManager.FadeDownSoundtrackCoroutine(audioClip.clip.length*1000, 0.05f));
+
+        yield return new WaitForSeconds(audioClip.clip.length);
+
         _LoadingBar.gameObject.SetActive(true);
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 

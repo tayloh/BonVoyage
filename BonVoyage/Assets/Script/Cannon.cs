@@ -42,6 +42,8 @@ public class Cannon : MonoBehaviour
     public void PlaySound()
     {
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+
+        audioSource.volume = AudioManager.DefaultCannonShotVolume;
         audioSource.Play();
     }
     public void PlayFiringAnimation()
