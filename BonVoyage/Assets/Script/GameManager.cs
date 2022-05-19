@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnGameStateChanged;
     public UnityEvent<List<Ship>, int> OnTurnChanged;
 
+    public bool DontHighlight = false;
+
     public Ship TreasureShip;
 
     private List<Ship> playerShips = new List<Ship>();
@@ -210,6 +212,7 @@ public class GameManager : MonoBehaviour
 
     public void NextTurn()
     {
+        DontHighlight = true;
 
         if (turnCount > 0) cameraMovement.SetOffset(GetActualShip());
 
@@ -252,6 +255,7 @@ public class GameManager : MonoBehaviour
         }
 
         turnCount++;
+        DontHighlight = false;
         OnTurnChanged.Invoke(shipsTurn, actualShipIndex);        
     }
 

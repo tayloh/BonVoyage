@@ -721,8 +721,16 @@ public class Ship : MonoBehaviour
             // until the camera reaches the target
             // so, lets just check that the camera is done transitioning
             // also, then the switch case wont fire
+            // Edit: this is still happening unfortunately, 
+            // it happens when the camera reaches the target before
+            // the next turn is called (!gameManager.IsCameraTransitioning() returns true),
+            // (actual ship updates before the next turn is called, since next turn is on a delay)
+            // and the user triggers OnMouseExit() during the time
+            // between the camera has transitioned, and the next turn has not begun
+            // Only happens when transitioning FROM PlayerFire
+            // Edit2: Added a fix that works (I think) but is ugly, (gameManager.DontHighlight, see game manager)
             Ship actualShip = gameManager.GetActualShip();
-            if(!actualShip.HasFiredLeft && !actualShip.HasFiredRight && !gameManager.IsCameraTransitioning())
+            if(!actualShip.HasFiredLeft && !actualShip.HasFiredRight && !gameManager.IsCameraTransitioning() && !gameManager.DontHighlight)
             {
                 switch (gameManager.state)
                 {
