@@ -713,8 +713,16 @@ public class Ship : MonoBehaviour
             RemoveHighLightAttackableTiles(1);
 
             //highlight again the tiles of the actual ship in case some of them were hidden
+
+            // when on mouse exit is called as the actual ship 
+            // is transitioned to another ship, the highlight appears
+            // on the new ship (which looks a little wonky)
+            // its mainly because the player fire state isn't over
+            // until the camera reaches the target
+            // so, lets just check that the camera is done transitioning
+            // also, then the switch case wont fire
             Ship actualShip = gameManager.GetActualShip();
-            if(!actualShip.HasFiredLeft && !actualShip.HasFiredRight)
+            if(!actualShip.HasFiredLeft && !actualShip.HasFiredRight && !gameManager.IsCameraTransitioning())
             {
                 switch (gameManager.state)
                 {
