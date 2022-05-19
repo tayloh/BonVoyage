@@ -80,9 +80,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        // Have 'Esc' for pause menu 
+        //if(Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    Application.Quit();
+        //}
+
+        // Some way to force next turn to happen
+        // in case bugs during demo
+        // This will break things if spammed
+        // so use sparingly...
+        if (Input.GetKeyDown(KeyCode.Home))
         {
-            Application.Quit();
+            Debug.Log("Forcing Next Turn!");
+            NextTurn();
         }
     }
 
