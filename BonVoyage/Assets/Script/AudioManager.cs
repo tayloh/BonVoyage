@@ -5,7 +5,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
 
-    public static float DefaultSoundtrackVolume = 0.28f;
+    public static float DefaultSoundtrackVolume = 0.25f;
     public static float DefaultCannonShotVolume = 0.55f;
 
     public static void AdjustVolumeOfSoundtrack(float volume)
