@@ -172,7 +172,7 @@ public class CameraMovement : MonoBehaviour
         //Handles zoom via mousescrolling by checking speed and direction of scroll, uses unitys built in input manager for the scroll variable
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll != 0 && _activeShipTransform != null)
+        if (scroll != 0 && _activeShipTransform != null && !_isTransitioning)
         {
             transform.forward = (_activeShipTransform.position - transform.position).normalized;
             
