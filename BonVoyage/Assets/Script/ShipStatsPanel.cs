@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ShipStatsPanel : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class ShipStatsPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI CannonsStatText;
     [SerializeField] TextMeshProUGUI StatusText;
     [SerializeField] TextMeshProUGUI AttackStatsText;
+
+    [SerializeField] Image ShipTypeImage;
 
     private void Start()
     {
@@ -51,6 +54,37 @@ public class ShipStatsPanel : MonoBehaviour
         SetStatusText(ship.tag);
 
         SetAttackStatsText(ship);
+
+        SetShipTypeImage(ship);
+
+    }
+
+    private void SetShipTypeImage(Ship ship)
+    {
+
+        if (ship.gameObject.name == "Blackbeard")
+        {
+            ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconSpecial2");
+            return;
+        }
+
+        var type = ship._shipType;
+
+        switch (type)
+        {
+            case ShipType.Brig:
+                ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconWarship1");
+                break;
+            case ShipType.Frigate:
+                ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconWarship2");
+                break;
+            case ShipType.TreasureShip:
+                ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconSpecial1");
+                break;
+            case ShipType.ShipOfTheLine:
+                ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconWarship3");
+                break;
+        }
 
     }
 
