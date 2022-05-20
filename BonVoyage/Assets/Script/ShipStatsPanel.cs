@@ -31,11 +31,13 @@ public class ShipStatsPanel : MonoBehaviour
 
     public void Show()
     {
+        if (PausMenu.GameIsPaused) return;
         UI.SetActive(true);
     }
 
     public void UpdatePanel(Ship ship)
     {
+        if (PausMenu.GameIsPaused) return;
         if (ship == null) return;
 
         SetShipTypeText(ship._shipType);

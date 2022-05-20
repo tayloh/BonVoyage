@@ -29,6 +29,8 @@ public class PausMenu : MonoBehaviour
     public void Pause()
     {
         AudioManager.AdjustVolumeOfSoundtrack(0.1f);
+        ShipStatsPanel.Instance.Hide();
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         pauseMenuUI.SetActive(true);
         GameIsPaused = true;
         Time.timeScale = 0;

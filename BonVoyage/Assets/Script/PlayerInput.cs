@@ -42,6 +42,13 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateCursor(CursorState state)
     {
+        // If the game is paused, don't change the cursor.
+        if (PausMenu.GameIsPaused)
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            return;
+        }
+
         switch (state)
         {
             case CursorState.General:
