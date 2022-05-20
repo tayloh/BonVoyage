@@ -205,69 +205,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6458208548203798515, guid: 8f9880ad50863014ba0ce47dfc7c2dd7, type: 3}
   m_PrefabInstance: {fileID: 9196261}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &74158618
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 74158620}
-  - component: {fileID: 74158619}
-  m_Layer: 0
-  m_Name: SceneryManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &74158619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74158618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 673b8ffcc6137a14db98bab3dd463e88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SceneryType: 3
-  SkyboxSunny: {fileID: 2100000, guid: efd1c33efd2d58340b88804268e6833f, type: 2}
-  SkyboxStorm: {fileID: 2100000, guid: 2039a0ad0a9d05549928b70362f54902, type: 2}
-  SkyboxEvening: {fileID: 2100000, guid: 9b7ca251e8646c54db0a77ae2021bf9b, type: 2}
-  SkyboxNight: {fileID: 2100000, guid: d4454f71d85928744be7771e2143dab7, type: 2}
-  WaterSunny: {fileID: 2100000, guid: 27bbfc4173cd36d4cae5d03e061f6f7c, type: 2}
-  WaterStorm: {fileID: 2100000, guid: 892dcc8bd3369e3438bf812a7c459468, type: 2}
-  WaterEvening: {fileID: 2100000, guid: 5d4706a7b4d0698429dbe0a6e08009f7, type: 2}
-  WaterNight: {fileID: 2100000, guid: 76d24dc09a90734469044954c08289ad, type: 2}
-  Water: {fileID: 2114453982}
-  MissParticlesSunny: {r: 0, g: 0, b: 0, a: 0}
-  MissParticlesStorm: {r: 0, g: 0, b: 0, a: 0}
-  MissParticlesEvening: {r: 0, g: 0, b: 0, a: 0}
-  MissParticlesNight: {r: 0, g: 0, b: 0, a: 0}
-  HexagonGridGround: {fileID: 1488788713}
-  HexSunny: {fileID: 2100000, guid: 7605c313eada94a42960a8cddf50f8c4, type: 2}
-  HexStorm: {fileID: 2100000, guid: 503fbd1252fc13447920b275f9721770, type: 2}
-  HexEvening: {fileID: 2100000, guid: a8f80607970337c4ba6208139f91a641, type: 2}
-  HexNight: {fileID: 2100000, guid: 45863e6f5d36fbe49aa644969535f70a, type: 2}
-  HexPrefab: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}
---- !u!4 &74158620
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74158618}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &120368467
 GameObject:
   m_ObjectHideFlags: 0
@@ -3161,6 +3098,71 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d1486e139f7a6b4aabbb49e55743198, type: 3}
+--- !u!1001 &2534292000003432601
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2534292000069005954, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: Water
+      value: 
+      objectReference: {fileID: 2114453982}
+    - target: {fileID: 2534292000069005954, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: HexagonGridGround
+      value: 
+      objectReference: {fileID: 1488788713}
+    - target: {fileID: 2534292000069005955, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_Name
+      value: SceneryManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534292000069005957, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd8421f534d3c7b448b8f88c67aedbde, type: 3}
 --- !u!1001 &7980977842731918744
 PrefabInstance:
   m_ObjectHideFlags: 0

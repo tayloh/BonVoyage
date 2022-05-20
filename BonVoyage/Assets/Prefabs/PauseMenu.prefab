@@ -592,6 +592,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6fc0b745ee08240942d408b95db832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HexPrefab: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}
+  OriginalHexMaterial: {fileID: 2100000, guid: 7605c313eada94a42960a8cddf50f8c4, type: 2}
   pauseMenuUI: {fileID: 771660607042066667}
 --- !u!1 &771660607141046046
 GameObject:

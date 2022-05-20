@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2534292000069005955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2534292000069005957}
+  - component: {fileID: 2534292000069005954}
+  m_Layer: 0
+  m_Name: SceneryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2534292000069005957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2534292000069005955}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2534292000069005954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2534292000069005955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 673b8ffcc6137a14db98bab3dd463e88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SceneryType: 0
+  SkyboxSunny: {fileID: 2100000, guid: efd1c33efd2d58340b88804268e6833f, type: 2}
+  SkyboxStorm: {fileID: 2100000, guid: 2039a0ad0a9d05549928b70362f54902, type: 2}
+  SkyboxEvening: {fileID: 2100000, guid: 9b7ca251e8646c54db0a77ae2021bf9b, type: 2}
+  SkyboxNight: {fileID: 2100000, guid: d4454f71d85928744be7771e2143dab7, type: 2}
+  WaterSunny: {fileID: 2100000, guid: 27bbfc4173cd36d4cae5d03e061f6f7c, type: 2}
+  WaterStorm: {fileID: 2100000, guid: 892dcc8bd3369e3438bf812a7c459468, type: 2}
+  WaterEvening: {fileID: 2100000, guid: 5d4706a7b4d0698429dbe0a6e08009f7, type: 2}
+  WaterNight: {fileID: 2100000, guid: 76d24dc09a90734469044954c08289ad, type: 2}
+  Water: {fileID: 0}
+  HexagonGridGround: {fileID: 0}
+  HexSunny: {fileID: 2100000, guid: 7605c313eada94a42960a8cddf50f8c4, type: 2}
+  HexStorm: {fileID: 2100000, guid: 503fbd1252fc13447920b275f9721770, type: 2}
+  HexEvening: {fileID: 2100000, guid: a8f80607970337c4ba6208139f91a641, type: 2}
+  HexNight: {fileID: 2100000, guid: 45863e6f5d36fbe49aa644969535f70a, type: 2}
+  HexPrefab: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}

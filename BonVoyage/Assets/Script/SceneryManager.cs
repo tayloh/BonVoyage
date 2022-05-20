@@ -19,11 +19,6 @@ public class SceneryManager : MonoBehaviour
 
     [SerializeField] private GameObject Water;
 
-    [SerializeField] private Color MissParticlesSunny;
-    [SerializeField] private Color MissParticlesStorm;
-    [SerializeField] private Color MissParticlesEvening;
-    [SerializeField] private Color MissParticlesNight;
-
     [SerializeField] private GameObject HexagonGridGround;
 
     [SerializeField] private Material HexSunny;
