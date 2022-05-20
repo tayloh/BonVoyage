@@ -10,6 +10,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private Slider _LoadingBar;
 
+    private void Start()
+    {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
     public void LoadLevel (int sceneIndex)
     {
         StartCoroutine(LoadLevelAsync(sceneIndex));
