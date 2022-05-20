@@ -10,7 +10,7 @@ public class DamageModel : MonoBehaviour
 
     public static float BowSternAngle = 30.0f;
     public static float BowSternAccuracyReduction = 0.65f;
-    public static float SternDamageAmplifier = 1.5f;
+    public static float SternDamageAmplifier = 2.5f;
     public static float BowDamageAmplifier = 0.5f;
     public static float TileDistanceForWorstAccuracy = 10;
 

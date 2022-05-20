@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HexFadeDefault
+  m_Name: HexMat
   m_Shader: {fileID: -6465566751694194690, guid: cc3b77411f094954f880a484694e3d57, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -33,7 +33,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _FarLimit: 60
-    - _NearLimit: 20
+    - _NearLimit: 25
     m_Colors:
-    - _Color: {r: 0.18022424, g: 0.7621083, b: 0.8490566, a: 0.24705882}
+    - _Color: {r: 0.15686274, g: 0.6456886, b: 0.8, a: 0.24705882}
   m_BuildTextureStacks: []
