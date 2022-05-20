@@ -672,8 +672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6fc0b745ee08240942d408b95db832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HexPrefab: {fileID: 969951994086998290, guid: cafb73fcc9f0c6841b8cff46325b0e68, type: 3}
-  OriginalHexMaterial: {fileID: 2100000, guid: 7605c313eada94a42960a8cddf50f8c4, type: 2}
   pauseMenuUI: {fileID: 771660607042066667}
 --- !u!1 &771660607141046046
 GameObject:
@@ -1488,7 +1486,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -581, y: -78.391846}
+  m_AnchoredPosition: {x: -581, y: 41}
   m_SizeDelta: {x: 450, y: 738.8016}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1263745570457510531
