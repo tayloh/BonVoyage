@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673b8ffcc6137a14db98bab3dd463e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneryType: 0
+  SceneryType: 3
   SkyboxSunny: {fileID: 2100000, guid: efd1c33efd2d58340b88804268e6833f, type: 2}
   SkyboxStorm: {fileID: 2100000, guid: 2039a0ad0a9d05549928b70362f54902, type: 2}
   SkyboxEvening: {fileID: 2100000, guid: 9b7ca251e8646c54db0a77ae2021bf9b, type: 2}
@@ -625,7 +625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6ab55511f83617741ba2af38aaced882, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6ab55511f83617741ba2af38aaced882, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1694,7 +1694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 7cd69a0b8856e4f4f9a4f7b5858cde83, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 7cd69a0b8856e4f4f9a4f7b5858cde83, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1839,7 +1839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 6d5d55c245ecd0a4aa4127581e2d7371, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2294,7 +2294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2419,7 +2419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: dac42ce826700404bb1bc0e5d364d4c2, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6458208548203798515, guid: dac42ce826700404bb1bc0e5d364d4c2, type: 3}
       propertyPath: m_LocalPosition.x
