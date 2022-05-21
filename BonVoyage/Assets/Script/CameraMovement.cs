@@ -117,6 +117,23 @@ public class CameraMovement : MonoBehaviour
         ShipCameraOffset = transform.position - ship.transform.position;
     }
 
+    private void ClampAlongLookDir()
+    {
+        var lookDir = (_activeShipTransform.position - transform.position).normalized;
+        var currentDistance = (transform.position - _activeShipTransform.position).magnitude;
+
+        if (currentDistance < minLimiter_y)
+        {
+            transform.position = _activeShipTransform.position + minLimiter_y * 1.001f * -lookDir;
+        }
+
+        if (currentDistance > maxLimiter_y)
+        {
+            transform.position = _activeShipTransform.position + maxLimiter_y * 0.999f * -lookDir;
+        }
+    }
+
+
     private void LateUpdate()
     {
 
@@ -126,9 +143,10 @@ public class CameraMovement : MonoBehaviour
         {
             _smoothTransition();
         }
-        else
+        else if (_activeShipTransform != null)
         {
             transform.LookAt(_activeShipTransform);
+            ClampAlongLookDir();
         }
 
         //ShipCameraOffset.y = transform.position.y;
@@ -177,9 +195,26 @@ public class CameraMovement : MonoBehaviour
             transform.forward = (_activeShipTransform.position - transform.position).normalized;
             
             var resultingCamPos = CamPos + transform.forward * scroll * scrollSpeed * Time.deltaTime;
-            var distToAnchor = (resultingCamPos - _activeShipTransform.position).magnitude;
+            var newDistToAnchor = (resultingCamPos - _activeShipTransform.position).magnitude;
 
-            if (distToAnchor > minLimiter_y && distToAnchor < maxLimiter_y)
+            var currDistToAnchor = (transform.position - _activeShipTransform.position).magnitude;
+
+            bool isValidMove = false;
+
+            if (newDistToAnchor > minLimiter_y && newDistToAnchor < maxLimiter_y)
+            {
+                isValidMove = true;
+            }
+            else if (currDistToAnchor > maxLimiter_y && newDistToAnchor < currDistToAnchor)
+            {
+                isValidMove = true;
+            }
+            else if (currDistToAnchor < minLimiter_y && newDistToAnchor > currDistToAnchor)
+            {
+                isValidMove = true;
+            }
+
+            if (isValidMove)
             {
                 var movementVector = transform.forward * scroll * scrollSpeed * Time.deltaTime;
                 movementVector.Normalize();
