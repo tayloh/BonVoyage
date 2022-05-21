@@ -34,13 +34,19 @@ public class ShipStatsPanel : MonoBehaviour
 
     public void Show()
     {
-        if (PausMenu.GameIsPaused) return;
+        if (IsNotValid()) return;
         UI.SetActive(true);
+    }
+
+    private bool IsNotValid()
+    {
+        return CameraMovement.isMoving || PausMenu.GameIsPaused || gameManager.IsCameraTransitioning();
     }
 
     public void UpdatePanel(Ship ship)
     {
-        if (PausMenu.GameIsPaused) return;
+        if (IsNotValid()) return;
+
         if (ship == null) return;
 
         SetShipTypeText(ship._shipType);
