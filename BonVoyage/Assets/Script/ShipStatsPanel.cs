@@ -79,7 +79,14 @@ public class ShipStatsPanel : MonoBehaviour
                 ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconWarship2");
                 break;
             case ShipType.TreasureShip:
-                ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconSpecial1");
+                if (ship.CompareTag("Pirate"))
+                {
+                    ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconSpecial2");
+                }
+                else
+                {
+                    ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconSpecial1");
+                }
                 break;
             case ShipType.ShipOfTheLine:
                 ShipTypeImage.sprite = Resources.Load<Sprite>("ShipIcons/ShipIconWarship3");
