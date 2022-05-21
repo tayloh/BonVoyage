@@ -897,7 +897,7 @@ PrefabInstance:
       objectReference: {fileID: 1679244513}
     - target: {fileID: 6785397451433885353, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: fireRange
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6785397451433885353, guid: 472aef4b0a376304e9e0df4b83a5903d, type: 3}
       propertyPath: gameManager
