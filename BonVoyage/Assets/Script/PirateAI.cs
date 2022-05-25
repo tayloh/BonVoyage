@@ -816,6 +816,10 @@ public class PirateAI : MonoBehaviour
 
     private AIMoveAction _GetAIMoveAction()
     {
+        // First, check if it can even move at all
+        var moveableTo = _GetNonObstacleNeighbours(ship.hexCoord, ship.transform.forward);
+        if (moveableTo.Count == 0) return AIMoveAction.StayMove;
+
         // ON LOW HEALTH
         // Flee if low hp AND in enemy fire arc AND enemy shoots before me - IF NOT, then Stay
         if (ship.Health <= PirateAI.AIConsideredLowHpThreshold)
